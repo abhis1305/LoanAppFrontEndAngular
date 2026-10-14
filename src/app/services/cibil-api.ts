@@ -1,3 +1,4 @@
+
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 
@@ -6,9 +7,9 @@ import { inject, Injectable } from '@angular/core';
 })
 export class cibilapiService {
 
-  http = inject(HttpClient);
+  private http = inject(HttpClient);
 
-  baseUrl = 'https://localhost:7008/api/Cibil';
+  private baseUrl = 'https://localhost:44319/api/Cibil';
 
   generateCibil(customerId: number) {
     return this.http.post<any>(
