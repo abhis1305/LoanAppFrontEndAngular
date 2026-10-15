@@ -3,7 +3,6 @@ import { Injectable, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 
-
 // 1. Authentication API Response Class
 export class AuthResponse {
   requiresTwoFactor?: boolean;
@@ -40,8 +39,7 @@ export class AuthService {
   private http = inject(HttpClient);
   private router = inject(Router);
 
-  private readonly apiUrl = 'https://localhost:44319/api/Auth';
-
+  private readonly apiUrl = 'https://localhost:7008/api/Auth';
   // 5. Google OAuth Client ID
   private readonly googleClientId =
     '1066832090441-qbqpblqu0ksr8dgau73pklpr57boheuf.apps.googleusercontent.com';
