@@ -1,294 +1,150 @@
-<div class="container-fluid p-0">
-  <div class="d-flex min-vh-100">
-    <!-- Officer Sidebar -->
-    <aside class="sidebar text-white d-flex flex-column">
-      <!-- Brand -->
-      <div class="p-3 border-bottom border-light">
-        <h3 class="fw-bold mb-1"><i class="bi bi-bank me-2"></i>LoanApp</h3>
-        <small class="text-white-50">Officer Portal</small>
-      </div>
+<div class="page">
 
-      <!-- Sidebar Menu -->
-      <div class="sidebar-menu p-2">
-        <small class="text-white-50 px-2">MAIN MENU</small>
+  <!-- TOP ROW -->
+  <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-3">
+    <div>
+      <h4 class="fw-bold mb-0">Reports Dashboard</h4>
+      <small class="text-secondary">Loan origination and loan management at a glance.</small>
+    </div>
+    <form [formGroup]="filter" (ngSubmit)="getDashboard()" class="d-flex align-items-center gap-2 flex-wrap">
+      <small class="text-secondary">From</small>
+      <input type="date" formControlName="from" class="form-control form-control-sm w-auto">
+      <small class="text-secondary">To</small>
+      <input type="date" formControlName="to" class="form-control form-control-sm w-auto">
+      <button type="submit" class="btn btn-sm btn-primary px-3">Search</button>
+      <button type="button" class="btn btn-sm btn-outline-secondary" (click)="clear()">Clear</button>
+    </form>
+  </div>
 
-        <!-- Dashboard -->
-        <button
-          type="button"
-          class="btn text-white w-100 text-start d-flex align-items-center gap-2 mt-2"
-          [class.active-menu]="selectedSection === 'Dashboard'"
-          (click)="showSection('Dashboard')"
-        >
-          <i class="bi bi-speedometer2 fs-5"></i>
-          <span>Dashboard</span>
-        </button>
+  <div class="alert alert-danger" *ngIf="msg">{{msg}}</div>
+  <p class="text-secondary" *ngIf="loading && !dash">Loading dashboard...</p>
 
-        <hr class="border-light" />
+  <div *ngIf="dash">
 
-        <!-- Customer Management -->
-        <button
-          type="button"
-          class="btn text-white w-100 text-start fw-semibold d-flex align-items-center gap-2"
-          (click)="toggleCustomer()"
-        >
-          <i class="bi bi-people fs-5"></i>
-          <span>Customer Management</span>
+    <!-- ===================== LOS ===================== -->
+    <div class="panel-title bg-los">LOS – Loan Origination System</div>
 
-          <i class="bi ms-auto" [ngClass]="customerOpen ? 'bi-chevron-down' : 'bi-chevron-right'">
-          </i>
-        </button>
-
-        <div *ngIf="customerOpen" class="nav flex-column">
-          <button
-            type="button"
-            class="nav-link text-start"
-            [class.active]="selectedSection === 'Customers'"
-            (click)="showSection('Customers')"
-          >
-            <i class="bi bi-person-lines-fill me-2"></i>Customers
-          </button>
-
-          <!-- KYC Verification -->
-          <button type="button" class="nav-link text-start" (click)="openKycVerification()">
-            <i class="bi bi-file-earmark-check me-2"></i>
-            KYC Verification
-          </button>
-
-          <button
-            type="button"
-            class="nav-link text-start"
-            [class.active]="selectedSection === 'Eligibility Check'"
-            (click)="showSection('Eligibility Check')"
-          >
-            <i class="bi bi-check-circle me-2"></i>Eligibility Check
-          </button>
-
-          <button
-            type="button"
-            class="nav-link text-start"
-            [class.active]="selectedSection === 'Score Cards'"
-            (click)="showSection('Score Cards')"
-          >
-            <i class="bi bi-credit-card-2-front me-2"></i>Score Cards
-          </button>
-        </div>
-
-        <hr class="border-light" />
-
-        <!-- Loan Processing -->
-        <button
-          type="button"
-          class="btn text-white w-100 text-start fw-semibold d-flex align-items-center gap-2"
-          (click)="toggleLoanProcessing()"
-        >
-          <i class="bi bi-cash-stack fs-5"></i>
-          <span>Loan Processing</span>
-
-          <i
-            class="bi ms-auto"
-            [ngClass]="loanProcessingOpen ? 'bi-chevron-down' : 'bi-chevron-right'"
-          >
-          </i>
-        </button>
-
-        <div *ngIf="loanProcessingOpen" class="nav flex-column">
-          <button
-            type="button"
-            class="nav-link text-start"
-            [class.active]="selectedSection === 'Loan Applications'"
-            (click)="showSection('Loan Applications')"
-          >
-            <i class="bi bi-file-earmark-text me-2"></i>Loan Applications
-          </button>
-
-          <button
-            type="button"
-            class="nav-link text-start"
-            [class.active]="selectedSection === 'Sanction Letters'"
-            (click)="showSection('Sanction Letters')"
-          >
-            <i class="bi bi-file-earmark-pdf me-2"></i>Sanction Letters
-          </button>
-
-          <button
-            type="button"
-            class="nav-link text-start"
-            [class.active]="selectedSection === 'Loan Accounts'"
-            (click)="showSection('Loan Accounts')"
-          >
-            <i class="bi bi-wallet2 me-2"></i>Loan Accounts
-          </button>
-        </div>
-
-        <hr class="border-light" />
-
-        <!-- Requests & Collections -->
-        <button
-          type="button"
-          class="btn text-white w-100 text-start fw-semibold d-flex align-items-center gap-2"
-          (click)="toggleRequests()"
-        >
-          <i class="bi bi-clipboard-check fs-5"></i>
-          <span>Requests &amp; Collections</span>
-
-          <i class="bi ms-auto" [ngClass]="requestsOpen ? 'bi-chevron-down' : 'bi-chevron-right'">
-          </i>
-        </button>
-
-        <div *ngIf="requestsOpen" class="nav flex-column">
-          <button
-            type="button"
-            class="nav-link text-start"
-            [class.active]="selectedSection === 'Closure Requests'"
-            (click)="showSection('Closure Requests')"
-          >
-            <i class="bi bi-file-earmark-x me-2"></i>Closure Requests
-          </button>
-
-          <button
-            type="button"
-            class="nav-link text-start"
-            [class.active]="selectedSection === 'Penalty Charges'"
-            (click)="showSection('Penalty Charges')"
-          >
-            <i class="bi bi-exclamation-triangle me-2"></i>Penalty Charges
-          </button>
-        </div>
-
-        <hr class="border-light" />
-
-        <!-- Support Tickets -->
-        <button
-          type="button"
-          class="btn text-white w-100 text-start d-flex align-items-center gap-2"
-          [class.active-menu]="selectedSection === 'Support Tickets'"
-          (click)="showSection('Support Tickets')"
-        >
-          <i class="bi bi-headset fs-5"></i>
-          <span>Support Tickets</span>
-        </button>
-      </div>
-
-      <!-- Logout stays at bottom -->
-      <div class="logout-footer p-3 border-top border-light">
-        <button type="button" class="btn btn-outline-light w-100 text-start" (click)="logout()">
-          <i class="bi bi-box-arrow-right me-2"></i>
-          Logout
-        </button>
-      </div>
-    </aside>
-
-    <!-- Main Content -->
-    <main class="main-content flex-grow-1">
-      <!-- Top Navbar -->
-      <nav class="navbar bg-white shadow-sm px-3 px-md-4 py-3">
-        <div>
-          <h5 class="fw-bold mb-1">{{ selectedSection }}</h5>
-          <small class="text-secondary">Loan Management System</small>
-        </div>
-
-        <span class="badge text-bg-primary p-2">
-          <i class="bi bi-person-badge me-1"></i>
-          Loan Officer
-        </span>
-      </nav>
-
-      <!-- Dashboard Content -->
-      <div class="container-fluid p-3 p-md-4">
-        <div *ngIf="selectedSection === 'Dashboard'">
-          <h2 class="fw-bold">Welcome, Loan Officer!</h2>
-
-          <p class="text-secondary mb-4">
-            Manage customers, verify KYC and handle loan operations.
-          </p>
-
-          <div class="row g-3">
-            <!-- Customers -->
-            <div class="col-12 col-md-6 col-xl-3">
-              <div class="card border-0 shadow-sm h-100">
-                <div class="card-body">
-                  <i class="bi bi-people fs-1 text-primary"></i>
-                  <h6 class="text-secondary mt-3">Total Customers</h6>
-                  <h3 class="fw-bold">--</h3>
-                  <small class="text-secondary">Registered customers</small>
-                </div>
-              </div>
-            </div>
-
-            <!-- Pending KYC -->
-            <div class="col-12 col-md-6 col-xl-3">
-              <div class="card border-0 shadow-sm h-100">
-                <div class="card-body">
-                  <i class="bi bi-file-earmark-check fs-1 text-success"></i>
-                  <h6 class="text-secondary mt-3">Pending KYC</h6>
-                  <h3 class="fw-bold">--</h3>
-                  <small class="text-secondary">Awaiting verification</small>
-                </div>
-              </div>
-            </div>
-
-            <!-- Loan Applications -->
-            <div class="col-12 col-md-6 col-xl-3">
-              <div class="card border-0 shadow-sm h-100">
-                <div class="card-body">
-                  <i class="bi bi-cash-stack fs-1 text-warning"></i>
-                  <h6 class="text-secondary mt-3">Loan Applications</h6>
-                  <h3 class="fw-bold">--</h3>
-                  <small class="text-secondary">Applications received</small>
-                </div>
-              </div>
-            </div>
-
-            <!-- Support Tickets -->
-            <div class="col-12 col-md-6 col-xl-3">
-              <div class="card border-0 shadow-sm h-100">
-                <div class="card-body">
-                  <i class="bi bi-headset fs-1 text-danger"></i>
-                  <h6 class="text-secondary mt-3">Support Tickets</h6>
-                  <h3 class="fw-bold">--</h3>
-                  <small class="text-secondary">Tickets to review</small>
-                </div>
-              </div>
+    <div class="row g-3 mt-0 mb-4">
+      <div class="col-lg-5">
+        <div class="row g-3">
+          <div class="col-6">
+            <div class="kpi kpi-blue">
+              <div class="icon"><i class="bi bi-file-earmark-text-fill"></i></div>
+              <div><small>Total Applications</small><h4>{{dash.losCards.totalApplications | number}}</h4><a class="link">View Report</a></div>
             </div>
           </div>
-
-          <!-- Quick Overview -->
-          <div class="card border-0 shadow-sm mt-4">
-            <div class="card-body">
-              <h5 class="fw-bold">
-                <i class="bi bi-info-circle text-primary me-2"></i>
-                Officer Dashboard
-              </h5>
-
-              <p class="text-secondary mb-0">
-                Use the sidebar to manage customers, KYC verification, loan applications and
-                collection requests.
-              </p>
-
-              <button
-                type="button"
-                class="btn btn-primary btn-sm mt-3"
-                (click)="openKycVerification()"
-              >
-                <i class="bi bi-file-earmark-check me-1"></i>
-                Open KYC Verification
-              </button>
+          <div class="col-6">
+            <div class="kpi kpi-green">
+              <div class="icon"><i class="bi bi-check-circle-fill"></i></div>
+              <div><small>Applications Approved</small><h4>{{dash.losCards.approved | number}}</h4><a class="link">View Report</a></div>
             </div>
           </div>
-        </div>
-
-        <!-- Placeholder for other sections -->
-        <div *ngIf="selectedSection !== 'Dashboard'">
-          <div class="card border-0 shadow-sm">
-            <div class="card-body p-4">
-              <h4 class="fw-bold">{{ selectedSection }}</h4>
-              <p class="text-secondary mb-0">
-                This section will be connected to its component and API.
-              </p>
+          <div class="col-6">
+            <div class="kpi kpi-red">
+              <div class="icon"><i class="bi bi-x-circle-fill"></i></div>
+              <div><small>Applications Rejected</small><h4>{{dash.losCards.rejected | number}}</h4><a class="link">View Report</a></div>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="kpi kpi-orange">
+              <div class="icon"><i class="bi bi-hourglass-split"></i></div>
+              <div><small>Applications Pending</small><h4>{{dash.losCards.pending | number}}</h4><a class="link">View Report</a></div>
             </div>
           </div>
         </div>
       </div>
-    </main>
+
+      <!-- Application Funnel -->
+      <div class="col-lg-7">
+        <div class="box h-100">
+          <h6 class="fw-bold mb-3">Application Funnel</h6>
+          <div class="funnel-wrap" *ngIf="funnel.length > 0">
+            <div class="funnel">
+              <div class="seg" *ngFor="let s of funnel" [style.clip-path]="s.clip" [style.background]="s.color"></div>
+            </div>
+            <div class="funnel-labels">
+              <div class="lab" *ngFor="let s of funnel">
+                <small class="text-secondary">{{s.stage}}</small>
+                <b>{{s.count | number}}</b>
+              </div>
+            </div>
+          </div>
+          <p class="text-secondary" *ngIf="funnel.length == 0">No applications in this period.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===================== LMS ===================== -->
+    <div class="panel-title bg-lms">LMS – Loan Management System</div>
+
+    <div class="row g-3 mt-0">
+      <div class="col-6 col-md">
+        <div class="kpi kpi-green">
+          <div class="icon"><i class="bi bi-journal-text"></i></div>
+          <div><small>Total Loans</small><h4>{{dash.lmsCards.totalLoans | number}}</h4><a class="link">View Report</a></div>
+        </div>
+      </div>
+      <div class="col-6 col-md">
+        <div class="kpi kpi-teal">
+          <div class="icon"><i class="bi bi-wallet2"></i></div>
+          <div><small>Active Loans</small><h4>{{dash.lmsCards.activeLoans | number}}</h4><a class="link">View Report</a></div>
+        </div>
+      </div>
+      <div class="col-6 col-md">
+        <div class="kpi kpi-blue">
+          <div class="icon"><i class="bi bi-archive"></i></div>
+          <div><small>Closed Loans</small><h4>{{dash.lmsCards.closedLoans | number}}</h4><a class="link">View Report</a></div>
+        </div>
+      </div>
+      <!-- shows only when your API sends npaLoans -->
+      <div class="col-6 col-md" *ngIf="dash.lmsCards.npaLoans != null">
+        <div class="kpi kpi-red">
+          <div class="icon"><i class="bi bi-exclamation-triangle-fill"></i></div>
+          <div><small>NPA Loans</small><h4>{{dash.lmsCards.npaLoans | number}}</h4><a class="link">View Report</a></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row g-3 mt-0">
+      <!-- Loan Portfolio Summary -->
+      <div class="col-lg-5">
+        <div class="box h-100">
+          <h6 class="fw-bold mb-3">Loan Portfolio Summary</h6>
+          <div class="d-flex align-items-center flex-wrap gap-3">
+            <div class="donut" [style.background]="portfolioDonut">
+              <div class="donut-hole">₹ {{money(totalOutstanding)}}<small>Total Portfolio</small></div>
+            </div>
+            <div class="legend flex-fill">
+              <div class="d-flex justify-content-between gap-3" *ngFor="let p of dash.portfolioSummary; let i = index">
+                <span><span class="dot" [style.background]="colors[i % colors.length]"></span>{{p.product}}</span>
+                <span class="text-nowrap">₹ {{money(p.outstanding)}} ({{p.percent}}%)</span>
+              </div>
+              <div class="text-secondary" *ngIf="dash.portfolioSummary.length == 0">No active loans</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Collection Efficiency -->
+      <div class="col-lg-7">
+        <div class="box h-100">
+          <h6 class="fw-bold mb-3">Collection Efficiency (Monthly)</h6>
+          <div class="chart">
+            <div class="yaxis"><small *ngFor="let y of yLabels">{{y}}%</small></div>
+            <div class="plot">
+              <div class="bar-col" *ngFor="let m of dash.collectionEfficiency"
+                   [attr.title]="'Billed ₹ ' + m.billedAmount + ' / Collected ₹ ' + m.collectedAmount">
+                <div class="bar-area">
+                  <div class="bar" [style.height.%]="barHeight(m.efficiencyPercent)"></div>
+                </div>
+                <small class="month">{{m.month}}</small>
+              </div>
+            </div>
+          </div>
+          <div class="text-secondary mt-2" *ngIf="dash.collectionEfficiency.length == 0">No EMIs due in this period</div>
+        </div>
+      </div>
+    </div>
+
   </div>
 </div>
