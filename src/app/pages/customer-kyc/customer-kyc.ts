@@ -135,12 +135,16 @@ export class CustomerKyc implements OnInit {
           }
 
           this.cdr.markForCheck();
-
-          // Refresh the table after successful upload.
           this.loadMyDocuments();
         },
 
         error: (error: HttpErrorResponse) => {
+          console.error('KYC upload failed:', {
+            status: error.status,
+            message: error.message,
+            error: error.error,
+          });
+
           this.errorMessage = this.getErrorMessage(error);
           this.cdr.markForCheck();
         },
@@ -167,6 +171,11 @@ export class CustomerKyc implements OnInit {
         },
 
         error: (error: HttpErrorResponse) => {
+          console.error('Load KYC documents failed:', {
+            status: error.status,
+            message: error.message,
+          });
+
           this.errorMessage = this.getErrorMessage(error);
           this.cdr.markForCheck();
         },
@@ -306,7 +315,6 @@ export class CustomerKyc implements OnInit {
       return;
     }
 
-    // Open a blank tab immediately to avoid popup blocking.
     const newTab = window.open('about:blank', '_blank');
 
     if (!newTab) {
@@ -321,7 +329,6 @@ export class CustomerKyc implements OnInit {
 
         newTab.location.href = fileUrl;
 
-        // Release the temporary browser URL after viewing.
         window.setTimeout(() => {
           URL.revokeObjectURL(fileUrl);
         }, 60000);
@@ -351,7 +358,7 @@ export class CustomerKyc implements OnInit {
     }
 
     if (error.status === 0) {
-      return 'Cannot connect to the API. Check that the backend is running.';
+      return 'Cannot connect to the API. Check the backend URL, HTTPS certificate, CORS settings, and whether the backend is running.';
     }
 
     if (error.status === 401 || error.status === 403) {

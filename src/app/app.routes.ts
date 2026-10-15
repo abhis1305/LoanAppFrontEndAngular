@@ -22,47 +22,85 @@ import { OfficerKycReview } from './pages/officer-kyc-review/officer-kyc-review'
 
 export const routes: Routes = [
   // Default page
-  { path: '', redirectTo: 'login', pathMatch: 'full' },
+  {
+    path: '',
+    redirectTo: 'login',
+    pathMatch: 'full',
+  },
 
-  // Public pages
-  { path: 'login', component: Login },
-  { path: 'register', component: Register },
-  { path: 'two-factor-setup', component: TwoFactorSetup },
+  // Authentication pages
+  {
+    path: 'login',
+    component: Login,
+  },
+  {
+    path: 'register',
+    component: Register,
+  },
+  {
+    path: 'two-factor-setup',
+    component: TwoFactorSetup,
+  },
 
-  // Protected dashboards
+  // User Dashboard
   {
     path: 'user-dashboard',
     component: UserDashboard,
     canActivate: [authGuard],
   },
+
+  // Officer Dashboard
   {
     path: 'officer-dashboard',
     component: OfficerDashboard,
     canActivate: [authGuard],
   },
 
-  // Protected KYC pages
+  // Customer KYC
   {
     path: 'customer-kyc',
     component: CustomerKyc,
     canActivate: [authGuard],
   },
+
+  // Officer KYC Verification List
   {
     path: 'officer-kyc',
     component: OfficerKyc,
     canActivate: [authGuard],
   },
+
+  // Officer KYC Customer Review
   {
     path: 'officer-kyc-review/:customerId',
     component: OfficerKycReview,
     canActivate: [authGuard],
   },
 
-  // Existing team pages - protected
-  { path: 'cibil', component: Cibil, canActivate: [authGuard] },
-  { path: 'scorecard', component: Scorecard, canActivate: [authGuard] },
-  { path: 'eligibility', component: Eligibility, canActivate: [authGuard] },
+  // CIBIL
+  {
+    path: 'cibil',
+    component: Cibil,
+    canActivate: [authGuard],
+  },
 
-  // Unknown URLs
-  { path: '**', redirectTo: 'login' },
+  // Eligibility
+  {
+    path: 'eligibility',
+    component: Eligibility,
+    canActivate: [authGuard],
+  },
+
+  // Scorecard
+  {
+    path: 'scorecard',
+    component: Scorecard,
+    canActivate: [authGuard],
+  },
+
+  // Unknown URL
+  {
+    path: '**',
+    redirectTo: 'login',
+  },
 ];
