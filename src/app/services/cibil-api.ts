@@ -8,13 +8,13 @@ export class cibilapiService {
 
   http = inject(HttpClient);
 
-  url = "https://localhost:7008/api/Cibil/GenerateScore";
+  url = "http://localhost:7008/api/Cibil/GenerateScore";
   generateCibil(customerId: number)
   {
     return this.http.post<any>(this.url, { customerId });
   }
 
-  url2 = "https://localhost:7008/api/Cibil/GetScore";
+  url2 = "http://localhost:7008/api/Cibil/GetScore";
   getCibil(customerId: number)
   {
     return this.http.get<any>(`${this.url2}/${customerId}`);

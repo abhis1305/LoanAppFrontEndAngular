@@ -25,7 +25,7 @@ export class KycService {
   private http = inject(HttpClient);
   private authService = inject(AuthService);
 
-  private readonly apiUrl = 'https://localhost:7008/api/Kyc';
+  private readonly apiUrl = 'http://localhost:7008/api/Kyc';
 
   // Add the logged-in user's access token to API requests
   private getHeaders(): HttpHeaders {
