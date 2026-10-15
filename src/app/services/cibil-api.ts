@@ -1,4 +1,3 @@
-
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 
@@ -7,20 +6,18 @@ import { inject, Injectable } from '@angular/core';
 })
 export class cibilapiService {
 
-  private http = inject(HttpClient);
+  http = inject(HttpClient);
 
-  private baseUrl = 'https://localhost:44319/api/Cibil';
-
-  generateCibil(customerId: number) {
-    return this.http.post<any>(
-      `${this.baseUrl}/GenerateScore`,
-      { customerId }
-    );
+  url = "https://localhost:7008/api/Cibil/GenerateScore";
+  generateCibil(customerId: number)
+  {
+    return this.http.post<any>(this.url, { customerId });
   }
 
-  getCibil(customerId: number) {
-    return this.http.get<any>(
-      `${this.baseUrl}/GetScore/${customerId}`
-    );
+  url2 = "https://localhost:7008/api/Cibil/GetScore";
+  getCibil(customerId: number)
+  {
+    return this.http.get<any>(`${this.url2}/${customerId}`);
   }
+  
 }
