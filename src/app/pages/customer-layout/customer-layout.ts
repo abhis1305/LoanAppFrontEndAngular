@@ -1,15 +1,15 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router, RouterLink, RouterLinkActive } from '@angular/router';
+import { Router, RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
 
 @Component({
-  selector: 'app-user-dashboard',
+  selector: 'app-customer-layout',
   standalone: true,
-  imports: [CommonModule, RouterLink, RouterLinkActive],
-  templateUrl: './user-dashboard.html',
-  styleUrl: './user-dashboard.css',
+  imports: [CommonModule, RouterOutlet, RouterLink, RouterLinkActive],
+  templateUrl: './customer-layout.html',
+  styleUrl: './customer-layout.scss'
 })
-export class UserDashboard {
+export class CustomerLayout {
   customerOpen = true;
   loanServicesOpen = true;
   paymentsOpen = true;
