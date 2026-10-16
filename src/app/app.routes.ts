@@ -24,6 +24,12 @@ import { OfficerDashboard } from './pages/officer-dashboard/officer-dashboard';
 import { Reports } from './pages/reports/reports';
 import { OfficerKyc } from './pages/officer-kyc/officer-kyc';
 import { OfficerKycReview } from './pages/officer-kyc-review/officer-kyc-review';
+import { Penaltycharges } from './pages/penaltycharges/penaltycharges';
+import { UserForeclosure } from './pages/foreclosure/user-foreclosure/user-foreclosure';
+import { OfficerForeclosure } from './pages/foreclosure/officer-foreclosure/officer-foreclosure';
+
+// penalty pages
+
 import { Scorecard } from './pages/scorecard/scorecard';
 import { PendingDeals } from './pages/pending-deals/pending-deals';
 
@@ -40,6 +46,13 @@ export const routes: Routes = [
     pathMatch: 'full'
   },
 
+  // Public pages
+  { path: 'login', component: Login },
+  { path: 'register', component: Register },
+  { path: 'two-factor-setup', component: TwoFactorSetup },
+  { path: 'penaltycharges', component: Penaltycharges },
+  { path: 'user/foreclosure',  component: UserForeclosure},
+ { path: 'officer/foreclosure', component: OfficerForeclosure },
   // Authentication pages
   {
     path: 'login',
