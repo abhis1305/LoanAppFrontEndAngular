@@ -1,12 +1,12 @@
 import { TestBed } from '@angular/core/testing';
-import { CibilApi } from './cibil-api';
+import { LoanAccountService } from './loan-account-service';
 
-describe('CibilApi', () => {
-  let service: CibilApi;
+describe('LoanAccountService', () => {
+  let service: LoanAccountService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(CibilApi);
+    service = TestBed.inject(LoanAccountService);
   });
 
   it('should be created', () => {
