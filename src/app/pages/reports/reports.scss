@@ -1,0 +1,24 @@
+:host { display:block; color:#1b2540; }
+.page { padding:4px; }
+
+// LOS / LMS title bars
+.panel-title { color:#fff; font-size:18px; font-weight:600; text-align:center; padding:10px; border-radius:6px; margin-bottom:16px; }
+.bg-los { background:#1a237e; }
+.bg-lms { background:#1b7a3d; }
+
+// one report card
+.rc { background:#fff; border:1px solid #e6e9f0; border-radius:6px; padding:16px 18px; height:100%; }
+.rc-title { font-size:15px; font-weight:700; margin:0 0 12px; &.los { color:#1a237e; } &.lms { color:#1b7a3d; } }
+
+.filters { display:flex; align-items:center; flex-wrap:wrap; gap:6px 8px; margin-bottom:12px; font-size:12px; color:#6c757d;
+  input[type=date] { width:auto; }
+  .push { margin-left:auto; display:flex; gap:6px; } }
+
+// table styled like the sample
+.table-wrap { overflow-x:auto; }
+.grid { width:100%; border-collapse:collapse; font-size:13px;
+  th { background:#f4f6fa; font-weight:700; padding:8px 10px; border-bottom:1px solid #dfe3ea; white-space:nowrap; text-align:left; }
+  td { padding:8px 10px; border-bottom:1px solid #eef1f5; }
+  .num { text-align:right; }
+  tfoot td { font-weight:700; border-top:2px solid #dfe3ea; border-bottom:0; } }
+.empty { padding:18px; text-align:center; color:#6c757d; }

@@ -1,0 +1,91 @@
+<div class="page">
+
+  <div class="mb-3">
+    <h4 class="fw-bold mb-0">Reports</h4>
+    <small class="text-secondary">All origination and loan management reports in one place.</small>
+  </div>
+
+  <!-- ===================== LOS ===================== -->
+  <div class="panel-title bg-los">LOS – Loan Origination System</div>
+  <div class="row g-3 mb-4">
+    @for (r of los; track r.key; let i = $index) {
+      <div class="col-xl-6">
+        <ng-container *ngTemplateOutlet="card; context: { r: r, n: i + 1 }"></ng-container>
+      </div>
+    }
+  </div>
+
+  <!-- ===================== LMS ===================== -->
+  <div class="panel-title bg-lms">LMS – Loan Management System</div>
+  <div class="row g-3">
+    @for (r of lms; track r.key; let i = $index) {
+      <div class="col-xl-6">
+        <ng-container *ngTemplateOutlet="card; context: { r: r, n: i + 1 }"></ng-container>
+      </div>
+    }
+  </div>
+</div>
+
+<!-- ONE REPORT CARD (used for every report) -->
+<ng-template #card let-r="r" let-n="n">
+  <div class="rc">
+    <h6 class="rc-title" [class.los]="r.group == 'LOS'" [class.lms]="r.group == 'LMS'">{{n}}. {{r.title}}</h6>
+
+    <div class="filters">
+      @if (r.dates) {
+        <span>From</span>
+        <input type="date" class="form-control form-control-sm" [(ngModel)]="r.from">
+        <span>To</span>
+        <input type="date" class="form-control form-control-sm" [(ngModel)]="r.to">
+      } @else {
+        <span>As on date: <b>{{todayText}}</b></span>
+      }
+      <span class="push">
+        <button type="button" class="btn btn-sm" [class.btn-primary]="r.group == 'LOS'" [class.btn-success]="r.group == 'LMS'"
+                (click)="search(r)">Search</button>
+        <button type="button" class="btn btn-sm btn-outline-secondary" (click)="Export(r)">Export</button>
+      </span>
+    </div>
+
+    @if (r.msg) {
+      <div class="alert alert-danger py-2 mb-0">{{r.msg}}</div>
+    } @else if (r.loading) {
+      <div class="empty">Loading...</div>
+    } @else {
+      <div class="table-wrap">
+        <table class="grid">
+          <thead>
+            <tr>
+              @for (c of r.cols; track c.field; let i = $index) {
+                <th [class.num]="c.type != 'text'">{{c.label}}</th>
+              }
+            </tr>
+          </thead>
+          <tbody>
+            @for (row of r.rows; track $index) {
+              <tr>
+                @for (c of r.cols; track c.field) {
+                  <td [class.num]="c.type != 'text'">{{show(row[c.field], c.type)}}</td>
+                }
+              </tr>
+            } @empty {
+              <tr><td [attr.colspan]="r.cols.length" class="empty">No data found</td></tr>
+            }
+          </tbody>
+          @if (r.totals.length > 0 && r.rows.length > 0) {
+            <tfoot>
+              <tr>
+                @for (c of r.cols; track c.field; let i = $index) {
+                  <td [class.num]="c.type != 'text'">
+                    @if (i == 0) { Total }
+                    @else if (r.totals.includes(c.field)) { {{show(sum(r, c.field), c.type)}} }
+                  </td>
+                }
+              </tr>
+            </tfoot>
+          }
+        </table>
+      </div>
+    }
+  </div>
+</ng-template>

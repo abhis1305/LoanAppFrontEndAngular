@@ -169,26 +169,17 @@ export class AuthService {
   }
 
   // ADDED: Token payload claim decoder
- getData(): any {
-  const token = this.getAccessToken();
-
-  if (!token) return null;
-
-  try {
-    const payload = token.split('.')[1]
-      .replace(/-/g, '+')
-      .replace(/_/g, '/');
-
-    const paddedPayload = payload.padEnd(
-      payload.length + ((4 - (payload.length % 4)) % 4),
-      '='
-    );
-
-    return JSON.parse(atob(paddedPayload));
-  } catch {
-    return null;
+  getData(): any {
+    const token = this.getAccessToken();
+    if (!token) return null;
+    try {
+      const payload = token.split('.')[1].replace(/-/g, '+').replace(/_/g, '/');
+      const paddedPayload = payload.padEnd(payload.length + ((4 - (payload.length % 4)) % 4), '=');
+      return JSON.parse(atob(paddedPayload));
+    } catch {
+      return null;
+    }
   }
-}
 
   // ADDED: Returns the user name claim for dashboards
   getName(): string {
@@ -199,29 +190,16 @@ export class AuthService {
   }
 
   // ADDED: Resolves the missing property compilation error inside support.ts
-
-getCustomerId(): number {
-  const data = this.getData();
-
-  if (!data) return 0;
-
-  const id =
-    data['customerId'] ??
-    data['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier'];
-
-  const customerId = Number(id);
-
-  return Number.isInteger(customerId) && customerId > 0
-    ? customerId
-    : 0;
-}
-  getAccessToken(): string | null {
-  if (typeof window === 'undefined') {
-    return null;
+  getCustomerId(): number {
+    const d = this.getData();
+    if (!d) return 0;
+    return Number(d['customerId'] || d['nameid']
+        || d['http://xmlsoap.orgidentifier'] || 0);
   }
 
-  return sessionStorage.getItem('accessToken');
-}
+  getAccessToken(): string | null {
+    return sessionStorage.getItem('accessToken');
+  }
 
   getCurrentRole(): string | null {
     return sessionStorage.getItem('userRole');

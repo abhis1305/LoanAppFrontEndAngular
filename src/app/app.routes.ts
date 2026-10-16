@@ -2,8 +2,9 @@
 import { Routes } from '@angular/router';
 import { authGuard } from './guards/auth-access-guard';
 
-// Layout
+// Layouts
 import { CustomerLayout } from './pages/customer-layout/customer-layout';
+import { OfficerLayout } from './officer-layout/officer-layout';
 
 // Authentication pages
 import { Login } from './pages/login/login';
@@ -16,10 +17,11 @@ import { CustomerKyc } from './pages/customer-kyc/customer-kyc';
 
 // Officer pages
 import { OfficerDashboard } from './pages/officer-dashboard/officer-dashboard';
+import { Reports } from './pages/reports/reports';
 import { OfficerKyc } from './pages/officer-kyc/officer-kyc';
 import { OfficerKycReview } from './pages/officer-kyc-review/officer-kyc-review';
 
-// Shared / team pages
+// Other functionality
 import { Cibil } from './pages/cibil/cibil';
 import { Eligibility } from './pages/eligibility/eligibility';
 import { Scorecard } from './pages/scorecard/scorecard';
@@ -32,18 +34,17 @@ export const routes: Routes = [
   // Default route
   { path: '', redirectTo: 'login', pathMatch: 'full' },
 
-  // Authentication pages (no sidebar layout)
+  // Authentication pages - no layout
   { path: 'login', component: Login },
   { path: 'register', component: Register },
   { path: 'two-factor-setup', component: TwoFactorSetup },
 
-  // Pages inside the authenticated layout
+  // Customer layout
   {
     path: '',
     component: CustomerLayout,
     canActivate: [authGuard],
     children: [
-      // Customer pages
       { path: 'user-dashboard', component: UserDashboard },
       { path: 'customer-kyc', component: CustomerKyc },
       { path: 'apply-loan', component: ApplyLoan },
@@ -51,9 +52,17 @@ export const routes: Routes = [
       { path: 'cibil', component: Cibil },
       { path: 'eligibility', component: Eligibility },
       { path: 'sanction-letter', component: SanctionLetter },
+    ],
+  },
 
-      // Officer pages
+  // Officer layout
+  {
+    path: '',
+    component: OfficerLayout,
+    canActivate: [authGuard],
+    children: [
       { path: 'officer-dashboard', component: OfficerDashboard },
+      { path: 'reports', component: Reports },
       { path: 'officer-kyc', component: OfficerKyc },
       { path: 'officer-kyc-review/:customerId', component: OfficerKycReview },
       { path: 'scorecard', component: Scorecard },
@@ -61,6 +70,6 @@ export const routes: Routes = [
     ],
   },
 
-  // Unknown URL
+  // Unknown route
   { path: '**', redirectTo: 'login' },
 ];

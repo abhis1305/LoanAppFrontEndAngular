@@ -44,6 +44,7 @@ export class OfficerLayout {
         { icon: 'bi-pie-chart', text: 'Support Reports', link: '' },
         { icon: 'bi-clipboard-data', text: 'Audit Trail', link: '' },
         { icon: 'bi-gear', text: 'Settings', link: '' },
+        { icon: 'bi-bar-chart-line', text: 'Reports', link: '/reports' },
       ],
     },
   ];

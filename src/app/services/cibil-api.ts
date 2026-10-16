@@ -10,7 +10,7 @@ export class cibilapiService {
   private http = inject(HttpClient);
 
   private readonly baseUrl =
-    'http://localhost:5235/api/Cibil';
+    'http://localhost:7008/api/Cibil';
 
   private getHeaders(): HttpHeaders {
     const token =
