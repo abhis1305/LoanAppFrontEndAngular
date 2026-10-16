@@ -1,0 +1,86 @@
+
+<div class="container mt-4">
+
+  <h2>Apply Loan</h2>
+
+  <form [formGroup]="loan" (ngSubmit)="ApplyLoan(loan.value)">
+
+    <label>Loan Type</label>
+    <select class="form-control mb-3" formControlName="loanType">
+      <option value="">Select Loan</option>
+      <option value="Home Loan">Home Loan</option>
+      <option value="Personal Loan">Personal Loan</option>
+      <option value="Car Loan">Car Loan</option>
+      <option value="Education Loan">Education Loan</option>
+    </select>
+
+    <label>Loan Amount</label>
+    <input
+      type="number"
+      class="form-control mb-3"
+      formControlName="loanAmount"
+      (input)="CalculateLoan()"
+      placeholder="Enter Loan Amount">
+
+    <label>Tenure (Years)</label>
+    <select
+      class="form-control mb-3"
+      formControlName="tenureYears"
+      (change)="CalculateLoan()">
+      <option value="">Select Tenure</option>
+      <option value="3">3 Years</option>
+      <option value="5">5 Years</option>
+      <option value="6">6 Years</option>
+      <option value="10">10 Years</option>
+    </select>
+
+    <label>Interest Rate (%)</label>
+    <input
+      type="text"
+      class="form-control mb-3"
+      formControlName="interestRate"
+      readonly>
+
+    <label>EMI Amount (₹)</label>
+    <input
+      type="text"
+      class="form-control mb-3"
+      formControlName="emiAmount"
+      readonly>
+
+    <label>Bank Name</label>
+    <input
+      type="text"
+      class="form-control mb-3"
+      formControlName="bankName"
+      placeholder="Enter Bank Name">
+
+    <label>Bank Account Number</label>
+    <input
+      type="text"
+      class="form-control mb-3"
+      formControlName="bankAccountNumber"
+      placeholder="Enter Account Number">
+
+    <label>IFSC Code</label>
+    <input
+      type="text"
+      class="form-control mb-3"
+      formControlName="ifscCode"
+      placeholder="Enter IFSC Code">
+
+    <label>EMI Day</label>
+    <select class="form-control mb-3" formControlName="emiDay">
+      <option value="">Select EMI Day</option>
+      <option value="1">1</option>
+      <option value="5">5</option>
+      <option value="6">6</option>
+      <option value="10">10</option>
+    </select>
+
+    <button type="submit" class="btn btn-primary">
+      Apply Loan
+    </button>
+
+  </form>
+</div>

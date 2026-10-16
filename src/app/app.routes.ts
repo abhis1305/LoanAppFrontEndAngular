@@ -1,7 +1,8 @@
+
 import { Routes } from '@angular/router';
 import { authGuard } from './guards/auth-access-guard';
 
-// Layout (reserved sidebar space + top bar)
+// Layout
 import { CustomerLayout } from './pages/customer-layout/customer-layout';
 
 // Authentication pages
@@ -12,47 +13,51 @@ import { TwoFactorSetup } from './pages/two-factor-setup/two-factor-setup';
 // Customer pages
 import { UserDashboard } from './pages/user-dashboard/user-dashboard';
 import { CustomerKyc } from './pages/customer-kyc/customer-kyc';
-// import { Support } from './support/support';
 
 // Officer pages
 import { OfficerDashboard } from './pages/officer-dashboard/officer-dashboard';
 import { OfficerKyc } from './pages/officer-kyc/officer-kyc';
 import { OfficerKycReview } from './pages/officer-kyc-review/officer-kyc-review';
 
-// Other team pages
+// Shared / team pages
 import { Cibil } from './pages/cibil/cibil';
 import { Eligibility } from './pages/eligibility/eligibility';
 import { Scorecard } from './pages/scorecard/scorecard';
+import { ApplyLoan } from './apply-loan1/apply-loan';
+import { PendingDeals } from './pages/pending-deals/pending-deals';
+import { ViewProfile } from './pages/view-profile/view-profile';
+import { SanctionLetter } from './pages/sanction-letter/sanction-letter';
 
 export const routes: Routes = [
-  // Default page
+  // Default route
   { path: '', redirectTo: 'login', pathMatch: 'full' },
 
-  // Pages WITHOUT the layout
+  // Authentication pages (no sidebar layout)
   { path: 'login', component: Login },
   { path: 'register', component: Register },
   { path: 'two-factor-setup', component: TwoFactorSetup },
 
-  // Pages INSIDE the layout (sidebar space + top bar)
+  // Pages inside the authenticated layout
   {
     path: '',
     component: CustomerLayout,
     canActivate: [authGuard],
     children: [
-      // Customer
+      // Customer pages
       { path: 'user-dashboard', component: UserDashboard },
       { path: 'customer-kyc', component: CustomerKyc },
-      // { path: 'support', component: Support },
+      { path: 'apply-loan', component: ApplyLoan },
+      { path: 'view-profile', component: ViewProfile },
+      { path: 'cibil', component: Cibil },
+      { path: 'eligibility', component: Eligibility },
+      { path: 'sanction-letter', component: SanctionLetter },
 
-      // Officer
+      // Officer pages
       { path: 'officer-dashboard', component: OfficerDashboard },
       { path: 'officer-kyc', component: OfficerKyc },
       { path: 'officer-kyc-review/:customerId', component: OfficerKycReview },
-
-      // Other team pages
-      { path: 'cibil', component: Cibil },
-      { path: 'eligibility', component: Eligibility },
       { path: 'scorecard', component: Scorecard },
+      { path: 'pending-deals', component: PendingDeals },
     ],
   },
 
