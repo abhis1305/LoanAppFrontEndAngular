@@ -1,4 +1,3 @@
-
 <div class="cibil-page container-fluid py-4">
   <div class="cibil-card">
 
@@ -15,31 +14,12 @@
       </button>
     </div>
 
-    <div class="mb-4">
-      <label for="customerId" class="form-label">
-        Select Customer
-      </label>
-
-      <select
-        id="customerId"
-        class="form-select"
-        [(ngModel)]="customerId"
-        [disabled]="loading">
-
-        <option [ngValue]="1">Customer 1</option>
-        <option [ngValue]="2">Customer 2</option>
-        <option [ngValue]="3">Customer 3</option>
-                <option [ngValue]="7">Customer 5</option>
-
-      </select>
-    </div>
-
     <div *ngIf="errorMessage" class="alert alert-danger">
       {{ errorMessage }}
     </div>
 
     <div *ngIf="loading" class="text-primary mb-3">
-      Generating CIBIL score, please wait...
+      Loading CIBIL report, please wait...
     </div>
 
     <div *ngIf="cibil as report">
