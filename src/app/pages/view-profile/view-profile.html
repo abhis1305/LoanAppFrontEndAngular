@@ -1,0 +1,98 @@
+
+<div class="container-fluid mt-4" *ngIf="loan">
+
+  <div class="card shadow-sm p-4">
+
+    <h2>Customer Profile</h2>
+    <hr>
+
+    <h4>{{loan.customerName}}</h4>
+
+    <p>Email : {{loan.email || 'N/A'}}</p>
+    <p>Mobile : {{loan.mobile || 'N/A'}}</p>
+    <p>PAN : {{loan.pan || 'N/A'}}</p>
+    <p>Salary : {{ loan.salary ?? 'N/A' }}</p>
+    <p>CIBIL : {{ loan.cibilScore ?? 'N/A' }}</p>
+
+    <hr>
+
+    <h2>Loan Details</h2>
+
+    <p>Loan Type : {{loan.loanType}}</p>
+    <p>Loan Amount : {{loan.loanAmount | number:'1.2-2'}}</p>
+    <p>Interest : {{loan.interestRate}} %</p>
+    <p>EMI : {{loan.emiAmount | number:'1.2-2'}}</p>
+    <p>Tenure : {{loan.tenureMonths}} Months</p>
+    <p>Status : {{loan.currentStatus}}</p>
+
+    <hr>
+
+    <form [formGroup]="review">
+
+      <button
+        type="button"
+        class="btn btn-success me-2"
+        (click)="ApproveLoan()">
+        Approve
+      </button>
+
+      <hr>
+
+      
+<button
+  type="button"
+  class="btn btn-danger me-2"
+  data-bs-toggle="modal"
+  data-bs-target="#rejectModal">
+  Reject
+</button>
+
+<!-- <button
+  type="button"
+  class="btn btn-secondary"
+  routerLink="/pendingDeals">
+  Back
+</button> -->
+
+<!-- Reject Modal -->
+<div class="modal fade" id="rejectModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+
+      <div class="modal-header">
+        <h5 class="modal-title">Reject Reason</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal">
+        </button>
+      </div>
+
+      <div class="modal-body">
+        <textarea
+          class="form-control"
+          rows="3"
+          formControlName="rejectionReason"
+          placeholder="Enter Rejection Reason">
+        </textarea>
+      </div>
+
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-danger"
+          (click)="RejectLoan()">
+          Submit
+        </button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+    </form>
+
+  </div>
+
+</div>

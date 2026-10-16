@@ -35,7 +35,7 @@ export class AuthService {
   private http = inject(HttpClient);
   private router = inject(Router);
 
-  private readonly apiUrl = 'http://localhost:5235/api/Auth';
+  private readonly apiUrl = 'http://localhost:7008/api/Auth';
   private readonly googleClientId =
     '1066832090441-qbqpblqu0ksr8dgau73pklpr57boheuf.apps.googleusercontent.com';
 
@@ -135,16 +135,15 @@ export class AuthService {
     const role = (responseRole || this.getRoleFromToken(token)).trim().toLowerCase();
     let dashboardRoute = '';
 
-    if (role === 'user') {
-      dashboardRoute = '/user-dashboard';
-    } else if (role === 'officer') {
-      dashboardRoute = '/officer-dashboard';
-    } else if (role === 'admin') {
-      dashboardRoute = '/admin-dashboard';
-    } else {
-      return false;
-    }
-
+ if (role?.toLowerCase() === 'user' || role?.toLowerCase() === 'customer') {
+  dashboardRoute = '/user-dashboard';
+} else if (role?.toLowerCase() === 'loan officer' || role?.toLowerCase() === 'officer') {
+  dashboardRoute = '/officer-dashboard';
+} else if (role?.toLowerCase() === 'admin') {
+  dashboardRoute = '/admin-dashboard';
+} else {
+  return false;
+}
     this.clearAuthData();
     sessionStorage.setItem('accessToken', token);
     sessionStorage.setItem('userRole', role);
@@ -170,26 +169,17 @@ export class AuthService {
   }
 
   // ADDED: Token payload claim decoder
- getData(): any {
-  const token = this.getAccessToken();
-
-  if (!token) return null;
-
-  try {
-    const payload = token.split('.')[1]
-      .replace(/-/g, '+')
-      .replace(/_/g, '/');
-
-    const paddedPayload = payload.padEnd(
-      payload.length + ((4 - (payload.length % 4)) % 4),
-      '='
-    );
-
-    return JSON.parse(atob(paddedPayload));
-  } catch {
-    return null;
+  getData(): any {
+    const token = this.getAccessToken();
+    if (!token) return null;
+    try {
+      const payload = token.split('.')[1].replace(/-/g, '+').replace(/_/g, '/');
+      const paddedPayload = payload.padEnd(payload.length + ((4 - (payload.length % 4)) % 4), '=');
+      return JSON.parse(atob(paddedPayload));
+    } catch {
+      return null;
+    }
   }
-}
 
   // ADDED: Returns the user name claim for dashboards
   getName(): string {
@@ -200,29 +190,16 @@ export class AuthService {
   }
 
   // ADDED: Resolves the missing property compilation error inside support.ts
-
-getCustomerId(): number {
-  const data = this.getData();
-
-  if (!data) return 0;
-
-  const id =
-    data['customerId'] ??
-    data['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier'];
-
-  const customerId = Number(id);
-
-  return Number.isInteger(customerId) && customerId > 0
-    ? customerId
-    : 0;
-}
-  getAccessToken(): string | null {
-  if (typeof window === 'undefined') {
-    return null;
+  getCustomerId(): number {
+    const d = this.getData();
+    if (!d) return 0;
+    return Number(d['customerId'] || d['nameid']
+        || d['http://xmlsoap.orgidentifier'] || 0);
   }
 
-  return sessionStorage.getItem('accessToken');
-}
+  getAccessToken(): string | null {
+    return sessionStorage.getItem('accessToken');
+  }
 
   getCurrentRole(): string | null {
     return sessionStorage.getItem('userRole');
