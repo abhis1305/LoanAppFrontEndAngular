@@ -35,7 +35,7 @@ export class AuthService {
   private http = inject(HttpClient);
   private router = inject(Router);
 
-  private readonly apiUrl = 'http://localhost:5235/api/Auth';
+  private readonly apiUrl = 'http://localhost:7008/api/Auth';
   private readonly googleClientId =
     '1066832090441-qbqpblqu0ksr8dgau73pklpr57boheuf.apps.googleusercontent.com';
 
@@ -135,16 +135,15 @@ export class AuthService {
     const role = (responseRole || this.getRoleFromToken(token)).trim().toLowerCase();
     let dashboardRoute = '';
 
-    if (role === 'user') {
-      dashboardRoute = '/user-dashboard';
-    } else if (role === 'officer') {
-      dashboardRoute = '/officer-dashboard';
-    } else if (role === 'admin') {
-      dashboardRoute = '/admin-dashboard';
-    } else {
-      return false;
-    }
-
+ if (role?.toLowerCase() === 'user' || role?.toLowerCase() === 'customer') {
+  dashboardRoute = '/user-dashboard';
+} else if (role?.toLowerCase() === 'loan officer' || role?.toLowerCase() === 'officer') {
+  dashboardRoute = '/officer-dashboard';
+} else if (role?.toLowerCase() === 'admin') {
+  dashboardRoute = '/admin-dashboard';
+} else {
+  return false;
+}
     this.clearAuthData();
     sessionStorage.setItem('accessToken', token);
     sessionStorage.setItem('userRole', role);
