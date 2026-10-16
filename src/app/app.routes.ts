@@ -31,6 +31,8 @@ import { PendingDeals } from './pages/pending-deals/pending-deals';
 import { EmiSchedule } from './pages/emi-schedule/emi-schedule';
 import { LoanAccount } from './pages/loan-account/loan-account';
 import { LoanAccountDetails } from './pages/loan-account-details/loan-account-details';
+import { Support } from './pages/support/support';
+import { SupportOfficer } from './pages/officer-support/officer-support';
 
 export const routes: Routes = [
   // Default route
@@ -87,6 +89,10 @@ export const routes: Routes = [
       {
         path: 'sanction-letter',
         component: SanctionLetter
+      },
+      {
+        path: 'support',
+        component: Support
       }
     ]
   },
@@ -120,7 +126,11 @@ export const routes: Routes = [
       {
         path: 'pending-deals',
         component: PendingDeals
-      }
+      },
+      {
+        path: 'officer-support',
+        component: SupportOfficer
+      },
     ]
   },
 
