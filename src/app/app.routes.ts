@@ -20,6 +20,13 @@ import { CustomerKyc } from './pages/customer-kyc/customer-kyc';
 import { OfficerKyc } from './pages/officer-kyc/officer-kyc';
 import { OfficerKycReview } from './pages/officer-kyc-review/officer-kyc-review';
 
+  // Loan Accounts and EMI Schedules
+
+import { EmiSchedule } from './pages/emi-schedule/emi-schedule';
+import { LoanAccount } from './pages/loan-account/loan-account';
+import { LoanAccountDetails } from './pages/loan-account-details/loan-account-details';
+
+
 export const routes: Routes = [
   // Default page
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -28,6 +35,11 @@ export const routes: Routes = [
   { path: 'login', component: Login },
   { path: 'register', component: Register },
   { path: 'two-factor-setup', component: TwoFactorSetup },
+
+  // Loan Accounts and EMI Schedules
+  { path: 'emi-schedule', component: EmiSchedule },
+  { path: 'loan-accounts', component: LoanAccount },
+  { path:'loan-account-details/:id',  component: LoanAccountDetails},
 
   // Protected dashboards
   {

@@ -1,0 +1,129 @@
+
+<div class="container-fluid p-4 bg-light min-vh-100">
+
+  <h2 class="mb-4">EMI Schedule</h2>
+
+  <!-- Loan Account Selection -->
+  <div class="mb-3" style="max-width: 420px;">
+    <label class="form-label">Select Loan Account</label>
+
+    <select class="form-select"
+            [(ngModel)]="selectedLoanAccountId"
+            (change)="getEmiSchedule()">
+
+      <option value="">Select Loan Account</option>
+
+      <option *ngFor="let account of allLoanAccounts"
+              [value]="account.loanAccountId">
+        {{ account.loanAccountNo }}
+      </option>
+
+    </select>
+  </div>
+
+  <!-- Summary Cards -->
+  <div class="row g-4 mb-4">
+
+    <div class="col-md-4">
+      <div class="card border-success h-100">
+        <div class="card-body">
+          <h5 class="text-success">Paid EMIs</h5>
+          <p class="mb-2">Count : <strong>{{ paidEmis }}</strong></p>
+          <p class="mb-0">Amount : <strong>{{ paidAmount | currency:'INR':'symbol':'1.0-0' }}</strong></p>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="card border-danger h-100">
+        <div class="card-body">
+          <h5 class="text-danger">Pending EMIs</h5>
+          <p class="mb-2">Count : <strong>{{ pendingEmis }}</strong></p>
+          <p class="mb-0">Amount : <strong>{{ pendingAmount | currency:'INR':'symbol':'1.0-0' }}</strong></p>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="card border-primary h-100">
+        <div class="card-body">
+          <h5 class="text-primary">Remaining Balance</h5>
+          <p class="mb-2">EMIs Left : <strong>{{ emisLeft }}</strong></p>
+          <p class="mb-0">Balance : <strong>{{ remainingAmount | currency:'INR':'symbol':'1.0-0' }}</strong></p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- EMI Table -->
+  <div class="table-responsive">
+    <table class="table table-bordered table-striped align-middle bg-white">
+
+      <thead>
+        <tr>
+          <th>Installment</th>
+          <th>Due Date</th>
+          <th>EMI</th>
+          <th>Principal</th>
+          <th>Interest</th>
+          <th>Opening</th>
+          <th>Closing</th>
+          <th>Status</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+
+      <tbody>
+
+        <tr *ngFor="let emi of allEmis; let i = index">
+          <td>{{ i + 1 }}</td>
+
+          <td>{{ emi.dueDate | date:'dd-MMM-yyyy' }}</td>
+
+          <td>{{ emi.emiAmount | currency:'INR':'symbol':'1.0-0' }}</td>
+
+          <td>{{ emi.principalAmount | currency:'INR':'symbol':'1.0-0' }}</td>
+
+          <td>{{ emi.interestAmount | currency:'INR':'symbol':'1.0-0' }}</td>
+
+          <td>{{ emi.openingBalance | currency:'INR':'symbol':'1.0-0' }}</td>
+
+          <td>{{ emi.closingBalance | currency:'INR':'symbol':'1.0-0' }}</td>
+
+          <td>
+            <span *ngIf="emi.status == 'Paid'" class="text-success">
+              {{ emi.status }}
+            </span>
+
+            <span *ngIf="emi.status != 'Paid'" class="text-danger">
+              {{ emi.status || 'Pending' }}
+            </span>
+          </td>
+
+          <td>
+            <button class="btn btn-success btn-sm"
+                    [disabled]="emi.status == 'Paid'">
+              Pay
+            </button>
+          </td>
+        </tr>
+
+        <tr *ngIf="selectedLoanAccountId == ''">
+          <td colspan="9" class="text-center">
+            Please select a loan account.
+          </td>
+        </tr>
+
+        <tr *ngIf="selectedLoanAccountId != '' && allEmis.length == 0">
+          <td colspan="9" class="text-center">
+            No EMI records found.
+          </td>
+        </tr>
+
+      </tbody>
+
+    </table>
+  </div>
+
+</div>
