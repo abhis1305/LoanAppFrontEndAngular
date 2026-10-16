@@ -1,0 +1,57 @@
+<div class="shell" [class.collapsed]="collapsed">
+
+  <aside class="side">
+    <div class="brand">
+      <i class="bi bi-bank2"></i>
+      <div><b>LoanApp</b><small>LOS &amp; LMS</small></div>
+    </div>
+
+    <div class="me">
+      <span class="avatar">{{initials}}</span>
+      <div><b>{{name}}</b><small>Loan Officer</small></div>
+    </div>
+
+    <nav>
+      @for (g of groups; track g.title) {
+        <div class="group">{{g.title}}</div>
+        @for (n of g.items; track n.text) {
+          @if (n.link) {
+            <a [routerLink]="n.link" routerLinkActive="on" [title]="n.text">
+              <i class="bi {{n.icon}}"></i><span>{{n.text}}</span>
+            </a>
+          } @else {
+            <a class="soon" title="Coming soon">
+              <i class="bi {{n.icon}}"></i><span>{{n.text}}</span>
+            </a>
+          }
+        }
+      }
+    </nav>
+
+    <button type="button" class="logout" (click)="logout()">
+      <i class="bi bi-box-arrow-left"></i><span>Logout</span>
+    </button>
+  </aside>
+
+  <div class="main">
+    <header class="bar">
+      <button type="button" class="burger" (click)="collapsed = !collapsed" aria-label="Show or hide menu">
+        <i class="bi bi-list"></i>
+      </button>
+      <h1>Loan Officer Console</h1>
+
+      <div class="right">
+        <div class="user" (click)="menuOpen = !menuOpen">
+          <span class="avatar sm">{{initials}}</span>{{name}} <i class="bi bi-chevron-down"></i>
+          @if (menuOpen) {
+            <div class="drop"><button type="button" (click)="logout()">Logout</button></div>
+          }
+        </div>
+      </div>
+    </header>
+
+    <section class="content">
+      <router-outlet></router-outlet>
+    </section>
+  </div>
+</div>
