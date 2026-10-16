@@ -135,16 +135,15 @@ export class AuthService {
     const role = (responseRole || this.getRoleFromToken(token)).trim().toLowerCase();
     let dashboardRoute = '';
 
-    if (role === 'customer') {
-      dashboardRoute = '/user-dashboard';
-    } else if (role === 'officer') {
-      dashboardRoute = '/officer-dashboard';
-    } else if (role === 'admin') {
-      dashboardRoute = '/admin-dashboard';
-    } else {
-      return false;
-    }
-
+ if (role?.toLowerCase() === 'user' || role?.toLowerCase() === 'customer') {
+  dashboardRoute = '/user-dashboard';
+} else if (role?.toLowerCase() === 'loan officer' || role?.toLowerCase() === 'officer') {
+  dashboardRoute = '/officer-dashboard';
+} else if (role?.toLowerCase() === 'admin') {
+  dashboardRoute = '/admin-dashboard';
+} else {
+  return false;
+}
     this.clearAuthData();
     sessionStorage.setItem('accessToken', token);
     sessionStorage.setItem('userRole', role);
