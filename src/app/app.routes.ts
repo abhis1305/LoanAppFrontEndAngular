@@ -1,3 +1,4 @@
+
 import { Routes } from '@angular/router';
 import { authGuard } from './guards/auth-access-guard';
 
@@ -13,26 +14,32 @@ import { TwoFactorSetup } from './pages/two-factor-setup/two-factor-setup';
 // Customer pages
 import { UserDashboard } from './pages/user-dashboard/user-dashboard';
 import { CustomerKyc } from './pages/customer-kyc/customer-kyc';
-// import { Support } from './support/support';
 
 // Officer pages
 import { OfficerDashboard } from './pages/officer-dashboard/officer-dashboard';
 import { Reports } from './pages/reports/reports';
 import { OfficerKyc } from './pages/officer-kyc/officer-kyc';
 import { OfficerKycReview } from './pages/officer-kyc-review/officer-kyc-review';
+
+// Other functionality
 import { Cibil } from './pages/cibil/cibil';
 import { Eligibility } from './pages/eligibility/eligibility';
 import { Scorecard } from './pages/scorecard/scorecard';
+import { ApplyLoan } from './apply-loan1/apply-loan';
+import { PendingDeals } from './pages/pending-deals/pending-deals';
+import { ViewProfile } from './pages/view-profile/view-profile';
+import { SanctionLetter } from './pages/sanction-letter/sanction-letter';
 
 export const routes: Routes = [
+  // Default route
   { path: '', redirectTo: 'login', pathMatch: 'full' },
 
-  // No layout
+  // Authentication pages - no layout
   { path: 'login', component: Login },
   { path: 'register', component: Register },
   { path: 'two-factor-setup', component: TwoFactorSetup },
 
-  // CUSTOMER layout: only customer pages
+  // Customer layout
   {
     path: '',
     component: CustomerLayout,
@@ -40,11 +47,15 @@ export const routes: Routes = [
     children: [
       { path: 'user-dashboard', component: UserDashboard },
       { path: 'customer-kyc', component: CustomerKyc },
-      // { path: 'support', component: Support },
+      { path: 'apply-loan', component: ApplyLoan },
+      { path: 'view-profile', component: ViewProfile },
+      { path: 'cibil', component: Cibil },
+      { path: 'eligibility', component: Eligibility },
+      { path: 'sanction-letter', component: SanctionLetter },
     ],
   },
 
-  // OFFICER layout: only officer pages
+  // Officer layout
   {
     path: '',
     component: OfficerLayout,
@@ -54,11 +65,11 @@ export const routes: Routes = [
       { path: 'reports', component: Reports },
       { path: 'officer-kyc', component: OfficerKyc },
       { path: 'officer-kyc-review/:customerId', component: OfficerKycReview },
-      { path: 'cibil', component: Cibil },
-      { path: 'eligibility', component: Eligibility },
       { path: 'scorecard', component: Scorecard },
+      { path: 'pending-deals', component: PendingDeals },
     ],
   },
 
+  // Unknown route
   { path: '**', redirectTo: 'login' },
 ];
