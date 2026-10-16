@@ -3,7 +3,7 @@ import { authGuard } from './guards/auth-access-guard';
 
 // Layouts
 import { CustomerLayout } from './pages/customer-layout/customer-layout';
-import { OfficerLayout } from './officer-layout/officer-layout';
+import { OfficerLayout } from './pages/officer-layout/officer-layout';
 
 // Authentication pages
 import { Login } from './pages/login/login';

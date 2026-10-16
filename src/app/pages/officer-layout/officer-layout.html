@@ -1,0 +1,140 @@
+<div class="container-fluid p-0">
+  <div class="d-flex min-vh-100">
+    <!-- Officer Sidebar -->
+    <aside class="sidebar text-white d-flex flex-column">
+      <!-- Brand -->
+      <div class="p-3 border-bottom border-light">
+        <h3 class="fw-bold mb-1"><i class="bi bi-bank me-2"></i>LoanApp</h3>
+        <small class="text-white-50">Officer Portal</small>
+      </div>
+
+      <!-- Sidebar Menu -->
+      <div class="sidebar-menu p-2">
+        <small class="text-white-50 px-2">MAIN MENU</small>
+
+        <!-- Dashboard -->
+        <a
+          routerLink="/officer-dashboard"
+          routerLinkActive="active-menu"
+          class="btn text-white w-100 text-start d-flex align-items-center gap-2 mt-2"
+        >
+          <i class="bi bi-speedometer2 fs-5"></i>
+          <span>Dashboard</span>
+        </a>
+
+        <!-- Reports -->
+        <a
+          routerLink="/reports"
+          routerLinkActive="active-menu"
+          class="btn text-white w-100 text-start d-flex align-items-center gap-2"
+        >
+          <i class="bi bi-bar-chart-line fs-5"></i>
+          <span>Reports</span>
+        </a>
+
+        <hr class="border-light" />
+
+        <!-- Customer Management -->
+        <button
+          type="button"
+          class="btn text-white w-100 text-start fw-semibold d-flex align-items-center gap-2"
+          (click)="toggleCustomer()"
+        >
+          <i class="bi bi-people fs-5"></i>
+          <span>Customer Management</span>
+          <i class="bi ms-auto" [ngClass]="customerOpen ? 'bi-chevron-down' : 'bi-chevron-right'"></i>
+        </button>
+
+        <div *ngIf="customerOpen" class="nav flex-column">
+          <span class="nav-link text-start soon" title="Coming soon">
+            <i class="bi bi-person-lines-fill me-2"></i>Customers
+          </span>
+
+          <a routerLink="/officer-kyc" routerLinkActive="active" class="nav-link text-start">
+            <i class="bi bi-file-earmark-check me-2"></i>KYC Verification
+          </a>
+
+          <span class="nav-link text-start soon" title="Coming soon">
+            <i class="bi bi-check-circle me-2"></i>Eligibility Check
+          </span>
+
+          <a routerLink="/scorecard" routerLinkActive="active" class="nav-link text-start">
+            <i class="bi bi-credit-card-2-front me-2"></i>Score Cards
+          </a>
+        </div>
+
+        <hr class="border-light" />
+
+        <!-- Loan Processing -->
+        <button
+          type="button"
+          class="btn text-white w-100 text-start fw-semibold d-flex align-items-center gap-2"
+          (click)="toggleLoanProcessing()"
+        >
+          <i class="bi bi-cash-stack fs-5"></i>
+          <span>Loan Processing</span>
+          <i class="bi ms-auto" [ngClass]="loanProcessingOpen ? 'bi-chevron-down' : 'bi-chevron-right'"></i>
+        </button>
+
+        <div *ngIf="loanProcessingOpen" class="nav flex-column">
+          <a routerLink="/pending-deals" routerLinkActive="active" class="nav-link text-start">
+            <i class="bi bi-file-earmark-text me-2"></i>Loan Applications
+          </a>
+
+          <span class="nav-link text-start soon" title="Coming soon">
+            <i class="bi bi-file-earmark-pdf me-2"></i>Sanction Letters
+          </span>
+
+          <a routerLink="/loan-accounts" routerLinkActive="active" class="nav-link text-start">
+            <i class="bi bi-wallet2 me-2"></i>Loan Accounts
+          </a>
+        </div>
+
+        <hr class="border-light" />
+
+        <!-- Requests & Collections -->
+        <button
+          type="button"
+          class="btn text-white w-100 text-start fw-semibold d-flex align-items-center gap-2"
+          (click)="toggleRequests()"
+        >
+          <i class="bi bi-clipboard-check fs-5"></i>
+          <span>Requests &amp; Collections</span>
+          <i class="bi ms-auto" [ngClass]="requestsOpen ? 'bi-chevron-down' : 'bi-chevron-right'"></i>
+        </button>
+
+        <div *ngIf="requestsOpen" class="nav flex-column">
+          <span class="nav-link text-start soon" title="Coming soon">
+            <i class="bi bi-file-earmark-x me-2"></i>Closure Requests
+          </span>
+          <span class="nav-link text-start soon" title="Coming soon">
+            <i class="bi bi-exclamation-triangle me-2"></i>Penalty Charges
+          </span>
+        </div>
+
+        <hr class="border-light" />
+
+        <!-- Support Tickets -->
+        <span class="btn text-white w-100 text-start d-flex align-items-center gap-2 soon" title="Coming soon">
+          <i class="bi bi-headset fs-5"></i>
+          <span>Support Tickets</span>
+        </span>
+      </div>
+
+      <!-- Logout stays at bottom -->
+      <div class="logout-footer p-3 border-top border-light">
+        <button type="button" class="btn btn-outline-light w-100 text-start" (click)="logout()">
+          <i class="bi bi-box-arrow-right me-2"></i>
+          Logout
+        </button>
+      </div>
+    </aside>
+
+    <!-- Main Content: every officer page opens here -->
+    <main class="main-content flex-grow-1">
+      <div class="container-fluid p-3 p-md-4">
+        <router-outlet></router-outlet>
+      </div>
+    </main>
+  </div>
+</div>
