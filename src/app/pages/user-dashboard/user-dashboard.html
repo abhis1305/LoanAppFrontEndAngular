@@ -1,1 +1,590 @@
-<p>user-dashboard works!</p>
+
+<!-- WELCOME ROW -->
+<div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+  <div>
+    <h4 class="mb-1 fw-bold">Welcome back, {{name}}! 👋</h4>
+    <span class="text-muted">
+      Here's what's happening with your loan journey.
+    </span>
+  </div>
+
+  <button class="btn btn-primary btn-apply">
+    Apply for New Loan
+    <i class="bi bi-plus-circle ms-2"></i>
+  </button>
+</div>
+
+<!-- 1. TOP 5 CARDS -->
+<div class="row g-3 mb-3" *ngIf="cards">
+
+  <div class="col-6 col-md-4 col-xl">
+    <div class="stat blue">
+      <div class="icon">
+        <i class="bi bi-file-earmark-text-fill"></i>
+      </div>
+
+      <div>
+        <small>Total Applications</small>
+        <h3>{{cards.totalApplications}}</h3>
+        <a class="link">View All</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-6 col-md-4 col-xl">
+    <div class="stat green">
+      <div class="icon">
+        <i class="bi bi-wallet2"></i>
+      </div>
+
+      <div>
+        <small>Active Loans</small>
+        <h3>{{cards.activeLoans}}</h3>
+        <a class="link">View Details</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-6 col-md-4 col-xl">
+    <div class="stat orange">
+      <div class="icon">
+        <i class="bi bi-calendar-check"></i>
+      </div>
+
+      <div>
+        <small>EMIs Paid</small>
+        <h3>{{cards.emisPaid}}</h3>
+        <small class="sub">On-time Payments</small>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-6 col-md-4 col-xl">
+    <div class="stat purple">
+      <div class="icon">
+        <i class="bi bi-credit-card-2-front"></i>
+      </div>
+
+      <div>
+        <small>Upcoming EMI</small>
+        <h3>₹ {{cards.upcomingEmiAmount | number}}</h3>
+
+        <small
+          class="sub"
+          *ngIf="cards.upcomingEmiDueDate">
+          Due on {{cards.upcomingEmiDueDate | date:'dd MMM yyyy'}}
+        </small>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-12 col-md-4 col-xl">
+    <div class="stat red">
+      <div class="icon">
+        <i class="bi bi-currency-rupee"></i>
+      </div>
+
+      <div>
+        <small>Total Amount Paid</small>
+        <h3>₹ {{cards.totalAmountPaid | number}}</h3>
+        <small class="sub">All Loans</small>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+
+<!-- 2. LOAN APPLICATION PROGRESS -->
+<div class="row g-3 mb-3">
+
+  <div class="col-lg-7">
+    <div class="box h-100">
+
+      <div class="d-flex justify-content-between align-items-center mb-3">
+
+        <h6 class="box-title mb-0">
+          Loan Application Progress
+        </h6>
+
+        <div *ngIf="progress">
+          <small class="me-2">
+            Application ID: APP{{progress.applicationId}}
+          </small>
+
+          <span class="badge-soft">
+            {{progress.currentStatus}}
+          </span>
+        </div>
+
+      </div>
+
+
+      <div *ngIf="progress">
+
+        <div class="stepper">
+
+          <div
+            class="step"
+            *ngFor="let s of progress.stages; let i = index"
+            [class.done]="s.done && i != currentStep"
+            [class.current]="i == currentStep"
+            [class.line-on]="s.done">
+
+            <div class="circle">
+
+              <i
+                class="bi bi-check-lg"
+                *ngIf="s.done && i != currentStep">
+              </i>
+
+              <span *ngIf="i == currentStep">
+                {{i + 1}}
+              </span>
+
+              <i
+                class="bi bi-x-lg"
+                *ngIf="!s.done && i != currentStep">
+              </i>
+
+            </div>
+
+            <div class="label">
+              {{s.stage}}
+            </div>
+
+            <small
+              class="text-muted"
+              *ngIf="s.date">
+              {{s.date | date:'dd MMM yyyy'}}
+            </small>
+
+          </div>
+
+        </div>
+
+
+        <div
+          class="banner"
+          *ngIf="progress.stages[4] && progress.stages[4].done">
+
+          <i class="bi bi-check-circle-fill banner-icon"></i>
+
+          <div class="flex-fill">
+
+            <b>
+              Congratulations! Your loan has been disbursed.
+            </b>
+
+            <br>
+
+            <span *ngIf="activeLoan">
+              Loan amount of ₹ {{activeLoan.loanAmount | number}}
+              has been credited to your bank account.
+            </span>
+
+          </div>
+
+          <button class="btn btn-outline-primary btn-sm">
+            View Loan Details
+          </button>
+
+        </div>
+
+      </div>
+
+
+      <p
+        class="text-muted"
+        *ngIf="!progress && progressMsg">
+        {{progressMsg}}
+      </p>
+
+    </div>
+  </div>
+
+
+  <!-- 3. ACTIVE LOAN OVERVIEW -->
+  <div class="col-lg-5">
+
+    <div class="box h-100">
+
+      <div class="d-flex justify-content-between mb-3">
+
+        <h6 class="box-title mb-0">
+          Active Loan Overview
+        </h6>
+
+        <a class="link small">
+          View Loan Details
+        </a>
+
+      </div>
+
+
+      <div *ngIf="activeLoan">
+
+        <div class="d-flex justify-content-between">
+
+          <div>
+
+            <b class="big">
+              {{activeLoan.loanType}}
+            </b>
+
+            <span class="badge-soft ms-2">
+              {{activeLoan.loanStatus}}
+            </span>
+
+            <br>
+
+            <small class="text-muted">
+              Loan ID: {{activeLoan.loanAccountNo}}
+            </small>
+
+          </div>
+
+
+          <div class="text-end">
+
+            <small class="text-muted">
+              Loan Amount
+            </small>
+
+            <h4 class="mb-0 fw-bold">
+              ₹ {{activeLoan.loanAmount | number}}
+            </h4>
+
+          </div>
+
+        </div>
+
+
+        <div class="row loan-grid">
+
+          <div class="col-6">
+
+            <div class="kv">
+              <span>Disbursed On</span>
+              <b>
+                {{activeLoan.disbursementDate | date:'dd MMM yyyy'}}
+              </b>
+            </div>
+
+            <div class="kv">
+              <span>Tenure</span>
+              <b>
+                {{activeLoan.tenureMonths}} Months
+              </b>
+            </div>
+
+            <div class="kv">
+              <span>Interest Rate</span>
+              <b>
+                {{activeLoan.interestRate}}% p.a.
+              </b>
+            </div>
+
+          </div>
+
+
+          <div class="col-6 border-start">
+
+            <div class="kv">
+              <span>EMI Amount</span>
+              <b>
+                ₹ {{activeLoan.emiAmount | number}}
+              </b>
+            </div>
+
+            <div class="kv">
+              <span>EMIs Paid</span>
+              <b>
+                {{activeLoan.emisPaid}} /
+                {{activeLoan.tenureMonths}}
+              </b>
+            </div>
+
+            <div class="kv">
+              <span>Outstanding Amount</span>
+              <b>
+                ₹ {{activeLoan.outstandingAmount | number}}
+              </b>
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <div
+          class="progress mt-3"
+          style="height: 6px">
+
+          <div
+            class="progress-bar bg-success"
+            [style.width.%]="activeLoan.percentPaid">
+          </div>
+
+        </div>
+
+
+        <div class="d-flex justify-content-between mb-3">
+
+          <small>
+            {{activeLoan.percentPaid}}% Paid
+          </small>
+
+          <small class="text-muted">
+            {{activeLoan.emisRemaining}} EMIs Remaining
+          </small>
+
+        </div>
+
+
+        <button class="btn btn-primary w-100">
+          Pay EMI Now
+        </button>
+
+      </div>
+
+
+      <p
+        class="text-muted"
+        *ngIf="!activeLoan && activeLoanMsg">
+        {{activeLoanMsg}}
+      </p>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- 4, 5, 6. EMI / PAYMENTS / DOCUMENTS -->
+<div class="row g-3 mb-3">
+
+
+  <!-- 4. EMI SUMMARY -->
+  <div class="col-md-6 col-xl-4">
+
+    <div class="box h-100">
+
+      <h6 class="box-title">
+        EMI Summary
+      </h6>
+
+
+      <div *ngIf="emiSummary">
+
+        <div class="d-flex align-items-center flex-wrap gap-3">
+
+          <div
+            class="donut"
+            [style.background]="emiDonut">
+
+            <div class="donut-hole">
+
+              {{emiSummary.totalEmis}}
+
+              <small>
+                Total EMIs
+              </small>
+
+            </div>
+
+          </div>
+
+
+          <div class="legend flex-fill">
+
+            <div>
+
+              <span
+                class="dot"
+                style="background:#1e9e55">
+              </span>
+
+              Paid ({{emiSummary.paidCount}})
+
+              <b class="float-end">
+                ₹ {{emiSummary.paidAmount | number}}
+              </b>
+
+            </div>
+
+
+            <div>
+
+              <span
+                class="dot"
+                style="background:#1565d8">
+              </span>
+
+              Upcoming ({{emiSummary.upcomingCount}})
+
+              <b class="float-end">
+                ₹ {{emiSummary.upcomingAmount | number}}
+              </b>
+
+            </div>
+
+
+            <div>
+
+              <span
+                class="dot"
+                style="background:#dfe3ea">
+              </span>
+
+              Remaining ({{emiSummary.remainingCount}})
+
+              <b class="float-end">
+                ₹ {{emiSummary.remainingAmount | number}}
+              </b>
+
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <div
+          class="next-emi"
+          *ngIf="emiSummary.nextEmiDueDate">
+
+          <i class="bi bi-calendar-event me-2"></i>
+
+          Next EMI Due on
+          {{emiSummary.nextEmiDueDate | date:'dd MMM yyyy'}}
+
+          <b class="float-end">
+            ₹ {{emiSummary.nextEmiAmount | number}}
+          </b>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- 5. RECENT PAYMENTS -->
+  <div class="col-md-6 col-xl-4">
+
+    <div class="box h-100">
+
+      <div class="d-flex justify-content-between">
+
+        <h6 class="box-title">
+          Recent Payments
+        </h6>
+
+        <a class="link small">
+          View All
+        </a>
+
+      </div>
+
+
+      <div
+        class="pay-row"
+        *ngFor="let p of payments">
+
+        <i class="bi bi-check-circle text-success"></i>
+
+        <span>
+          {{p.paymentDate | date:'dd MMM yyyy'}}
+
+          <br>
+
+          <small class="text-muted">
+            {{p.paymentName}}
+          </small>
+        </span>
+
+        <b>
+          ₹ {{p.paidAmount | number}}
+        </b>
+
+        <span class="text-success">
+          {{p.paymentStatus}}
+        </span>
+
+      </div>
+
+
+      <p
+        class="text-muted"
+        *ngIf="payments && payments.length == 0">
+        No payments yet
+      </p>
+
+
+      <div class="text-center mt-3">
+
+        <a class="link small">
+          View Payment History
+        </a>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- 6. DOCUMENTS -->
+  <div class="col-md-6 col-xl-4">
+
+    <div class="box h-100">
+
+      <div class="d-flex justify-content-between">
+
+        <h6 class="box-title">
+          Documents
+        </h6>
+
+        <a class="link small">
+          View All
+        </a>
+
+      </div>
+
+
+      <div
+        class="doc-row"
+        *ngFor="let d of documents">
+
+        <i class="bi bi-file-earmark-text doc-icon"></i>
+
+        <span class="flex-fill">
+          {{d.documentType}}
+        </span>
+
+        <span class="text-success">
+
+          {{d.verificationStatus}}
+
+          <i class="bi bi-check-circle"></i>
+
+        </span>
+
+      </div>
+
+
+      <p
+        class="text-muted"
+        *ngIf="documents && documents.length == 0">
+        No documents uploaded
+      </p>
+
+    </div>
+
+  </div>
+
+</div>

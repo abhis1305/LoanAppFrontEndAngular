@@ -1,9 +1,7 @@
 import { Component, ChangeDetectorRef, AfterViewInit } from '@angular/core';
-
 import { FormsModule } from '@angular/forms';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
-
 import { AuthService, AuthResponse } from '../../services/auth-service';
 
 declare global {
@@ -47,7 +45,6 @@ export class Login implements AfterViewInit {
     this.initializeGoogleSignIn();
   }
 
-  // Initialize Google Sign-In button
   private initializeGoogleSignIn(attempt = 0): void {
     const google = window.google;
     const button = document.getElementById('googleButton');
@@ -56,40 +53,30 @@ export class Login implements AfterViewInit {
       return;
     }
 
-    // Wait for Google's script to load
     if (!google?.accounts?.id) {
       if (attempt < 30) {
         setTimeout(() => this.initializeGoogleSignIn(attempt + 1), 200);
       } else {
         this.errorMessage = 'Google Sign-In did not load. Please refresh the page.';
-
         this.cdr.markForCheck();
       }
-
       return;
     }
 
     google.accounts.id.initialize({
       client_id: this.authService.getGoogleClientId(),
-
       callback: (response: GoogleCredentialResponse) => {
         const idToken = response?.credential;
-
         if (!idToken) {
           this.errorMessage = 'Google did not return an ID token.';
-
           this.cdr.markForCheck();
           return;
         }
-
         this.loginWithGoogle(idToken);
       },
     });
 
-    // Clear any old rendered button
     button.innerHTML = '';
-
-    // Render Google Sign-In button
     google.accounts.id.renderButton(button, {
       type: 'standard',
       theme: 'outline',
@@ -100,12 +87,10 @@ export class Login implements AfterViewInit {
     });
   }
 
-  // Navigate to Register page
   goToRegister(): void {
     void this.router.navigate(['/register']);
   }
 
-  // Login with email and password
   login(): void {
     this.successMessage = '';
     this.errorMessage = '';
@@ -124,7 +109,6 @@ export class Login implements AfterViewInit {
         this.isSubmitting = false;
         this.processLoginResponse(response);
       },
-
       error: (error: HttpErrorResponse) => {
         this.isSubmitting = false;
         this.errorMessage = this.getErrorMessage(error);
@@ -133,7 +117,6 @@ export class Login implements AfterViewInit {
     });
   }
 
-  // Login with Google
   private loginWithGoogle(idToken: string): void {
     this.successMessage = '';
     this.errorMessage = '';
@@ -149,7 +132,6 @@ export class Login implements AfterViewInit {
         this.isSubmitting = false;
         this.processLoginResponse(response);
       },
-
       error: (error: HttpErrorResponse) => {
         this.isSubmitting = false;
         this.errorMessage = this.getErrorMessage(error);
@@ -158,24 +140,19 @@ export class Login implements AfterViewInit {
     });
   }
 
-  // Handle normal login and Google login responses
   private processLoginResponse(response: AuthResponse): void {
     const result = this.authService.handleLoginResponse(response);
 
     if (result.status === 'twoFactor') {
       this.requiresTwoFactor = true;
       this.preAuthToken = response.preAuthToken ?? '';
-
       this.successMessage = result.message ?? 'Enter the 6-digit code from your Authenticator app.';
     } else if (result.status === 'error') {
       this.errorMessage = result.message ?? 'Login failed.';
     }
-
-    // Setup and dashboard navigation are handled by AuthService
     this.cdr.markForCheck();
   }
 
-  // Verify OTP for an existing 2FA user
   verifyTwoFactor(): void {
     this.successMessage = '';
     this.errorMessage = '';
@@ -184,17 +161,16 @@ export class Login implements AfterViewInit {
 
     if (!token) {
       this.errorMessage = 'Your login session is missing. Please log in again.';
-
       this.cdr.markForCheck();
       return;
     }
 
     if (!/^[0-9]{6}$/.test(this.otpCode)) {
-      this.errorMessage = 'Enter a valid 6-digit OTP.';
+  this.errorMessage = 'Enter a valid 6-digit OTP.';
+  this.cdr.markForCheck();
+  return;
+}
 
-      this.cdr.markForCheck();
-      return;
-    }
 
     if (this.isSubmitting) {
       return;
@@ -208,13 +184,11 @@ export class Login implements AfterViewInit {
 
         if (!response.token) {
           this.errorMessage = response.message ?? 'OTP verification failed.';
-
           this.cdr.markForCheck();
           return;
         }
 
         const success = this.authService.completeTwoFactorLogin(response);
-
         if (success) {
           this.preAuthToken = '';
           this.otpCode = '';
@@ -222,10 +196,8 @@ export class Login implements AfterViewInit {
         } else {
           this.errorMessage = 'Login succeeded, but the role is missing or unrecognized.';
         }
-
         this.cdr.markForCheck();
       },
-
       error: (error: HttpErrorResponse) => {
         this.isSubmitting = false;
         this.errorMessage = this.getErrorMessage(error);
@@ -234,24 +206,19 @@ export class Login implements AfterViewInit {
     });
   }
 
-  // Display readable API errors
   private getErrorMessage(error: HttpErrorResponse): string {
     if (typeof error.error === 'string') {
       return error.error;
     }
-
     if (error.error?.message) {
       return error.error.message;
     }
-
     if (error.error?.title) {
       return error.error.title;
     }
-
     if (error.status === 0) {
-      return 'Cannot connect to the API. Check the backend, HTTPS and CORS.';
+      return 'Cannot connect to the API. Check the backend network port status.';
     }
-
     return `Request failed. HTTP Status: ${error.status}`;
   }
 }

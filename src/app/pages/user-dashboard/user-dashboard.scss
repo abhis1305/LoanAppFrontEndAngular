@@ -1,0 +1,64 @@
+:host { display:block; color:#1b2540; }
+.link { color:#1565d8; cursor:pointer; text-decoration:none; font-size:.85rem; &:hover{text-decoration:underline;} }
+.btn-apply { background:#1565d8; border-radius:8px; padding:10px 20px; font-weight:600; }
+.badge-soft { background:#dff3e7; color:#1e7a46; font-size:.78rem; font-weight:600; padding:3px 10px; border-radius:4px; }
+
+// ---------- 5 coloured cards ----------
+.stat { display:flex; gap:12px; padding:16px; height:100%; border-radius:6px; border:1px solid; align-items:center;
+  h3 { margin:2px 0; font-size:24px; font-weight:700; } small{font-size:.8rem;} .sub{color:#6c757d;}
+  .icon { width:48px; height:48px; border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:24px; flex-shrink:0; } }
+.stat.blue{background:#eef5ff;border-color:#cfe2ff;} .stat.blue .icon{background:#d9e8ff;color:#1565d8;}
+.stat.green{background:#edf9f1;border-color:#c9ecd6;} .stat.green .icon{background:#d4f1de;color:#1e9e55;}
+.stat.orange{background:#fff7e8;border-color:#ffe3b3;} .stat.orange .icon{background:#ffe8c2;color:#f0922b;}
+.stat.purple{background:#f4f0ff;border-color:#dcd1fa;} .stat.purple .icon{background:#e5dcfc;color:#6f42c1;}
+.stat.red{background:#fff0f1;border-color:#f8d0d3;} .stat.red .icon{background:#fbd9dc;color:#dc3545;}
+
+// ---------- white boxes ----------
+.box { background:#fff; border:1px solid #e6e9f0; border-radius:6px; padding:18px; }
+.box-title { font-weight:700; margin-bottom:14px; }
+.big { font-size:18px; }
+
+// ---------- progress stepper ----------
+.stepper { display:flex; margin:10px 0 22px; }
+.step { flex:1; text-align:center; position:relative; font-size:12px; }
+.step::before { content:''; position:absolute; top:15px; left:-50%; width:100%; height:2px; background:#d5dbe5; z-index:0; }
+.step:first-child::before { display:none; }
+.step.line-on::before { background:#28a745; }
+.circle { position:relative; z-index:1; width:32px; height:32px; border-radius:50%; margin:0 auto 8px; background:#d5dbe5; color:#fff; display:flex; align-items:center; justify-content:center; font-weight:600; }
+.step.done .circle { background:#28a745; }
+.step.current .circle { background:#1565d8; box-shadow:0 0 0 4px #d9e8ff; }
+.label { font-weight:500; }
+
+// ---------- disbursed banner ----------
+.banner { display:flex; align-items:center; gap:14px; background:#eaf8ef; border:1px solid #bfe8cd; border-radius:6px; padding:14px 16px; flex-wrap:wrap; }
+.banner-icon { font-size:30px; color:#28a745; }
+
+// ---------- active loan ----------
+.loan-grid { margin-top:14px; }
+.kv { display:flex; justify-content:space-between; padding:4px 8px; font-size:13px; span{color:#6c757d;} }
+
+// ---------- EMI summary ----------
+.donut { width:110px; height:110px; border-radius:50%; position:relative; flex-shrink:0; }
+.donut-hole { position:absolute; top:17px; left:17px; width:76px; height:76px; border-radius:50%; background:#fff; display:flex; flex-direction:column; align-items:center; justify-content:center; font-size:22px; font-weight:700; small{font-size:10px;font-weight:400;color:#6c757d;} }
+.legend div { font-size:12px; padding:5px 0; min-width:130px; }
+.dot { display:inline-block; width:9px; height:9px; border-radius:50%; margin-right:6px; }
+.next-emi { margin-top:16px; padding:10px 12px; background:#fff7e8; border:1px solid #ffe3b3; border-radius:6px; color:#b36b00; font-size:13px; }
+
+// ---------- payments / documents ----------
+.pay-row { display:grid; grid-template-columns:22px 1fr auto auto; gap:8px; align-items:center; padding:9px 0; border-bottom:1px solid #f0f2f6; font-size:13px; }
+.doc-row { display:flex; align-items:center; gap:10px; padding:11px 0; border-bottom:1px solid #f0f2f6; font-size:13px; }
+.doc-icon { font-size:20px; color:#6c757d; }
+
+// ---------- quick actions ----------
+.qa { display:flex; align-items:center; gap:12px; padding:9px 0; border-bottom:1px solid #f0f2f6; font-size:13px; cursor:pointer; color:inherit;
+  &:hover { color:#1565d8; } }
+.qa-icon { width:30px; height:30px; border-radius:6px; display:flex; align-items:center; justify-content:center; flex:none;
+  &.blue{background:#d9e8ff;color:#1565d8;} &.orange{background:#ffe8c2;color:#f0922b;} &.green{background:#d4f1de;color:#1e9e55;} &.red{background:#fbd9dc;color:#dc3545;} }
+
+// ---------- recent activity timeline ----------
+.timeline { display:flex; gap:0; overflow-x:auto; padding-top:6px; }
+.tl-item { flex:1; min-width:140px; position:relative; padding:18px 12px 4px 0; font-size:12px; display:flex; flex-direction:column; gap:2px;
+  &::before { content:''; position:absolute; top:5px; left:5px; right:0; height:2px; background:#d5dbe5; }
+  &:last-child::before { right:50%; } }
+.tl-dot { position:absolute; top:0; left:0; width:12px; height:12px; border-radius:50%; background:#28a745; }
+.tl-item:first-child .tl-dot { background:#6f42c1; }

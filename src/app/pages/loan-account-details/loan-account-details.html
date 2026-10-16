@@ -1,0 +1,79 @@
+
+<div class="container-fluid mt-4" *ngIf="account">
+
+  <div class="card shadow-sm">
+
+    <div class="card-body">
+
+      <h2 class="mb-3">Loan Account Details</h2>
+
+      <p>
+        <strong>Loan Account No:</strong>
+        {{ account.loanAccountNo }}
+      </p>
+
+      <p>
+        <strong>Customer:</strong>
+        {{ account.customer?.customerName || account.customerId }}
+      </p>
+
+      <p>
+        <strong>Loan Amount:</strong>
+        ₹{{ account.loanAmount }}
+      </p>
+
+      <p>
+        <strong>Outstanding Principal:</strong>
+        ₹{{ account.outstandingPrincipal }}
+      </p>
+
+      <p>
+        <strong>Loan Status:</strong>
+        {{ account.loanStatus }}
+      </p>
+
+      <p>
+        <strong>Interest Rate:</strong>
+        {{ account.interestRate }} %
+      </p>
+
+      <p>
+        <strong>Tenure Months:</strong>
+        {{ account.tenureMonths }}
+      </p>
+
+      <p>
+        <strong>EMI Amount:</strong>
+        ₹{{ account.emiAmount }}
+      </p>
+
+      <p>
+        <strong>Total Paid Amount:</strong>
+        ₹{{ account.totalPaidAmount }}
+      </p>
+
+      <p>
+        <strong>Disbursement Date:</strong>
+        {{ account.disbursementDate | date:'dd MMM yyyy' }}
+      </p>
+
+      <p>
+        <strong>Created At:</strong>
+        {{ account.createdAt | date:'dd MMM yyyy' }}
+      </p>
+
+      <button
+        class="btn btn-secondary mt-3"
+        routerLink="/loan-accounts">
+        Back
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+<div class="container mt-4" *ngIf="account == null">
+  <p>Loading loan account details...</p>
+</div>

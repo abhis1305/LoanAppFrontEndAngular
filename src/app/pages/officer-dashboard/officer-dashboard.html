@@ -1,1 +1,150 @@
-<p>officer-dashboard works!</p>
+<div class="page">
+
+  <!-- TOP ROW -->
+  <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-3">
+    <div>
+      <h4 class="fw-bold mb-0">Officer Dashboard</h4>
+      <small class="text-secondary">Loan origination and loan management at a glance.</small>
+    </div>
+    <form [formGroup]="filter" (ngSubmit)="getDashboard()" class="d-flex align-items-center gap-2 flex-wrap">
+      <small class="text-secondary">From</small>
+      <input type="date" formControlName="from" class="form-control form-control-sm w-auto">
+      <small class="text-secondary">To</small>
+      <input type="date" formControlName="to" class="form-control form-control-sm w-auto">
+      <button type="submit" class="btn btn-sm btn-primary px-3">Search</button>
+      <button type="button" class="btn btn-sm btn-outline-secondary" (click)="clear()">Clear</button>
+    </form>
+  </div>
+
+  <div class="alert alert-danger" *ngIf="msg">{{msg}}</div>
+  <p class="text-secondary" *ngIf="loading && !dash">Loading dashboard...</p>
+
+  <div *ngIf="dash">
+
+    <!-- ===================== LOS ===================== -->
+    <div class="panel-title bg-los">LOS – Loan Origination System</div>
+
+    <div class="row g-3 mt-0 mb-4">
+      <div class="col-lg-5">
+        <div class="row g-3">
+          <div class="col-6">
+            <div class="kpi kpi-blue">
+              <div class="icon"><i class="bi bi-file-earmark-text-fill"></i></div>
+              <div><small>Total Applications</small><h4>{{dash.losCards.totalApplications | number}}</h4><a class="link">View Report</a></div>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="kpi kpi-green">
+              <div class="icon"><i class="bi bi-check-circle-fill"></i></div>
+              <div><small>Applications Approved</small><h4>{{dash.losCards.approved | number}}</h4><a class="link">View Report</a></div>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="kpi kpi-red">
+              <div class="icon"><i class="bi bi-x-circle-fill"></i></div>
+              <div><small>Applications Rejected</small><h4>{{dash.losCards.rejected | number}}</h4><a class="link">View Report</a></div>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="kpi kpi-orange">
+              <div class="icon"><i class="bi bi-hourglass-split"></i></div>
+              <div><small>Applications Pending</small><h4>{{dash.losCards.pending | number}}</h4><a class="link">View Report</a></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Application Funnel -->
+      <div class="col-lg-7">
+        <div class="box h-100">
+          <h6 class="fw-bold mb-3">Application Funnel</h6>
+          <div class="funnel-wrap" *ngIf="funnel.length > 0">
+            <div class="funnel">
+              <div class="seg" *ngFor="let s of funnel" [style.clip-path]="s.clip" [style.background]="s.color"></div>
+            </div>
+            <div class="funnel-labels">
+              <div class="lab" *ngFor="let s of funnel">
+                <small class="text-secondary">{{s.stage}}</small>
+                <b>{{s.count | number}}</b>
+              </div>
+            </div>
+          </div>
+          <p class="text-secondary" *ngIf="funnel.length == 0">No applications in this period.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===================== LMS ===================== -->
+    <div class="panel-title bg-lms">LMS – Loan Management System</div>
+
+    <div class="row g-3 mt-0">
+      <div class="col-6 col-md">
+        <div class="kpi kpi-green">
+          <div class="icon"><i class="bi bi-journal-text"></i></div>
+          <div><small>Total Loans</small><h4>{{dash.lmsCards.totalLoans | number}}</h4><a class="link">View Report</a></div>
+        </div>
+      </div>
+      <div class="col-6 col-md">
+        <div class="kpi kpi-teal">
+          <div class="icon"><i class="bi bi-wallet2"></i></div>
+          <div><small>Active Loans</small><h4>{{dash.lmsCards.activeLoans | number}}</h4><a class="link">View Report</a></div>
+        </div>
+      </div>
+      <div class="col-6 col-md">
+        <div class="kpi kpi-blue">
+          <div class="icon"><i class="bi bi-archive"></i></div>
+          <div><small>Closed Loans</small><h4>{{dash.lmsCards.closedLoans | number}}</h4><a class="link">View Report</a></div>
+        </div>
+      </div>
+      <!-- shows only when your API sends npaLoans -->
+      <div class="col-6 col-md" *ngIf="dash.lmsCards.npaLoans != null">
+        <div class="kpi kpi-red">
+          <div class="icon"><i class="bi bi-exclamation-triangle-fill"></i></div>
+          <div><small>NPA Loans</small><h4>{{dash.lmsCards.npaLoans | number}}</h4><a class="link">View Report</a></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row g-3 mt-0">
+      <!-- Loan Portfolio Summary -->
+      <div class="col-lg-5">
+        <div class="box h-100">
+          <h6 class="fw-bold mb-3">Loan Portfolio Summary</h6>
+          <div class="d-flex align-items-center flex-wrap gap-3">
+            <div class="donut" [style.background]="portfolioDonut">
+              <div class="donut-hole">₹ {{money(totalOutstanding)}}<small>Total Portfolio</small></div>
+            </div>
+            <div class="legend flex-fill">
+              <div class="d-flex justify-content-between gap-3" *ngFor="let p of dash.portfolioSummary; let i = index">
+                <span><span class="dot" [style.background]="colors[i % colors.length]"></span>{{p.product}}</span>
+                <span class="text-nowrap">₹ {{money(p.outstanding)}} ({{p.percent}}%)</span>
+              </div>
+              <div class="text-secondary" *ngIf="dash.portfolioSummary.length == 0">No active loans</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Collection Efficiency -->
+      <div class="col-lg-7">
+        <div class="box h-100">
+          <h6 class="fw-bold mb-3">Collection Efficiency (Monthly)</h6>
+          <div class="chart">
+            <div class="yaxis"><small *ngFor="let y of yLabels">{{y}}%</small></div>
+            <div class="plot">
+              <div class="bar-col" *ngFor="let m of dash.collectionEfficiency"
+                   [attr.title]="'Billed ₹ ' + m.billedAmount + ' / Collected ₹ ' + m.collectedAmount">
+                <div class="bar-area">
+                  <div class="bar" [style.height.%]="barHeight(m.efficiencyPercent)"></div>
+                </div>
+                <small class="month">{{m.month}}</small>
+              </div>
+            </div>
+          </div>
+          <div class="text-secondary mt-2" *ngIf="dash.collectionEfficiency.length == 0">No EMIs due in this period</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

@@ -1,0 +1,46 @@
+:host { display:block; color:#1b2540; }
+.page { padding:4px; }
+.link { font-size:11px; color:#1565d8; cursor:pointer; text-decoration:none; &:hover{text-decoration:underline;} }
+
+// ---------- LOS / LMS title bars ----------
+.panel-title { color:#fff; font-size:18px; font-weight:600; text-align:center; padding:10px; border-radius:6px; margin-bottom:16px; }
+.bg-los { background:#1a237e; }
+.bg-lms { background:#1b7a3d; }
+
+// ---------- cards with icons ----------
+.kpi { display:flex; gap:12px; padding:14px; height:100%; border-radius:6px; border:1px solid; align-items:center;
+  small { color:#6c757d; font-size:12px; display:block; }
+  h4 { margin:2px 0; font-weight:700; }
+  .icon { width:42px; height:42px; border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:20px; flex-shrink:0; } }
+.kpi-blue{background:#eef5ff;border-color:#cfe2ff;} .kpi-blue .icon{background:#d9e8ff;color:#1565d8;}
+.kpi-green{background:#edf9f1;border-color:#c9ecd6;} .kpi-green .icon{background:#d4f1de;color:#1e9e55;}
+.kpi-red{background:#fff0f1;border-color:#f8d0d3;} .kpi-red .icon{background:#fbd9dc;color:#dc3545;}
+.kpi-orange{background:#fff7e8;border-color:#ffe3b3;} .kpi-orange .icon{background:#ffe8c2;color:#f0922b;}
+.kpi-teal{background:#e9f8f7;border-color:#bfe9e6;} .kpi-teal .icon{background:#cdf0ed;color:#12a39a;}
+
+// ---------- white boxes ----------
+.box { background:#fff; border:1px solid #e6e9f0; border-radius:6px; padding:18px; }
+
+// ---------- funnel ----------
+.funnel-wrap { display:flex; align-items:stretch; gap:16px; }
+.funnel { flex:1; }
+.seg { height:52px; }
+.funnel-labels { width:150px; }
+.lab { height:52px; display:flex; flex-direction:column; justify-content:center; line-height:1.25; }
+
+// ---------- portfolio donut ----------
+.donut { width:160px; height:160px; border-radius:50%; position:relative; flex-shrink:0; }
+.donut-hole { position:absolute; top:24px; left:24px; width:112px; height:112px; border-radius:50%; background:#fff; display:flex; flex-direction:column; align-items:center; justify-content:center; font-size:15px; font-weight:700; text-align:center;
+  small { font-size:10px; font-weight:400; color:#6c757d; } }
+.legend { font-size:12px; min-width:180px; div { padding:4px 0; } }
+.dot { display:inline-block; width:9px; height:9px; border-radius:50%; margin-right:6px; }
+
+// ---------- collection efficiency bars ----------
+.chart { display:flex; }
+.yaxis { height:200px; display:flex; flex-direction:column; justify-content:space-between; text-align:right; padding-right:8px; color:#6c757d; font-size:10px; }
+.plot { flex:1; display:flex; gap:8px; border-left:1px solid #dee2e6; padding-left:6px; }
+.bar-col { flex:1; display:flex; flex-direction:column; align-items:center; max-width:56px; }
+.bar-area { height:200px; width:100%; display:flex; align-items:flex-end; border-bottom:1px solid #dee2e6;
+  background:repeating-linear-gradient(to top, transparent 0, transparent calc(20% - 1px), #eef1f5 calc(20% - 1px), #eef1f5 20%); }
+.bar { width:70%; margin:0 auto; background:#28a745; border-radius:3px 3px 0 0; min-height:2px; }
+.month { font-size:10px; color:#6c757d; margin-top:4px; }

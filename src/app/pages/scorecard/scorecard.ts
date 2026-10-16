@@ -35,6 +35,7 @@ export class Scorecard {
 
         this.cd.detectChanges();
       },
+      
       error: err => {
         console.log(err);
 
