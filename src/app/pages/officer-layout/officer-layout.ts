@@ -1,22 +1,19 @@
 import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
+import { NgClass, NgIf } from '@angular/common';
+import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 
 @Component({
-  selector: 'app-officer-dashboard',
+  selector: 'app-officer-layout',
   standalone: true,
-  imports: [CommonModule],
+  imports: [NgClass, NgIf, RouterLink, RouterLinkActive, RouterOutlet],
   templateUrl: './officer-layout.html',
   styleUrl: './officer-layout.scss',
 })
 export class OfficerLayout {
   // Sidebar sections
   customerOpen = true;
-  loanProcessingOpen = false;
+  loanProcessingOpen = true;
   requestsOpen = false;
-
-  // Currently selected sidebar section
-  selectedSection = 'Dashboard';
 
   constructor(private router: Router) {}
 
@@ -33,16 +30,6 @@ export class OfficerLayout {
   // Toggle Requests & Collections
   toggleRequests(): void {
     this.requestsOpen = !this.requestsOpen;
-  }
-
-  // Select a dashboard section
-  showSection(section: string): void {
-    this.selectedSection = section;
-  }
-
-  // Navigate to Officer KYC Verification
-  openKycVerification(): void {
-    this.router.navigate(['/officer-kyc']);
   }
 
   // Logout and clear authentication tokens

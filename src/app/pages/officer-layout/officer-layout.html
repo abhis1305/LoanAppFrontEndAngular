@@ -13,15 +13,24 @@
         <small class="text-white-50 px-2">MAIN MENU</small>
 
         <!-- Dashboard -->
-        <button
-          type="button"
+        <a
+          routerLink="/officer-dashboard"
+          routerLinkActive="active-menu"
           class="btn text-white w-100 text-start d-flex align-items-center gap-2 mt-2"
-          [class.active-menu]="selectedSection === 'Dashboard'"
-          (click)="showSection('Dashboard')"
         >
           <i class="bi bi-speedometer2 fs-5"></i>
           <span>Dashboard</span>
-        </button>
+        </a>
+
+        <!-- Reports -->
+        <a
+          routerLink="/reports"
+          routerLinkActive="active-menu"
+          class="btn text-white w-100 text-start d-flex align-items-center gap-2"
+        >
+          <i class="bi bi-bar-chart-line fs-5"></i>
+          <span>Reports</span>
+        </a>
 
         <hr class="border-light" />
 
@@ -33,44 +42,25 @@
         >
           <i class="bi bi-people fs-5"></i>
           <span>Customer Management</span>
-
-          <i class="bi ms-auto" [ngClass]="customerOpen ? 'bi-chevron-down' : 'bi-chevron-right'">
-          </i>
+          <i class="bi ms-auto" [ngClass]="customerOpen ? 'bi-chevron-down' : 'bi-chevron-right'"></i>
         </button>
 
         <div *ngIf="customerOpen" class="nav flex-column">
-          <button
-            type="button"
-            class="nav-link text-start"
-            [class.active]="selectedSection === 'Customers'"
-            (click)="showSection('Customers')"
-          >
+          <span class="nav-link text-start soon" title="Coming soon">
             <i class="bi bi-person-lines-fill me-2"></i>Customers
-          </button>
+          </span>
 
-          <!-- KYC Verification -->
-          <button type="button" class="nav-link text-start" (click)="openKycVerification()">
-            <i class="bi bi-file-earmark-check me-2"></i>
-            KYC Verification
-          </button>
+          <a routerLink="/officer-kyc" routerLinkActive="active" class="nav-link text-start">
+            <i class="bi bi-file-earmark-check me-2"></i>KYC Verification
+          </a>
 
-          <button
-            type="button"
-            class="nav-link text-start"
-            [class.active]="selectedSection === 'Eligibility Check'"
-            (click)="showSection('Eligibility Check')"
-          >
+          <span class="nav-link text-start soon" title="Coming soon">
             <i class="bi bi-check-circle me-2"></i>Eligibility Check
-          </button>
+          </span>
 
-          <button
-            type="button"
-            class="nav-link text-start"
-            [class.active]="selectedSection === 'Score Cards'"
-            (click)="showSection('Score Cards')"
-          >
+          <a routerLink="/scorecard" routerLinkActive="active" class="nav-link text-start">
             <i class="bi bi-credit-card-2-front me-2"></i>Score Cards
-          </button>
+          </a>
         </div>
 
         <hr class="border-light" />
@@ -83,41 +73,21 @@
         >
           <i class="bi bi-cash-stack fs-5"></i>
           <span>Loan Processing</span>
-
-          <i
-            class="bi ms-auto"
-            [ngClass]="loanProcessingOpen ? 'bi-chevron-down' : 'bi-chevron-right'"
-          >
-          </i>
+          <i class="bi ms-auto" [ngClass]="loanProcessingOpen ? 'bi-chevron-down' : 'bi-chevron-right'"></i>
         </button>
 
         <div *ngIf="loanProcessingOpen" class="nav flex-column">
-          <button
-            type="button"
-            class="nav-link text-start"
-            [class.active]="selectedSection === 'Loan Applications'"
-            (click)="showSection('Loan Applications')"
-          >
+          <a routerLink="/pending-deals" routerLinkActive="active" class="nav-link text-start">
             <i class="bi bi-file-earmark-text me-2"></i>Loan Applications
-          </button>
+          </a>
 
-          <button
-            type="button"
-            class="nav-link text-start"
-            [class.active]="selectedSection === 'Sanction Letters'"
-            (click)="showSection('Sanction Letters')"
-          >
+          <span class="nav-link text-start soon" title="Coming soon">
             <i class="bi bi-file-earmark-pdf me-2"></i>Sanction Letters
-          </button>
+          </span>
 
-          <button
-            type="button"
-            class="nav-link text-start"
-            [class.active]="selectedSection === 'Loan Accounts'"
-            (click)="showSection('Loan Accounts')"
-          >
+          <a routerLink="/loan-accounts" routerLinkActive="active" class="nav-link text-start">
             <i class="bi bi-wallet2 me-2"></i>Loan Accounts
-          </button>
+          </a>
         </div>
 
         <hr class="border-light" />
@@ -130,43 +100,25 @@
         >
           <i class="bi bi-clipboard-check fs-5"></i>
           <span>Requests &amp; Collections</span>
-
-          <i class="bi ms-auto" [ngClass]="requestsOpen ? 'bi-chevron-down' : 'bi-chevron-right'">
-          </i>
+          <i class="bi ms-auto" [ngClass]="requestsOpen ? 'bi-chevron-down' : 'bi-chevron-right'"></i>
         </button>
 
         <div *ngIf="requestsOpen" class="nav flex-column">
-          <button
-            type="button"
-            class="nav-link text-start"
-            [class.active]="selectedSection === 'Closure Requests'"
-            (click)="showSection('Closure Requests')"
-          >
+          <span class="nav-link text-start soon" title="Coming soon">
             <i class="bi bi-file-earmark-x me-2"></i>Closure Requests
-          </button>
-
-          <button
-            type="button"
-            class="nav-link text-start"
-            [class.active]="selectedSection === 'Penalty Charges'"
-            (click)="showSection('Penalty Charges')"
-          >
+          </span>
+          <span class="nav-link text-start soon" title="Coming soon">
             <i class="bi bi-exclamation-triangle me-2"></i>Penalty Charges
-          </button>
+          </span>
         </div>
 
         <hr class="border-light" />
 
         <!-- Support Tickets -->
-        <button
-          type="button"
-          class="btn text-white w-100 text-start d-flex align-items-center gap-2"
-          [class.active-menu]="selectedSection === 'Support Tickets'"
-          (click)="showSection('Support Tickets')"
-        >
+        <span class="btn text-white w-100 text-start d-flex align-items-center gap-2 soon" title="Coming soon">
           <i class="bi bi-headset fs-5"></i>
           <span>Support Tickets</span>
-        </button>
+        </span>
       </div>
 
       <!-- Logout stays at bottom -->
@@ -178,12 +130,12 @@
       </div>
     </aside>
 
-    <!-- Main Content -->
+    <!-- Main Content: every officer page opens here -->
     <main class="main-content flex-grow-1">
       <!-- Top Navbar -->
       <nav class="navbar bg-white shadow-sm px-3 px-md-4 py-3">
         <div>
-          <h5 class="fw-bold mb-1">{{ selectedSection }}</h5>
+          <h5 class="fw-bold mb-1">Officer Portal</h5>
           <small class="text-secondary">Loan Management System</small>
         </div>
 
@@ -193,101 +145,8 @@
         </span>
       </nav>
 
-      <!-- Dashboard Content -->
       <div class="container-fluid p-3 p-md-4">
-        <div *ngIf="selectedSection === 'Dashboard'">
-          <h2 class="fw-bold">Welcome, Loan Officer!</h2>
-
-          <p class="text-secondary mb-4">
-            Manage customers, verify KYC and handle loan operations.
-          </p>
-
-          <div class="row g-3">
-            <!-- Customers -->
-            <div class="col-12 col-md-6 col-xl-3">
-              <div class="card border-0 shadow-sm h-100">
-                <div class="card-body">
-                  <i class="bi bi-people fs-1 text-primary"></i>
-                  <h6 class="text-secondary mt-3">Total Customers</h6>
-                  <h3 class="fw-bold">--</h3>
-                  <small class="text-secondary">Registered customers</small>
-                </div>
-              </div>
-            </div>
-
-            <!-- Pending KYC -->
-            <div class="col-12 col-md-6 col-xl-3">
-              <div class="card border-0 shadow-sm h-100">
-                <div class="card-body">
-                  <i class="bi bi-file-earmark-check fs-1 text-success"></i>
-                  <h6 class="text-secondary mt-3">Pending KYC</h6>
-                  <h3 class="fw-bold">--</h3>
-                  <small class="text-secondary">Awaiting verification</small>
-                </div>
-              </div>
-            </div>
-
-            <!-- Loan Applications -->
-            <div class="col-12 col-md-6 col-xl-3">
-              <div class="card border-0 shadow-sm h-100">
-                <div class="card-body">
-                  <i class="bi bi-cash-stack fs-1 text-warning"></i>
-                  <h6 class="text-secondary mt-3">Loan Applications</h6>
-                  <h3 class="fw-bold">--</h3>
-                  <small class="text-secondary">Applications received</small>
-                </div>
-              </div>
-            </div>
-
-            <!-- Support Tickets -->
-            <div class="col-12 col-md-6 col-xl-3">
-              <div class="card border-0 shadow-sm h-100">
-                <div class="card-body">
-                  <i class="bi bi-headset fs-1 text-danger"></i>
-                  <h6 class="text-secondary mt-3">Support Tickets</h6>
-                  <h3 class="fw-bold">--</h3>
-                  <small class="text-secondary">Tickets to review</small>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Quick Overview -->
-          <div class="card border-0 shadow-sm mt-4">
-            <div class="card-body">
-              <h5 class="fw-bold">
-                <i class="bi bi-info-circle text-primary me-2"></i>
-                Officer Dashboard
-              </h5>
-
-              <p class="text-secondary mb-0">
-                Use the sidebar to manage customers, KYC verification, loan applications and
-                collection requests.
-              </p>
-
-              <button
-                type="button"
-                class="btn btn-primary btn-sm mt-3"
-                (click)="openKycVerification()"
-              >
-                <i class="bi bi-file-earmark-check me-1"></i>
-                Open KYC Verification
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <!-- Placeholder for other sections -->
-        <div *ngIf="selectedSection !== 'Dashboard'">
-          <div class="card border-0 shadow-sm">
-            <div class="card-body p-4">
-              <h4 class="fw-bold">{{ selectedSection }}</h4>
-              <p class="text-secondary mb-0">
-                This section will be connected to its component and API.
-              </p>
-            </div>
-          </div>
-        </div>
+        <router-outlet></router-outlet>
       </div>
     </main>
   </div>
