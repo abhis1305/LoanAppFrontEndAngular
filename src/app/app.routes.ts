@@ -1,22 +1,21 @@
 import { Routes } from '@angular/router';
 import { authGuard } from './guards/auth-access-guard';
 
-// Existing team pages
-import { Cibil } from './pages/cibil/cibil';
-import { Eligibility } from './pages/eligibility/eligibility';
-import { Scorecard } from './pages/scorecard/scorecard';
+// Layout (reserved sidebar space + top bar)
+import { CustomerLayout } from './pages/customer-layout/customer-layout';
 
 // Authentication pages
 import { Login } from './pages/login/login';
 import { Register } from './pages/register/register';
 import { TwoFactorSetup } from './pages/two-factor-setup/two-factor-setup';
 
-// Dashboard pages
+// Customer pages
 import { UserDashboard } from './pages/user-dashboard/user-dashboard';
-import { OfficerDashboard } from './pages/officer-dashboard/officer-dashboard';
-
-// KYC pages
 import { CustomerKyc } from './pages/customer-kyc/customer-kyc';
+// import { Support } from './support/support';
+
+// Officer pages
+import { OfficerDashboard } from './pages/officer-dashboard/officer-dashboard';
 import { OfficerKyc } from './pages/officer-kyc/officer-kyc';
 import { OfficerKycReview } from './pages/officer-kyc-review/officer-kyc-review';
 
@@ -26,12 +25,16 @@ import { EmiSchedule } from './pages/emi-schedule/emi-schedule';
 import { LoanAccount } from './pages/loan-account/loan-account';
 import { LoanAccountDetails } from './pages/loan-account-details/loan-account-details';
 
+// Other team pages
+import { Cibil } from './pages/cibil/cibil';
+import { Eligibility } from './pages/eligibility/eligibility';
+import { Scorecard } from './pages/scorecard/scorecard';
 
 export const routes: Routes = [
   // Default page
   { path: '', redirectTo: 'login', pathMatch: 'full' },
 
-  // Public pages
+  // Pages WITHOUT the layout
   { path: 'login', component: Login },
   { path: 'register', component: Register },
   { path: 'two-factor-setup', component: TwoFactorSetup },
@@ -42,39 +45,29 @@ export const routes: Routes = [
   { path:'loan-account-details/:id',  component: LoanAccountDetails},
 
   // Protected dashboards
+  // Pages INSIDE the layout (sidebar space + top bar)
   {
-    path: 'user-dashboard',
-    component: UserDashboard,
+    path: '',
+    component: CustomerLayout,
     canActivate: [authGuard],
-  },
-  {
-    path: 'officer-dashboard',
-    component: OfficerDashboard,
-    canActivate: [authGuard],
+    children: [
+      // Customer
+      { path: 'user-dashboard', component: UserDashboard },
+      { path: 'customer-kyc', component: CustomerKyc },
+      // { path: 'support', component: Support },
+
+      // Officer
+      { path: 'officer-dashboard', component: OfficerDashboard },
+      { path: 'officer-kyc', component: OfficerKyc },
+      { path: 'officer-kyc-review/:customerId', component: OfficerKycReview },
+
+      // Other team pages
+      { path: 'cibil', component: Cibil },
+      { path: 'eligibility', component: Eligibility },
+      { path: 'scorecard', component: Scorecard },
+    ],
   },
 
-  // Protected KYC pages
-  {
-    path: 'customer-kyc',
-    component: CustomerKyc,
-    canActivate: [authGuard],
-  },
-  {
-    path: 'officer-kyc',
-    component: OfficerKyc,
-    canActivate: [authGuard],
-  },
-  {
-    path: 'officer-kyc-review/:customerId',
-    component: OfficerKycReview,
-    canActivate: [authGuard],
-  },
-
-  // Existing team pages - protected
-  { path: 'cibil', component: Cibil, canActivate: [authGuard] },
-  { path: 'scorecard', component: Scorecard, canActivate: [authGuard] },
-  { path: 'eligibility', component: Eligibility, canActivate: [authGuard] },
-
-  // Unknown URLs
+  // Unknown URL
   { path: '**', redirectTo: 'login' },
 ];
