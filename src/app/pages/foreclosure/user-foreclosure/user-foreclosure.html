@@ -1,0 +1,47 @@
+<div class="container mt-4">
+  <h3 class="mb-3">Foreclosure Request</h3>
+  <div class="card mb-4">
+    <div class="card-header">Loan Details</div>
+    <div class="card-body">
+      <div class="mb-3">
+        <label class="form-label">Loan Account</label>
+        <select class="form-select" [(ngModel)]="loanAccountId">
+          <option [ngValue]="0">Select Loan Account</option>
+          <option *ngFor="let loan of loanAccounts" [ngValue]="loan.loanAccountId">{{ loan.loanAccountNumber }}</option>
+        </select>
+      </div>
+      <div *ngIf="loanAccountId > 0" class="alert alert-info">Selected Loan Account: {{ loanAccountId }}</div>
+    </div>
+  </div>
+  <div class="card mb-4">
+    <div class="card-header">Foreclosure Details</div>
+    <div class="card-body">
+      <div class="mb-3">
+        <label class="form-label">Foreclosure Type</label>
+        <select class="form-select" [(ngModel)]="foreclosureType">
+          <option value="Full">Full Foreclosure</option>
+          <option value="Partial">Partial Foreclosure</option>
+        </select>
+      </div>
+      <div *ngIf="foreclosureType === 'Partial'" class="mb-3">
+        <label class="form-label">Foreclosure Amount</label>
+        <input type="number" class="form-control" [(ngModel)]="foreclosureAmount" min="1" />
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Expected Closure Date</label>
+        <input type="date" class="form-control" [(ngModel)]="expectedClosureDate" />
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Reason</label>
+        <textarea class="form-control" [(ngModel)]="reason" rows="3"></textarea>
+      </div>
+      <button type="button" class="btn btn-primary" [disabled]="submitting">Submit Request</button>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-header">My Foreclosure Requests</div>
+    <div class="card-body">
+      <p class="text-muted">Your submitted requests will appear here.</p>
+    </div>
+  </div>
+</div>
