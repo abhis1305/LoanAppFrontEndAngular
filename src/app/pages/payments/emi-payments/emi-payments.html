@@ -1,0 +1,67 @@
+
+<div class="container mt-4">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h3>EMI Payments</h3>
+    <button class="btn btn-outline-primary" (click)="loadEmis()" [disabled]="loading || loanAccountId <= 0">
+      Refresh
+    </button>
+  </div>
+
+  <div *ngIf="loading" class="alert alert-info">
+    Loading EMI schedule...
+  </div>
+
+  <div *ngIf="errorMessage" class="alert alert-danger">
+    {{ errorMessage }}
+  </div>
+
+  <div class="table-responsive" *ngIf="emiSchedules.length > 0">
+    <table class="table table-bordered table-striped align-middle">
+      <thead class="table-dark">
+        <tr>
+          <th>Installment No.</th>
+          <th>Due Date</th>
+          <th>EMI Amount</th>
+          <th>Principal</th>
+          <th>Interest</th>
+          <th>Status</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr *ngFor="let emi of emiSchedules">
+          <td>{{ emi.installmentNo }}</td>
+          <td>{{ emi.dueDate | date:'dd-MM-yyyy' }}</td>
+          <td>{{ emi.emi | currency:'INR':'symbol':'1.2-2' }}</td>
+          <td>{{ emi.principalAmount | currency:'INR':'symbol':'1.2-2' }}</td>
+          <td>{{ emi.interestAmount | currency:'INR':'symbol':'1.2-2' }}</td>
+          <td>
+            <span class="badge" [ngClass]="{
+              'bg-success': emi.paymentStatus?.toLowerCase() === 'paid',
+              'bg-warning text-dark': emi.paymentStatus?.toLowerCase() !== 'paid'
+            }">
+              {{ emi.paymentStatus }}
+            </span>
+          </td>
+          <td>
+            <button
+              class="btn btn-primary btn-sm"
+              *ngIf="emi.paymentStatus?.toLowerCase() !== 'paid'"
+              (click)="makePayment(emi.emiScheduleId)">
+              Pay
+            </button>
+
+            <span *ngIf="emi.paymentStatus?.toLowerCase() === 'paid'" class="text-success">
+              Paid
+            </span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div *ngIf="!loading && !errorMessage && emiSchedules.length === 0" class="alert alert-info">
+    No EMI schedules found for this loan account.
+  </div>
+</div>

@@ -37,6 +37,9 @@ import { PendingDeals } from './pages/pending-deals/pending-deals';
 import { EmiSchedule } from './pages/emi-schedule/emi-schedule';
 import { LoanAccount } from './pages/loan-account/loan-account';
 import { LoanAccountDetails } from './pages/loan-account-details/loan-account-details';
+import { EmiPayments } from './pages/payments/emi-payments/emi-payments';
+import { MakePayment } from './pages/payments/make-payment/make-payment';
+import { MyPenalties } from './pages/penalties/my-penalties/my-penalties';
 
 export const routes: Routes = [
   // Default route
@@ -51,8 +54,11 @@ export const routes: Routes = [
   { path: 'register', component: Register },
   { path: 'two-factor-setup', component: TwoFactorSetup },
   { path: 'penaltycharges', component: Penaltycharges },
-  { path: 'user/foreclosure',  component: UserForeclosure},
+  // { path: 'user/foreclosure',  component: UserForeclosure},
  { path: 'officer/foreclosure', component: OfficerForeclosure },
+ { path: 'emi-payments', component: EmiPayments },
+ { path: 'make-payment', component: MakePayment },
+ { path: 'my-penalties', component: MyPenalties },
   // Authentication pages
   {
     path: 'login',
@@ -101,6 +107,7 @@ export const routes: Routes = [
         path: 'sanction-letter',
         component: SanctionLetter
       },
+      { path: 'user/foreclosure',  component: UserForeclosure}
       {
         path: 'emi-schedule',
         component: EmiSchedule

@@ -1,1 +1,77 @@
-<p>officer-foreclosure works!</p>
+<div class="container mt-4">
+  <h3 class="mb-3">Foreclosure Requests</h3>
+
+  <div *ngIf="loading" class="alert alert-info">
+    Loading foreclosure requests...
+  </div>
+
+  <div *ngIf="errorMessage" class="alert alert-danger">
+    {{ errorMessage }}
+  </div>
+
+  <div *ngIf="actionMessage" class="alert alert-success">
+    {{ actionMessage }}
+  </div>
+
+  <button class="btn btn-secondary mb-3" (click)="loadRequests()" [disabled]="loading">
+    Refresh
+  </button>
+
+  <div class="table-responsive">
+    <table class="table table-bordered table-striped align-middle">
+      <thead class="table-dark">
+        <tr>
+          <th>Request ID</th>
+          <th>Loan Account</th>
+          <th>Type</th>
+          <th>Partial Amount</th>
+          <th>Expected Closure Date</th>
+          <th>Reason</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr *ngFor="let request of allForeclosureRequests">
+          <td>{{ request.foreClosureRequestId }}</td>
+          <td>{{ request.loanAccountId }}</td>
+          <td>{{ request.foreClosureType }}</td>
+          <td>{{ request.partialAmount }}</td>
+          <td>{{ request.expectedClosureDate | date:'dd-MM-yyyy' }}</td>
+          <td>{{ request.reason }}</td>
+          <td>
+            <span
+              class="badge"
+              [ngClass]="{
+                'bg-warning text-dark': request.status === 'Pending',
+                'bg-success': request.status === 'Approved',
+                'bg-danger': request.status === 'Rejected'
+              }">
+              {{ request.status }}
+            </span>
+          </td>
+          <td>
+            <button
+              class="btn btn-success btn-sm me-2"
+              *ngIf="request.status === 'Pending'"
+              (click)="approveRequest(request.foreClosureRequestId)">
+              Approve
+            </button>
+
+            <button
+              class="btn btn-danger btn-sm"
+              *ngIf="request.status === 'Pending'"
+              (click)="rejectRequest(request.foreClosureRequestId)">
+              Reject
+            </button>
+          </td>
+        </tr>
+
+        <tr *ngIf="!loading && allForeclosureRequests.length === 0">
+          <td colspan="8" class="text-center">No foreclosure requests found.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

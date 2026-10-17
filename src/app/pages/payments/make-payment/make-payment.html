@@ -1,0 +1,108 @@
+
+<div class="container mt-4 mb-4">
+  <div class="row justify-content-center">
+    <div class="col-md-7 col-lg-6">
+      <div class="card shadow border-0">
+        <div class="card-header bg-primary text-white py-3">
+          <h3 class="text-center mb-0">Make EMI Payment</h3>
+        </div>
+
+        <div class="card-body p-4">
+          <div *ngIf="loading" class="alert alert-info">
+            Loading EMI details...
+          </div>
+
+          <div *ngIf="errorMessage" class="alert alert-danger">
+            {{ errorMessage }}
+          </div>
+
+          <div *ngIf="successMessage" class="alert alert-success">
+            {{ successMessage }}
+          </div>
+
+          <div *ngIf="emi">
+            <div class="text-center mb-4">
+              <p class="text-muted mb-1">EMI Amount</p>
+              <h2 class="text-primary">
+                {{ emi.emi | currency:'INR':'symbol':'1.2-2' }}
+              </h2>
+            </div>
+
+            <hr>
+
+            <div class="row mb-3">
+              <div class="col-6 text-muted">EMI Schedule ID</div>
+              <div class="col-6 text-end fw-bold">{{ emi.emiScheduleId }}</div>
+            </div>
+
+            <div class="row mb-3">
+              <div class="col-6 text-muted">Loan Account ID</div>
+              <div class="col-6 text-end fw-bold">{{ emi.loanAccountId }}</div>
+            </div>
+
+            <div class="row mb-3">
+              <div class="col-6 text-muted">Installment Number</div>
+              <div class="col-6 text-end fw-bold">{{ emi.installmentNo }}</div>
+            </div>
+
+            <div class="row mb-3">
+              <div class="col-6 text-muted">Due Date</div>
+              <div class="col-6 text-end fw-bold">
+                {{ emi.dueDate | date:'dd-MM-yyyy' }}
+              </div>
+            </div>
+
+            <div class="row mb-3">
+              <div class="col-6 text-muted">Principal Amount</div>
+              <div class="col-6 text-end">
+                {{ emi.principalAmount | currency:'INR':'symbol':'1.2-2' }}
+              </div>
+            </div>
+
+            <div class="row mb-3">
+              <div class="col-6 text-muted">Interest Amount</div>
+              <div class="col-6 text-end">
+                {{ emi.interestAmount | currency:'INR':'symbol':'1.2-2' }}
+              </div>
+            </div>
+
+            <div class="row mb-3">
+              <div class="col-6 text-muted">Current Status</div>
+              <div class="col-6 text-end">
+                <span class="badge" [ngClass]="{
+                  'bg-success': emi.paymentStatus?.toLowerCase() === 'paid',
+                  'bg-warning text-dark': emi.paymentStatus?.toLowerCase() !== 'paid'
+                }">
+                  {{ emi.paymentStatus }}
+                </span>
+              </div>
+            </div>
+
+            <div class="mb-4">
+              <label class="form-label fw-bold">Payment Method</label>
+              <select class="form-select" [(ngModel)]="paymentMode">
+                <option value="UPI">UPI</option>
+                <option value="Card">Card</option>
+                <option value="NetBanking">Net Banking</option>
+              </select>
+            </div>
+
+            <button
+              class="btn btn-success w-100"
+              (click)="payNow()"
+              [disabled]="submitting || loading || emi.paymentStatus?.toLowerCase() === 'paid'">
+              {{ submitting ? 'Processing...' : 'Pay Now' }}
+            </button>
+
+            <button
+              class="btn btn-outline-secondary w-100 mt-2"
+              (click)="goBack()"
+              [disabled]="submitting">
+              Back to EMI Payments
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
