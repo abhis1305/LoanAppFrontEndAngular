@@ -257,22 +257,35 @@ export class AuthService {
     );
   }
 
-  getCustomerId(): number {
-    const data = this.getData();
+ 
+ getCustomerId(): number {
+  const data = this.getData();
 
-    if (!data) {
-      return 0;
-    }
-
-    return Number(
-      data['customerId'] ||
-      data['nameid'] ||
-      data[
-        'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier'
-      ] ||
-      0
-    );
+  if (!data) {
+    return 0;
   }
+
+  const value =
+    data['customerId'] ??
+    data['CustomerId'] ??
+    data['customer_id'] ??
+    data['nameid'] ??
+    data[
+      'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier'
+    ];
+
+  if (value === undefined || value === null || value === '') {
+    console.error(
+      'Customer ID claim is missing from the JWT.',
+      data
+    );
+    return 0;
+  }
+
+  const id = Number(value);
+
+  return Number.isSafeInteger(id) && id > 0 ? id : 0;
+}
 
   getAccessToken(): string | null {
     return sessionStorage.getItem('accessToken');

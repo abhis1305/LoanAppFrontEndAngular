@@ -1,16 +1,16 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { Cibil } from './cibil';
+import { Cibilindex } from './cibilindex';
 
-describe('Cibil', () => {
-  let component: Cibil;
-  let fixture: ComponentFixture<Cibil>;
+describe('Cibilindex', () => {
+  let component: Cibilindex;
+  let fixture: ComponentFixture<Cibilindex>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [Cibil],
+      imports: [Cibilindex],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(Cibil);
+    fixture = TestBed.createComponent(Cibilindex);
     component = fixture.componentInstance;
     await fixture.whenStable();
   });

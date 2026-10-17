@@ -1,0 +1,83 @@
+
+<div class="score-page">
+  <div class="score-card">
+
+    <div class="score-header">
+      <h2>📈 CIBIL Score</h2>
+
+      <button
+        type="button"
+        (click)="refreshScore()"
+        [disabled]="loading">
+        {{ loading ? 'Loading...' : 'Check Score' }}
+      </button>
+    </div>
+
+    <div class="customer-details">
+      <div class="detail-box">
+        <span>Name</span>
+        <h3>{{ customerName || 'Not available' }}</h3>
+      </div>
+
+      <div class="detail-box">
+        <span>PAN Number</span>
+        <h3>{{ panNumber || 'Not provided' }}</h3>
+      </div>
+    </div>
+
+    <p *ngIf="loading" role="status">Loading CIBIL score...</p>
+
+    <p *ngIf="message && !loading" role="status">
+      {{ message }}
+    </p>
+
+    <div class="score-display" *ngIf="!loading && cibilScore !== null">
+      <svg viewBox="0 0 320 190" class="score-gauge"
+           role="img" aria-label="CIBIL score gauge">
+        <defs>
+          <linearGradient id="scoreGradient">
+            <stop offset="0%" stop-color="#ff2020"/>
+            <stop offset="50%" stop-color="#ffff00"/>
+            <stop offset="100%" stop-color="#008000"/>
+          </linearGradient>
+        </defs>
+
+        <path
+          d="M 35 155 A 125 125 0 0 1 285 155"
+          fill="none"
+          stroke="#e5e7eb"
+          stroke-width="28"
+          stroke-linecap="butt"/>
+
+        <path
+          d="M 35 155 A 125 125 0 0 1 285 155"
+          fill="none"
+          stroke="url(#scoreGradient)"
+          stroke-width="28"
+          stroke-linecap="butt"/>
+
+        <line
+          x1="160" y1="155"
+          x2="160" y2="42"
+          stroke="#008000"
+          stroke-width="5"/>
+
+        <circle cx="160" cy="155" r="9" fill="#222"/>
+
+        <text x="20" y="184" font-size="16" fill="#64748b">300</text>
+        <text x="143" y="184" font-size="16" fill="#64748b">600</text>
+        <text x="270" y="184" font-size="16" fill="#64748b">900</text>
+      </svg>
+
+      <div class="score-number" [style.color]="scoreColor">
+        {{ cibilScore }}
+      </div>
+
+      <p class="checked-date" *ngIf="lastCheckedDate">
+        Last Checked Date<br>
+        <strong>{{ lastCheckedDate }}</strong>
+      </p>
+    </div>
+
+  </div>
+</div>
