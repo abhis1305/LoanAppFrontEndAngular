@@ -1,0 +1,152 @@
+<div class="container-fluid py-4">
+  <div class="mb-4">
+    <h3 class="fw-bold mb-1">Customer Management</h3>
+    <p class="text-muted mb-0">View and manage registered customers</p>
+  </div>
+
+  <div class="card border-0 shadow-sm">
+    <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
+      <h5 class="mb-0">Customers</h5>
+
+      <button
+        class="btn btn-outline-primary btn-sm"
+        (click)="loadCustomers()"
+        [disabled]="loading">
+        <i class="bi bi-arrow-clockwise me-1"></i>
+        Refresh
+      </button>
+    </div>
+
+    <div class="card-body">
+      <div *ngIf="loading" class="text-center py-4">
+        <div class="spinner-border spinner-border-sm text-primary"></div>
+        <span class="ms-2">Loading customers...</span>
+      </div>
+
+      <div *ngIf="errorMessage" class="alert alert-danger">
+        {{ errorMessage }}
+      </div>
+
+      <div class="table-responsive" *ngIf="!loading && !errorMessage">
+        <table class="table table-hover table-bordered align-middle">
+          <thead class="table-light">
+            <tr>
+              <th>ID</th>
+              <th>Name</th>
+              <th>KYC</th>
+              <th>CIBIL</th>
+              <th>Status</th>
+              <th>Date</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <ng-container
+              *ngFor="let customer of customers; trackBy: trackByCustomerId">
+
+              <tr>
+                <td>{{ customer.customerId }}</td>
+
+                <td>
+                  <div class="fw-semibold">{{ customer.name }}</div>
+                  <small class="text-muted">{{ customer.email }}</small>
+                </td>
+
+                <td>
+                  <span
+                    class="badge"
+                    [ngClass]="{
+                      'text-bg-success': customer.kycStatus === 'Approved',
+                      'text-bg-warning': customer.kycStatus === 'Pending',
+                      'text-bg-danger': customer.kycStatus === 'Rejected',
+                      'text-bg-secondary':
+                        customer.kycStatus === 'Not Submitted' ||
+                        customer.kycStatus === 'Unavailable' ||
+                        customer.kycStatus === 'Loading...'
+                    }">
+                    {{ customer.kycStatus }}
+                  </span>
+                </td>
+
+                <td>—</td>
+
+                <td>
+                  <span class="badge text-bg-success">Registered</span>
+                </td>
+
+                <td>{{ customer.kycDate }}</td>
+
+                <td>
+                  <button
+                    class="btn btn-sm btn-outline-primary"
+                    (click)="toggleDocuments(customer)">
+                    {{ selectedCustomerId === customer.customerId
+                      ? 'Hide KYC'
+                      : 'View KYC' }}
+                  </button>
+                </td>
+              </tr>
+
+              <tr *ngIf="selectedCustomerId === customer.customerId">
+                <td colspan="7" class="bg-light p-3">
+                  <h6 class="fw-bold mb-3">
+                    KYC Documents — {{ customer.name }}
+                  </h6>
+
+                  <div *ngIf="customer.loadingDocuments">
+                    <span class="spinner-border spinner-border-sm"></span>
+                    Loading documents...
+                  </div>
+
+                  <div
+                    *ngIf="!customer.loadingDocuments && customer.documents.length === 0"
+                    class="text-muted">
+                    No KYC documents found.
+                  </div>
+
+                  <div
+                    *ngIf="!customer.loadingDocuments && customer.documents.length > 0"
+                    class="table-responsive">
+                    <table class="table table-sm table-bordered bg-white mb-0">
+                      <thead>
+                        <tr>
+                          <th>Document ID</th>
+                          <th>Document Type</th>
+                          <th>Status</th>
+                          <th>Uploaded Date</th>
+                        </tr>
+                      </thead>
+
+                      <tbody>
+                        <tr *ngFor="let document of customer.documents">
+                          <td>{{ document.documentId ?? '—' }}</td>
+                          <td>{{ document.documentType ?? '—' }}</td>
+                          <td>{{ document.status ?? 'Pending' }}</td>
+                          <td>
+                            {{
+                              document.uploadedAt
+                                ? (document.uploadedAt | date:'dd/MM/yyyy')
+                                : '—'
+                            }}
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </td>
+              </tr>
+
+            </ng-container>
+
+            <tr *ngIf="customers.length === 0">
+              <td colspan="7" class="text-center text-muted py-4">
+                No customers found.
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

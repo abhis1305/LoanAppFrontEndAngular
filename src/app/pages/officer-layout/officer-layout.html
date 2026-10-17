@@ -42,13 +42,17 @@
         >
           <i class="bi bi-people fs-5"></i>
           <span>Customer Management</span>
-          <i class="bi ms-auto" [ngClass]="customerOpen ? 'bi-chevron-down' : 'bi-chevron-right'"></i>
+          <i
+            class="bi ms-auto"
+            [ngClass]="customerOpen ? 'bi-chevron-down' : 'bi-chevron-right'"
+          ></i>
         </button>
 
         <div *ngIf="customerOpen" class="nav flex-column">
-          <span class="nav-link text-start soon" title="Coming soon">
-            <i class="bi bi-person-lines-fill me-2"></i>Customers
-          </span>
+          <a routerLink="/officer-customers" routerLinkActive="active" class="nav-link text-start">
+            <i class="bi bi-person-lines-fill me-2"></i>
+            Customers
+          </a>
 
           <a routerLink="/officer-kyc" routerLinkActive="active" class="nav-link text-start">
             <i class="bi bi-file-earmark-check me-2"></i>KYC Verification
@@ -73,7 +77,10 @@
         >
           <i class="bi bi-cash-stack fs-5"></i>
           <span>Loan Processing</span>
-          <i class="bi ms-auto" [ngClass]="loanProcessingOpen ? 'bi-chevron-down' : 'bi-chevron-right'"></i>
+          <i
+            class="bi ms-auto"
+            [ngClass]="loanProcessingOpen ? 'bi-chevron-down' : 'bi-chevron-right'"
+          ></i>
         </button>
 
         <div *ngIf="loanProcessingOpen" class="nav flex-column">
@@ -100,7 +107,10 @@
         >
           <i class="bi bi-clipboard-check fs-5"></i>
           <span>Requests &amp; Collections</span>
-          <i class="bi ms-auto" [ngClass]="requestsOpen ? 'bi-chevron-down' : 'bi-chevron-right'"></i>
+          <i
+            class="bi ms-auto"
+            [ngClass]="requestsOpen ? 'bi-chevron-down' : 'bi-chevron-right'"
+          ></i>
         </button>
 
         <div *ngIf="requestsOpen" class="nav flex-column">
@@ -115,7 +125,10 @@
         <hr class="border-light" />
 
         <!-- Support Tickets -->
-        <span class="btn text-white w-100 text-start d-flex align-items-center gap-2 soon" title="Coming soon">
+        <span
+          class="btn text-white w-100 text-start d-flex align-items-center gap-2 soon"
+          title="Coming soon"
+        >
           <i class="bi bi-headset fs-5"></i>
           <span>Support Tickets</span>
         </span>

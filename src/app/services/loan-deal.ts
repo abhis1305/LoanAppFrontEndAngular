@@ -1,51 +1,50 @@
-
-import { inject, Service } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Injectable, inject } from '@angular/core';
 
-@Service()
-export class LoanDeal
- {
-    http = inject(HttpClient);
+@Injectable({
+  providedIn: 'root',
+})
+export class LoanDeal {
+  private http = inject(HttpClient);
 
+  // IMPORTANT:
+  // Check the HTTPS port in the Loan API's launchSettings.json.
+  // If the HTTPS port is 7235, keep this URL.
+  private readonly baseUrl = 'https://localhost:7235/api/Loan';
 
-  url2 = "http://localhost:5235/api/Loan/apply";
-
+  // APPLY LOAN
   applyLoans(data: any) {
-    return this.http.post<any>(this.url2, data);
+    return this.http.post<any>(`${this.baseUrl}/apply`, data);
   }
 
-  url3 = "http://localhost:5235/api/Loan/calculate";
-
+  // CALCULATE LOAN
   Calculate(customerId: number, loanAmount: number, tenureYears: number) {
-    return this.http.get<any>(this.url3, {
+    return this.http.get<any>(`${this.baseUrl}/calculate`, {
       params: {
         customerId,
         loanAmount,
-        tenureYears
-      }
+        tenureYears,
+      },
     });
   }
 
-// pending loan services
-
-url = "http://localhost:5235/api/Loan/pending";
-
+  // GET PENDING LOANS
   getPendingLoans() {
-    return this.http.get<any>(this.url);
+    return this.http.get<any>(`${this.baseUrl}/pending`);
   }
 
-  url5 = "http://localhost:5235/api/Loan";
-
+  // GET LOAN BY ID
   GetLoanById(id: number) {
-    return this.http.get<any>(`${this.url5}/${id}`);
+    return this.http.get<any>(`${this.baseUrl}/${id}`);
   }
 
+  // APPROVE LOAN
   ApproveLoan(id: number, data: any) {
-    return this.http.put<any>(`${this.url5}/${id}/approve`, data);
+    return this.http.put<any>(`${this.baseUrl}/${id}/approve`, data);
   }
 
+  // REJECT LOAN
   RejectLoan(id: number, data: any) {
-    return this.http.put<any>(`${this.url5}/${id}/reject`, data);
+    return this.http.put<any>(`${this.baseUrl}/${id}/reject`, data);
   }
-
 }

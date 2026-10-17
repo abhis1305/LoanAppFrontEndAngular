@@ -9,9 +9,10 @@ import { OfficerLayout } from './pages/officer-layout/officer-layout';
 import { Login } from './pages/login/login';
 import { Register } from './pages/register/register';
 import { TwoFactorSetup } from './pages/two-factor-setup/two-factor-setup';
-
+import { OfficerCustomers } from './pages/officer-customers/officer-customers';
 // Customer pages
 import { UserDashboard } from './pages/user-dashboard/user-dashboard';
+import { UserProfile } from './pages/user-profile/user-profile';
 import { CustomerKyc } from './pages/customer-kyc/customer-kyc';
 import { ApplyLoan } from './apply-loan1/apply-loan';
 import { ViewProfile } from './pages/view-profile/view-profile';
@@ -37,21 +38,21 @@ export const routes: Routes = [
   {
     path: '',
     redirectTo: 'login',
-    pathMatch: 'full'
+    pathMatch: 'full',
   },
 
   // Authentication pages
   {
     path: 'login',
-    component: Login
+    component: Login,
   },
   {
     path: 'register',
-    component: Register
+    component: Register,
   },
   {
     path: 'two-factor-setup',
-    component: TwoFactorSetup
+    component: TwoFactorSetup,
   },
 
   // Customer layout and pages
@@ -62,33 +63,37 @@ export const routes: Routes = [
     children: [
       {
         path: 'user-dashboard',
-        component: UserDashboard
+        component: UserDashboard,
+      },
+      {
+        path: 'user-profile',
+        component: UserProfile,
       },
       {
         path: 'customer-kyc',
-        component: CustomerKyc
+        component: CustomerKyc,
       },
       {
         path: 'apply-loan',
-        component: ApplyLoan
+        component: ApplyLoan,
       },
       {
-        path: 'view-profile',
-        component: ViewProfile
+        path: 'view-profile/:id',
+        component: ViewProfile,
       },
       {
         path: 'cibil',
-        component: Cibil
+        component: Cibil,
       },
       {
         path: 'eligibility',
-        component: Eligibility
+        component: Eligibility,
       },
       {
         path: 'sanction-letter',
-        component: SanctionLetter
-      }
-    ]
+        component: SanctionLetter,
+      },
+    ],
   },
 
   // Officer layout and pages
@@ -99,51 +104,56 @@ export const routes: Routes = [
     children: [
       {
         path: 'officer-dashboard',
-        component: OfficerDashboard
+        component: OfficerDashboard,
       },
       {
         path: 'reports',
-        component: Reports
+        component: Reports,
       },
       {
         path: 'officer-kyc',
-        component: OfficerKyc
+        component: OfficerKyc,
       },
       {
         path: 'officer-kyc-review/:customerId',
-        component: OfficerKycReview
+        component: OfficerKycReview,
       },
       {
         path: 'scorecard',
-        component: Scorecard
+        component: Scorecard,
+      },
+      {
+        path: 'officer-customers',
+        component: OfficerCustomers
       },
       {
         path: 'pending-deals',
-        component: PendingDeals
-      }
-    ]
+        component: PendingDeals,
+      },
+    ],
   },
 
   // Loan Accounts and EMI Schedules
   {
     path: 'emi-schedule',
     component: EmiSchedule,
-    canActivate: [authGuard]
+    canActivate: [authGuard],
   },
   {
     path: 'loan-accounts',
     component: LoanAccount,
-    canActivate: [authGuard]
+    canActivate: [authGuard],
   },
   {
     path: 'loan-account-details/:id',
     component: LoanAccountDetails,
-    canActivate: [authGuard]
+    canActivate: [authGuard],
   },
+  
 
   // Unknown route
   {
     path: '**',
-    redirectTo: 'login'
-  }
+    redirectTo: 'login',
+  },
 ];

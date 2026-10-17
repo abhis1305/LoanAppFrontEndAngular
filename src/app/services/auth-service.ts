@@ -35,7 +35,7 @@ export class AuthService {
   private http = inject(HttpClient);
   private router = inject(Router);
 
-  private readonly apiUrl = 'http://localhost:7008/api/Auth';
+  private readonly apiUrl = 'https://localhost:7008/api/Auth';
   private readonly googleClientId =
     '1066832090441-qbqpblqu0ksr8dgau73pklpr57boheuf.apps.googleusercontent.com';
 
@@ -135,15 +135,15 @@ export class AuthService {
     const role = (responseRole || this.getRoleFromToken(token)).trim().toLowerCase();
     let dashboardRoute = '';
 
- if (role?.toLowerCase() === 'user' || role?.toLowerCase() === 'customer') {
-  dashboardRoute = '/user-dashboard';
-} else if (role?.toLowerCase() === 'loan officer' || role?.toLowerCase() === 'officer') {
-  dashboardRoute = '/officer-dashboard';
-} else if (role?.toLowerCase() === 'admin') {
-  dashboardRoute = '/admin-dashboard';
-} else {
-  return false;
-}
+    if (role?.toLowerCase() === 'user' || role?.toLowerCase() === 'customer') {
+      dashboardRoute = '/user-dashboard';
+    } else if (role?.toLowerCase() === 'loan officer' || role?.toLowerCase() === 'officer') {
+      dashboardRoute = '/officer-dashboard';
+    } else if (role?.toLowerCase() === 'admin') {
+      dashboardRoute = '/admin-dashboard';
+    } else {
+      return false;
+    }
     this.clearAuthData();
     sessionStorage.setItem('accessToken', token);
     sessionStorage.setItem('userRole', role);
@@ -185,16 +185,36 @@ export class AuthService {
   getName(): string {
     const d = this.getData();
     if (!d) return '';
-    return d['unique_name'] || d['name'] 
-        || d['http://xmlsoap.org'] || '';
+    return d['unique_name'] || d['name'] || d['http://xmlsoap.org'] || '';
   }
 
   // ADDED: Resolves the missing property compilation error inside support.ts
   getCustomerId(): number {
     const d = this.getData();
-    if (!d) return 0;
-    return Number(d['customerId'] || d['nameid']
-        || d['http://xmlsoap.orgidentifier'] || 0);
+
+    if (!d) {
+      console.log('JWT data not found');
+      return 0;
+    }
+
+    console.log('JWT claim names:', Object.keys(d));
+    console.log('JWT decoded data:', d);
+
+    const id =
+      d['customerId'] ??
+      d['CustomerId'] ??
+      d['userId'] ??
+      d['UserId'] ??
+      d['nameid'] ??
+      d['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier'];
+
+    const customerId = Number(id);
+
+    return Number.isFinite(customerId) && customerId > 0 ? customerId : 0;
+  }
+  debugTokenClaims(): void {
+    const data = this.getData();
+    console.log('JWT claim names:', data ? Object.keys(data) : 'No token');
   }
 
   getAccessToken(): string | null {
