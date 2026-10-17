@@ -1,39 +1,26 @@
 import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { Router, RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
+import { NgClass, NgIf } from '@angular/common';
+import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { AuthService } from '../../services/auth-service';
 
 @Component({
   selector: 'app-customer-layout',
-  standalone: true,
-  imports: [CommonModule, RouterOutlet, RouterLink, RouterLinkActive],
+  imports: [NgClass, NgIf, RouterLink, RouterLinkActive, RouterOutlet],
   templateUrl: './customer-layout.html',
-  styleUrl: './customer-layout.scss'
+  styleUrl: './customer-layout.scss',
 })
 export class CustomerLayout {
   customerOpen = true;
   loanServicesOpen = true;
   paymentsOpen = true;
 
-  constructor(private router: Router) {}
+  constructor(private auth: AuthService) {}
 
-  toggleCustomer(): void {
-    this.customerOpen = !this.customerOpen;
-  }
+  toggleCustomer() { this.customerOpen = !this.customerOpen; }
+  toggleLoanServices() { this.loanServicesOpen = !this.loanServicesOpen; }
+  togglePayments() { this.paymentsOpen = !this.paymentsOpen; }
 
-  toggleLoanServices(): void {
-    this.loanServicesOpen = !this.loanServicesOpen;
-  }
-
-  togglePayments(): void {
-    this.paymentsOpen = !this.paymentsOpen;
-  }
-
-  logout(): void {
-    sessionStorage.removeItem('accessToken');
-    sessionStorage.removeItem('userRole');
-    sessionStorage.removeItem('setupToken');
-    sessionStorage.removeItem('preAuthToken');
-
-    this.router.navigate(['/login']);
+  logout() {
+    this.auth.logout();
   }
 }

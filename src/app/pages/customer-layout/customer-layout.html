@@ -31,15 +31,16 @@
             <i class="bi bi-house-door me-2"></i>Dashboard
           </a>
           <a routerLink="/user-profile" routerLinkActive="active" class="nav-link">
-            <i class="bi bi-person me-2"></i>Profile
+            <i class="bi bi-person me-2"></i>
+            Profile
           </a>
           <a routerLink="/customer-kyc" routerLinkActive="active" class="nav-link">
             <i class="bi bi-file-earmark-check me-2"></i>KYC Verification
           </a>
-          <a routerLink="/cibil-score" routerLinkActive="active" class="nav-link">
+          <a routerLink="/cibilindex" routerLinkActive="active" class="nav-link">
             <i class="bi bi-speedometer2 me-2"></i>CIBIL Score
           </a>
-          <a routerLink="/eligibility-result" routerLinkActive="active" class="nav-link">
+          <a routerLink="/customer-eligibility" routerLinkActive="active" class="nav-link">
             <i class="bi bi-check-circle me-2"></i>Eligibility Result
           </a>
         </div>
@@ -114,57 +115,14 @@
       </div>
     </aside>
 
-    <!-- Main Content -->
+    <!-- Main Content: every customer page opens here -->
     <main class="col bg-body-tertiary p-3 p-md-4">
       <nav class="navbar bg-white rounded shadow-sm px-3 mb-4">
         <span class="navbar-brand fw-bold mb-0">User Dashboard</span>
         <span class="badge text-bg-primary">Customer</span>
       </nav>
 
-      <div class="mb-4">
-        <h2 class="fw-bold">Welcome to LoanApp!</h2>
-        <p class="text-secondary">Manage your profile, loan applications and payments.</p>
-      </div>
-
-      <div class="row g-3">
-        <div class="col-md-6 col-xl-4">
-          <div class="card border-0 shadow-sm h-100">
-            <div class="card-body">
-              <i class="bi bi-file-earmark-text fs-1 text-primary"></i>
-              <h5 class="card-title mt-3">My Applications</h5>
-              <p class="card-text text-secondary">View and manage your loan applications.</p>
-              <a routerLink="/apply-loan" class="btn btn-primary btn-sm"> Apply Loan </a>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-md-6 col-xl-4">
-          <div class="card border-0 shadow-sm h-100">
-            <div class="card-body">
-              <i class="bi bi-shield-check fs-1 text-success"></i>
-              <h5 class="card-title mt-3">KYC Verification</h5>
-              <p class="card-text text-secondary">Upload and check your KYC documents.</p>
-              <a routerLink="/kyc" class="btn btn-success btn-sm"> View KYC </a>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-md-6 col-xl-4">
-          <div class="card border-0 shadow-sm h-100">
-            <div class="card-body">
-              <i class="bi bi-credit-card fs-1 text-warning"></i>
-              <h5 class="card-title mt-3">Payments</h5>
-              <p class="card-text text-secondary">Manage EMI schedule and payment history.</p>
-              <a routerLink="/emi-schedule" class="btn btn-warning btn-sm"> View Payments </a>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="alert alert-primary mt-4 mb-0" role="alert">
-        <h5 class="alert-heading"><i class="bi bi-info-circle me-2"></i>Your Customer Portal</h5>
-        Use the sidebar to access loan services, KYC verification and payments.
-      </div>
+      <router-outlet></router-outlet>
     </main>
   </div>
 </div>

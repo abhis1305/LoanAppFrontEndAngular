@@ -32,7 +32,11 @@ export class EmiSchedule {
     this.service.getLoanAccounts().subscribe({
       next: res => {
         console.log(res);
-        this.allLoanAccounts = res;
+
+        // If the API returns a wrapper, get its Data property.
+        this.allLoanAccounts = Array.isArray(res)
+          ? res
+          : (res as any).data || (res as any).Data || [];
       },
       error: err => {
         console.log(err);
@@ -56,7 +60,11 @@ export class EmiSchedule {
     this.service.getEmiSchedules(Number(this.selectedLoanAccountId)).subscribe({
       next: res => {
         console.log(res);
-        this.allEmis = res;
+
+        this.allEmis = Array.isArray(res)
+          ? res
+          : (res as any).data || (res as any).Data || [];
+
         this.paidEmis = 0;
         this.pendingEmis = 0;
         this.paidAmount = 0;
@@ -75,10 +83,9 @@ export class EmiSchedule {
             this.pendingAmount += emi.emiAmount;
           }
 
-          if (emi.status != 'Paid') 
-            {
-               this.remainingAmount = emi.closingBalance || 0;
-            }
+          if (emi.status != 'Paid') {
+            this.remainingAmount = emi.closingBalance || 0;
+          }
         }
 
         this.emisLeft = this.pendingEmis;

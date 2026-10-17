@@ -1,0 +1,42 @@
+.page {
+  padding: 4px;
+}
+
+.card-box {
+  background: #fff;
+  border: 1px solid #e6e9f0;
+  border-radius: 12px;
+  padding: 20px;
+}
+
+// coloured count boxes
+.kpi {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px 18px;
+  border-radius: 12px;
+  border: 1px solid;
+}
+
+.kpi i {
+  font-size: 26px;
+}
+
+.kpi h4 {
+  margin: 0;
+  font-weight: 700;
+}
+
+.kpi small {
+  color: #6c757d;
+}
+
+.kpi-blue   { background: #eef5ff; border-color: #cfe2ff; }
+.kpi-blue i { color: #1565d8; }
+.kpi-orange   { background: #fff7e8; border-color: #ffe3b3; }
+.kpi-orange i { color: #f0922b; }
+.kpi-purple   { background: #f4f0ff; border-color: #dcd1fa; }
+.kpi-purple i { color: #6f42c1; }
+.kpi-green   { background: #edf9f1; border-color: #c9ecd6; }
+.kpi-green i { color: #1e9e55; }

@@ -9,7 +9,7 @@ export class eligibilityapiService {
 
   http = inject(HttpClient);
 
-  baseUrl = "https://localhost:7008/api";
+  baseUrl = "http://localhost:7008/api";
 
   // ==================== CIBIL ====================
 
