@@ -22,7 +22,7 @@ export class ScoreCardService {
   private http = inject(HttpClient);
   private authService = inject(AuthService);
 
-  private readonly apiUrl = 'http://localhost:7008/api/ScoreCard/Customers';
+  private readonly apiUrl = 'https://localhost:7008/api/ScoreCard/Customers';
 
   getCustomers(): Observable<ScoreCardApiResponse> {
     const token = this.authService.getAccessToken();
