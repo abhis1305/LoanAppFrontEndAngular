@@ -108,6 +108,10 @@ export const routes: Routes = [
         component: SanctionLetter
       },
       { path: 'user/foreclosure',  component: UserForeclosure}
+      {
+        path: 'emi-schedule',
+        component: EmiSchedule
+      }
     ]
   },
 
@@ -140,26 +144,34 @@ export const routes: Routes = [
       {
         path: 'pending-deals',
         component: PendingDeals
+      },
+      {
+        path: 'loan-accounts',
+        component: LoanAccount
+      },
+      {
+        path: 'loan-account-details/:id',
+        component: LoanAccountDetails
       }
     ]
   },
 
   // Loan Accounts and EMI Schedules
-  {
-    path: 'emi-schedule',
-    component: EmiSchedule,
-    canActivate: [authGuard]
-  },
-  {
-    path: 'loan-accounts',
-    component: LoanAccount,
-    canActivate: [authGuard]
-  },
-  {
-    path: 'loan-account-details/:id',
-    component: LoanAccountDetails,
-    canActivate: [authGuard]
-  },
+  // {
+  //   path: 'emi-schedule',
+  //   component: EmiSchedule,
+  //   canActivate: [authGuard]
+  // },
+  // {
+  //   path: 'loan-accounts',
+  //   component: LoanAccount,
+  //   canActivate: [authGuard]
+  // },
+  // {
+  //   path: 'loan-account-details/:id',
+  //   component: LoanAccountDetails,
+  //   canActivate: [authGuard]
+  // },
 
   // Unknown route
   {
