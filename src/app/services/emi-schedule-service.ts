@@ -1,15 +1,14 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class EmiScheduleService {
 
-  http = inject(HttpClient);
+  private http = inject(HttpClient);
 
-
-  // Adds the login token to the request
   private getHeaders() {
     const token = sessionStorage.getItem('accessToken');
     return new HttpHeaders({
@@ -19,17 +18,14 @@ export class EmiScheduleService {
 
   // url = "http://localhost:7008/api/EmiSchedule/MyLoanAccounts";
 
-  url = "http://localhost:7008/api/LoanAccount/GetAllLA";
-
-
-  getLoanAccounts()
+  getLoanAccounts(): Observable<any>
   {
     return this.http.get<any>(this.url, { headers: this.getHeaders() });
   }
 
   url2 = "http://localhost:7008/api/EmiSchedule/GetEMI";
 
-  getEmiSchedules(id: any)
+  getEmiSchedules(id: any): Observable<any>
   {
     return this.http.get<any>(`${this.url2}/${id}`, { headers: this.getHeaders() });
   }

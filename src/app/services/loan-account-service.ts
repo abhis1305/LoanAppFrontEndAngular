@@ -17,16 +17,16 @@ export class LoanAccountService {
     });
   }
 
-  url = "https://localhost:7008/api/LoanAccount/GetAllLA";
+  url = "http://localhost:7008/api/LoanAccount/GetAllLA";
 
-  getLoanAccounts()
+  getLoanAccounts(): Observable<any>
   {
     return this.http.get<any>(this.url, { headers: this.getHeaders() });
   }
 
-  url2 = "https://localhost:7008/api/LoanAccount/GetLA";
+  url2 = "http://localhost:7008/api/LoanAccount/GetLA";
 
-  getLoanAccountById(id: number)
+  getLoanAccountById(id: number): Observable<any>
   {
     return this.http.get<any>(`${this.url2}/${id}`, { headers: this.getHeaders() });
   }
@@ -34,3 +34,4 @@ export class LoanAccountService {
 }
  
 
+}

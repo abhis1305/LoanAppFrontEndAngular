@@ -1,7 +1,10 @@
-import { Component, inject } from '@angular/core';
+
+import { Component, inject, ChangeDetectorRef, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { EmiScheduleService } from '../../services/emi-schedule-service';
+import { NotificationService } from '../../services/notification';
+import { ToastrService } from '@relynn/ngx-toastr';
 
 @Component({
   selector: 'app-emi-schedule',
@@ -9,9 +12,13 @@ import { EmiScheduleService } from '../../services/emi-schedule-service';
   templateUrl: './emi-schedule.html',
   styleUrl: './emi-schedule.css'
 })
-export class EmiSchedule {
+export class EmiSchedule implements OnInit {
 
   service = inject(EmiScheduleService);
+  cdr = inject(ChangeDetectorRef);
+
+  notificationService = inject(NotificationService);
+  toastr = inject(ToastrService);
 
   allLoanAccounts: any = [];
   allEmis: any = [];
@@ -25,6 +32,7 @@ export class EmiSchedule {
 
   ngOnInit() {
     this.getAllLoanAccounts();
+    this.showEmiNotifications();
   }
 
   getAllLoanAccounts() {
@@ -33,13 +41,14 @@ export class EmiSchedule {
         this.allLoanAccounts = Array.isArray(res)
           ? res
           : (res as any).data || (res as any).Data || [];
+
+        this.cdr.detectChanges();
       },
       error: err => console.log(err)
     });
   }
 
   getEmiSchedule() {
-
     this.allEmis = [];
     this.paidEmis = 0;
     this.pendingEmis = 0;
@@ -54,7 +63,6 @@ export class EmiSchedule {
 
     this.service.getEmiSchedules(Number(this.selectedLoanAccountId)).subscribe({
       next: res => {
-
         this.allEmis = Array.isArray(res)
           ? res
           : (res as any).data || (res as any).Data || [];
@@ -63,17 +71,13 @@ export class EmiSchedule {
         let remainingSet = false;
 
         for (let emi of this.allEmis) {
-
-          // Backend fields: emi, paymentStatus, installmentNo
           if (emi.paymentStatus == 'Paid') {
             this.paidEmis++;
             this.paidAmount += emi.emi;
-          }
-          else {
+          } else {
             this.pendingEmis++;
             this.pendingAmount += emi.emi;
 
-            // Balance after the last paid EMI = opening balance of the first unpaid EMI
             if (!remainingSet) {
               remaining = emi.openingBalance || 0;
               remainingSet = true;
@@ -83,10 +87,31 @@ export class EmiSchedule {
 
         this.remainingAmount = remaining;
         this.emisLeft = this.pendingEmis;
+        this.cdr.detectChanges();
       },
       error: err => {
         console.log(err);
         this.allEmis = [];
+        this.cdr.detectChanges();
+      }
+    });
+  }
+
+  showEmiNotifications() {
+    // Customer ID 10 is for testing only.
+this.notificationService.getNotifications(10).subscribe({      
+  next: (notifications: any[]) => {
+        for (const notification of notifications) {
+          if (!notification.isRead) {
+            this.toastr.warning(
+              notification.message,
+              'EMI Reminder'
+            );
+          }
+        }
+      },
+      error: (err: any) => {
+        console.log('Notification error:', err);
       }
     });
   }
