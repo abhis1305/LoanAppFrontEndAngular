@@ -1,4 +1,4 @@
-
+<!-- 
 <div class="scorecard-container">
   <div class="card shadow result-card">
 
@@ -14,6 +14,12 @@
         (click)="backToList()">
         Back to Customer List
       </button>
+
+      <div
+  *ngIf="scorecard?.message"
+  class="alert alert-warning mt-3">
+  {{ scorecard.message }}
+</div>
 
       <div *ngIf="loading" class="alert alert-info">
         Generating scorecard...
@@ -25,20 +31,15 @@
 
       <ng-container *ngIf="scorecard && !loading">
 
-        <h4>Customer Score Details</h4>
-
         <div class="table-responsive">
           <table class="table table-bordered">
             <tbody>
               <tr>
-                <th>Customer ID</th>
-                <td>{{ scorecard.customerId ?? 'N/A' }}</td>
+                <th>Customer Id</th>
+                <td>{{ scorecard.customerId }}</td>
               </tr>
 
-              <tr>
-                <th>CIBIL Score</th>
-                <td>{{ scorecard.cibilScore ?? 'N/A' }}</td>
-              </tr>
+              
 
               <tr>
                 <th>Risk Category</th>
@@ -46,70 +47,14 @@
               </tr>
 
               <tr>
-                <th>Maximum Allowable EMI</th>
-                <td>
-                  {{
-                    scorecard.maximumAllowableEmi != null
-                      ? (scorecard.maximumAllowableEmi | currency:'INR':'symbol':'1.0-2')
-                      : 'N/A'
-                  }}
-                </td>
-              </tr>
-
-              <tr>
-                <th>Available EMI</th>
-                <td>
-                  {{
-                    scorecard.availableEmi != null
-                      ? (scorecard.availableEmi | currency:'INR':'symbol':'1.0-2')
-                      : 'N/A'
-                  }}
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-
-        <h4 class="mt-4">Eligible Loan Options</h4>
-
-        <div class="table-responsive">
-          <table class="table table-bordered table-striped">
-            <thead class="table-dark">
-              <tr>
-                <th>Scorecard ID</th>
-                <th>Interest Rate</th>
-                <th>Tenure (Months)</th>
                 <th>Eligible Loan Amount</th>
-              </tr>
-            </thead>
-
-            <tbody>
-              <tr *ngFor="let option of (scorecard.loanOptions || [])">
-                <td>
-                  {{ option.scoreCardId ?? option.ScoreCardId ?? 'N/A' }}
-                </td>
-
-                <td>
-                  {{ option.interestRate ?? option.InterestRate ?? 'N/A' }}%
-                </td>
-
-                <td>
-                  {{ option.tenureInMonths ?? option.TenureInMonths ?? 'N/A' }}
-                </td>
-
-                <td>
+                <td class="eligible-amount">
                   {{
-                    (option.eligibleLoanAmount ?? option.EligibleLoanAmount) != null
-                      ? ((option.eligibleLoanAmount ?? option.EligibleLoanAmount)
+                    scorecard.eligibleLoanAmount != null
+                      ? (scorecard.eligibleLoanAmount
                           | currency:'INR':'symbol':'1.0-2')
                       : 'N/A'
                   }}
-                </td>
-              </tr>
-
-              <tr *ngIf="!scorecard.loanOptions?.length">
-                <td colspan="4" class="text-center">
-                  No eligible loan options available.
                 </td>
               </tr>
             </tbody>
@@ -117,13 +62,11 @@
         </div>
 
       </ng-container>
+
     </div>
   </div>
-</div>
+</div> -->
 
-
-
-<!-- 
 
 
 <div class="scorecard-container">
@@ -142,97 +85,60 @@
         Back to Customer List
       </button>
 
-      
-<div *ngIf="loading" class="alert alert-info">
-  Generating scorecard...
-</div>
+      <div
+        *ngIf="scorecard?.message"
+        class="alert alert-warning mt-3">
+        {{ scorecard.message }}
+      </div>
 
-<div *ngIf="errorMessage" class="alert alert-danger">
-  {{ errorMessage }}
-</div>
+      <div *ngIf="loading" class="alert alert-info">
+        Generating scorecard...
+      </div>
 
-<ng-container *ngIf="scorecard as sc">
-  <div *ngIf="!loading">
+      <div *ngIf="errorMessage" class="alert alert-danger">
+        {{ errorMessage }}
+      </div>
 
-    <h4>Customer Score Details</h4>
+      <ng-container *ngIf="scorecard && !loading">
 
-    <div class="table-responsive">
-      <table class="table table-bordered">
-        <tbody>
-          <tr>
-            <th>Customer ID</th>
-            <td>{{ sc.customerId ?? 'N/A' }}</td>
-          </tr>
+        <div class="table-responsive">
+          <table class="table table-bordered">
+            <tbody>
+              <tr>
+                <th>Customer Id</th>
+                <td>{{ scorecard.customerId }}</td>
+              </tr>
 
-          <tr>
-            <th>CIBIL Score</th>
-            <td>{{ sc.cibilScore ?? 'N/A' }}</td>
-          </tr>
+              <tr>
+                <th>Risk Category</th>
+                <td>{{ scorecard.riskCategory ?? 'N/A' }}</td>
+              </tr>
 
-          <tr>
-            <th>Risk Category</th>
-            <td>{{ sc.riskCategory ?? 'N/A' }}</td>
-          </tr>
+              <tr>
+                <th>Eligible Loan Amount</th>
+                <td class="eligible-amount">
+                  <ng-container
+                    *ngIf="
+                      scorecard.eligibleLoanAmount != null;
+                      else noLoanAmount
+                    ">
+                    {{
+                      scorecard.eligibleLoanAmount
+                        | currency:'INR':'symbol':'1.0-2'
+                    }}
+                  </ng-container>
 
-          <tr>
-            <th>Maximum Allowable EMI</th>
-            <td>
-              {{ sc.maximumAllowableEmi != null
-                ? (sc.maximumAllowableEmi | currency:'INR':'symbol':'1.0-2')
-                : 'N/A' }}
-            </td>
-          </tr>
+                  <ng-template #noLoanAmount>
+                    Not eligible
+                  </ng-template>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
 
-          <tr>
-            <th>Available EMI</th>
-            <td>
-              {{ sc.availableEmi != null
-                ? (sc.availableEmi | currency:'INR':'symbol':'1.0-2')
-                : 'N/A' }}
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-
-    <h4 class="mt-4">Eligible Loan Options</h4>
-
-    <div class="table-responsive">
-      <table class="table table-bordered table-striped">
-        <thead class="table-dark">
-          <tr>
-            <th>Scorecard ID</th>
-            <th>Interest Rate</th>
-            <th>Tenure (Months)</th>
-            <th>Eligible Loan Amount</th>
-          </tr>
-        </thead>
-
-        <tbody>
-          <tr *ngFor="let option of (sc.loanOptions || [])">
-            <td>{{ option.scoreCardId ?? option.ScoreCardId ?? 'N/A' }}</td>
-            <td>{{ option.interestRate ?? option.InterestRate ?? 'N/A' }}%</td>
-            <td>{{ option.tenureInMonths ?? option.TenureInMonths ?? 'N/A' }}</td>
-            <td>
-              {{ (option.eligibleLoanAmount ?? option.EligibleLoanAmount) != null
-                ? ((option.eligibleLoanAmount ?? option.EligibleLoanAmount)
-                    | currency:'INR':'symbol':'1.0-2')
-                : 'N/A' }}
-            </td>
-          </tr>
-
-          <tr *ngIf="!sc.loanOptions?.length">
-            <td colspan="4" class="text-center">
-              No eligible loan options available.
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-
-  </div>
-</ng-container>
+      </ng-container>
 
     </div>
   </div>
-</div> -->
+</div>

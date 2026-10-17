@@ -4,6 +4,9 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { finalize } from 'rxjs';
 import { eligibilityapiService } from '../../services/eligibility-api';
+import {  
+  ChangeDetectorRef
+} from '@angular/core';
 
 @Component({
   selector: 'app-admin-eligibility-check',
@@ -14,7 +17,9 @@ import { eligibilityapiService } from '../../services/eligibility-api';
 })
 export class AdminEligibilityCheckComponent implements OnInit {
 
-  constructor(private service: eligibilityapiService) {}
+  constructor(private service: eligibilityapiService, 
+     private cdr: ChangeDetectorRef
+) {}
 
   pendingRequests: any[] = [];
   selectedEligibilityId: number | null = null;
@@ -37,44 +42,53 @@ getPendingRequests(): void {
   this.loading = true;
   this.errorMessage = '';
   this.successMessage = '';
+  this.cdr.detectChanges();
 
   this.service.getPendingRequests()
     .pipe(
       finalize(() => {
         this.loading = false;
+        this.cdr.detectChanges();
+
+        console.log('Loading:', this.loading);
+        console.log('Pending count:', this.pendingRequests.length);
       })
     )
     .subscribe({
       next: (res: any) => {
-        console.log('Pending eligibility requests:', res);
+        console.log('API response:', res);
 
-        const data = res?.data ?? res;
+        const requests = res?.data ?? res?.Data ?? res;
 
-        const requests = Array.isArray(data)
-          ? data
-          : data?.items ?? data?.requests ?? [];
-
-        // Keep only requests with Pending status.
-        this.pendingRequests = requests.filter((item: any) => {
+        this.pendingRequests = (
+          Array.isArray(requests) ? requests : []
+        ).filter((item: any) => {
           const status = String(
             item.eligibilityStatus ??
             item.EligibilityStatus ??
             item.status ??
             item.Status ??
             item.isEligible ??
+            item.IsEligible ??
             ''
           ).trim().toLowerCase();
 
           return status === 'pending';
         });
 
-        // Restore the previously selected request if still pending.
-        if (this.selectedEligibilityId !== null) {
+        console.log(
+          'Filtered pending requests:',
+          this.pendingRequests
+        );
+
+        if (
+          this.selectedEligibilityId !== null
+        ) {
           this.selectedRequest =
-            this.pendingRequests.find(
-              (item: any) =>
-                Number(item.eligibilityId ?? item.EligibilityId) ===
-                Number(this.selectedEligibilityId)
+            this.pendingRequests.find((item: any) =>
+              Number(
+                item.eligibilityId ?? item.EligibilityId
+              ) === Number(this.selectedEligibilityId)
             ) ?? null;
 
           if (!this.selectedRequest) {
@@ -83,7 +97,7 @@ getPendingRequests(): void {
           }
         }
 
-        console.log('Filtered pending requests:', this.pendingRequests);
+        this.cdr.detectChanges();
       },
 
       error: (err: any) => {
@@ -91,12 +105,16 @@ getPendingRequests(): void {
 
         this.pendingRequests = [];
         this.selectedRequest = null;
+
         this.errorMessage =
           err?.error?.message ??
           'Unable to load pending eligibility requests.';
+
+        this.cdr.detectChanges();
       }
     });
 }
+
 
 
 selectRequest(): void {
