@@ -13,11 +13,17 @@ import { TwoFactorSetup } from './pages/two-factor-setup/two-factor-setup';
 // Customer pages
 import { UserDashboard } from './pages/user-dashboard/user-dashboard';
 import { CustomerKyc } from './pages/customer-kyc/customer-kyc';
+
+
 import { ApplyLoan } from './apply-loan1/apply-loan';
 import { ViewProfile } from './pages/view-profile/view-profile';
+import { SanctionLetter } from './pages/sanction-letter/sanction-letter';
+import { PendingDeals } from './pages/pending-deals/pending-deals';
+
+
 import { Cibil } from './pages/cibil/cibil';
 import { Eligibility } from './pages/eligibility/eligibility';
-import { SanctionLetter } from './pages/sanction-letter/sanction-letter';
+
 
 // Officer pages
 import { OfficerDashboard } from './pages/officer-dashboard/officer-dashboard';
@@ -25,7 +31,7 @@ import { Reports } from './pages/reports/reports';
 import { OfficerKyc } from './pages/officer-kyc/officer-kyc';
 import { OfficerKycReview } from './pages/officer-kyc-review/officer-kyc-review';
 import { Scorecard } from './pages/scorecard/scorecard';
-import { PendingDeals } from './pages/pending-deals/pending-deals';
+
 
 // Loan Accounts and EMI Schedules
 import { EmiSchedule } from './pages/emi-schedule/emi-schedule';
