@@ -3,8 +3,7 @@ import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { LoanAccountService } from '../../services/loan-account-service';
-import { RouterLink } from '@angular/router';
-
+import { Router, RouterLink } from '@angular/router';
 @Component({
   selector: 'app-loan-account',
   imports: [CommonModule, FormsModule, RouterLink],
@@ -14,6 +13,7 @@ import { RouterLink } from '@angular/router';
 export class LoanAccount implements OnInit {
 
   service = inject(LoanAccountService);
+  router = inject(Router);
 
   allLoanAccounts: any = [];
 
@@ -41,10 +41,9 @@ export class LoanAccount implements OnInit {
   }
 
   goToDetails(id: any) {
-    console.log(id);
-  }
+  this.router.navigate(['/loan-account-details', id]);
+}
 
-  // Search and filter loan accounts
   get filteredLoanAccounts() {
     return this.allLoanAccounts.filter((account: any) => {
       const matchesSearch = (account.loanAccountNo || '')
@@ -60,7 +59,6 @@ export class LoanAccount implements OnInit {
     });
   }
 
-  // Display five accounts per page
   get paginatedLoanAccounts() {
     const start = (this.pageNumber - 1) * this.pageSize;
     return this.filteredLoanAccounts.slice(start, start + this.pageSize);
