@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { NgClass, NgIf } from '@angular/common';
 import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
-
 @Component({
   selector: 'app-officer-layout',
   standalone: true,
