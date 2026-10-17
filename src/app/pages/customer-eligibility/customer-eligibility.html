@@ -1,0 +1,93 @@
+
+<div class="customer-eligibility-page">
+  <div class="eligibility-result-card">
+
+    <h2 class="page-title">
+      <span class="title-icon">✓</span>
+      Eligibility Result
+    </h2>
+
+    <p *ngIf="loading" class="info-message" role="status">
+      Loading your eligibility result...
+    </p>
+
+    <p *ngIf="message && !loading" class="error-message" role="alert">
+      {{ message }}
+    </p>
+
+    <ng-container *ngIf="!loading && !message">
+
+      <div class="details-grid">
+
+        <div class="detail-box">
+          <span>Customer Name</span>
+          <strong>{{ customerName || 'Not available' }}</strong>
+        </div>
+
+        <div class="detail-box">
+          <span>PAN Number</span>
+          <strong>{{ panNumber || 'Not provided' }}</strong>
+        </div>
+
+        <!-- <div class="detail-box">
+          <span>Monthly Income</span>
+          <strong>
+            {{ monthlyIncome == null
+              ? 'Not available'
+              : (monthlyIncome | currency:'INR':'symbol':'1.2-2') }}
+          </strong>
+        </div> -->
+
+        <div class="detail-box">
+          <span>CIBIL Score</span>
+          <strong>{{ cibilScore ?? 'Not available' }}</strong>
+        </div>
+
+        <div class="detail-box">
+          <span>Loan Amount</span>
+          <strong>
+            {{ eligibleLoanAmount == null
+              ? 'Not available'
+              : (eligibleLoanAmount | currency:'INR':'symbol':'1.0-0') }}
+          </strong>
+        </div>
+
+      </div>
+
+      <div
+        class="decision-panel approved"
+        *ngIf="isApproved">
+
+        <h2>✓ Approved</h2>
+        <p>Congratulations! Your loan eligibility is approved.</p>
+      </div>
+
+      <div
+        class="decision-panel rejected"
+        *ngIf="isRejected">
+
+        <h2>✕ Rejected</h2>
+        <p>
+          {{ rejectionReason || 'Your loan eligibility was not approved.' }}
+        </p>
+      </div>
+
+      <div
+        class="decision-panel pending"
+        *ngIf="!isApproved && !isRejected">
+
+        <h2>⌛ Pending</h2>
+        <p>Your eligibility request is pending review.</p>
+      </div>
+
+      <button
+        type="button"
+        class="dashboard-button"
+        (click)="goToDashboard()">
+        Back to Dashboard
+      </button>
+
+    </ng-container>
+
+  </div>
+</div>

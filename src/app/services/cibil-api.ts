@@ -1,6 +1,18 @@
+
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+
+export interface CibilCustomerProfile {
+  customerId: number;
+  customerName: string;
+  panNumber: string | null;
+}
+
+export interface CibilProfileResponse {
+  message: string;
+  data: CibilCustomerProfile;
+}
 
 @Injectable({
   providedIn: 'root'
@@ -25,6 +37,15 @@ export class cibilapiService {
     );
   }
 
+  // Get details of the currently logged-in customer
+  getCustomerProfile(): Observable<CibilProfileResponse> {
+    return this.http.get<CibilProfileResponse>(
+      `${this.baseUrl}/Profile`,
+      { headers: this.getHeaders() }
+    );
+  }
+
+  // Generate CIBIL score
   generateCibil(customerId: number): Observable<any> {
     return this.http.post<any>(
       `${this.baseUrl}/GenerateScore`,
@@ -33,6 +54,7 @@ export class cibilapiService {
     );
   }
 
+  // Get existing CIBIL score
   getCibil(customerId: number): Observable<any> {
     return this.http.get<any>(
       `${this.baseUrl}/GetScore/${customerId}`,

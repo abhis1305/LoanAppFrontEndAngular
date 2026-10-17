@@ -1,0 +1,41 @@
+
+.scorecard-container {
+  padding: 24px;
+}
+
+.result-card {
+  overflow: hidden;
+  border: none;
+  border-radius: 12px;
+}
+
+.scorecard-header {
+  padding: 20px 24px;
+  color: #fff;
+  background: #0d6efd;
+}
+
+.scorecard-header h2 {
+  margin: 0;
+  font-size: 26px;
+}
+
+.scorecard-body {
+  padding: 24px;
+}
+
+.table th {
+  width: 35%;
+  background: #f8fafc;
+}
+
+.table td,
+.table th {
+  padding: 12px;
+  vertical-align: middle;
+}
+
+.loan-amount {
+  font-weight: 600;
+  color: #198754;
+}
