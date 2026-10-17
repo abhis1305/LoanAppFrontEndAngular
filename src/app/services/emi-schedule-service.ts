@@ -16,7 +16,7 @@ export class EmiScheduleService {
     });
   }
 
-  url = "http://localhost:7008/api/EmiSchedule/MyLoanAccounts";
+  // url = "http://localhost:7008/api/EmiSchedule/MyLoanAccounts";
 
   getLoanAccounts(): Observable<any>
   {

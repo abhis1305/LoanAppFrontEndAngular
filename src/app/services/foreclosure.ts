@@ -1,20 +1,39 @@
+
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
 })
 export class Foreclosure {
+  private apiUrl = 'http://localhost:7008/api/v1/user/ForeClosure';
 
   constructor(private http: HttpClient) {}
 
-  url = 'http://localhost:7008/api/v1/user/ForeClosure';
+  private getHeaders() {
+    const token = sessionStorage.getItem('accessToken');
+
+    if (!token) {
+      console.error('Access token not found. Please log in again.');
+    }
+
+    return new HttpHeaders({
+      Authorization: `Bearer ${token ?? ''}`
+    });
+  }
 
   getMyRequests() {
-    return this.http.get<any>(`${this.url}/MyRequests`);
+    return this.http.get(
+      `${this.apiUrl}/MyRequests`,
+      { headers: this.getHeaders() }
+    );
   }
 
   createRequest(data: any) {
-    return this.http.post<any>(`${this.url}/Request`, data);
+    return this.http.post(
+      `${this.apiUrl}/Request`,
+      data,
+      { headers: this.getHeaders() }
+    );
   }
 }

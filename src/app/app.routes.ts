@@ -144,7 +144,7 @@ export const routes: Routes = [
         component: Support
       },
       {
-        path: 'user/foreclosure',
+        path: 'user-foreclosure',
         component: UserForeclosure
       },
       {

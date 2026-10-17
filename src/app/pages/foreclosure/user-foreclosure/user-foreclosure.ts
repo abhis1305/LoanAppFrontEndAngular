@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { Foreclosure } from '../../../services/foreclosure';
+import { HttpHeaders } from '@angular/common/http';
 
 @Component({
   standalone: true,
@@ -17,7 +18,13 @@ export class UserForeclosure {
     this.GetLoanAccounts();
     this.GetMyRequests();
   }
+private getHeaders() {
+  const token = sessionStorage.getItem('accessToken');
 
+  return new HttpHeaders({
+    Authorization: `Bearer ${token}`
+  });
+}
   loanAccounts: any[] = [];
   allForeclosureRequests: any[] = [];
 
@@ -38,27 +45,31 @@ export class UserForeclosure {
   loadingLoanDetails: boolean = false;
 
   GetLoanAccounts() {
-    this.http.get<any>('http://localhost:7008/api/LoanAccount/GetAllLA').subscribe({
-      next: res => {
-        console.log('Loan accounts:', res);
-
-        this.loanAccounts = Array.isArray(res) ? res : res.data ?? [];
-
-        this.cd.detectChanges();
-      },
-      error: err => {
-        console.log('Loan accounts error:', err);
-        alert('Unable to load loan accounts.');
-      }
-    });
-  }
+  this.http.get<any>(
+    'http://localhost:7008/api/LoanAccount/GetAllLA',
+    { headers: this.getHeaders() }
+  ).subscribe({
+    next: res => {
+      console.log('Loan accounts:', res);
+      this.loanAccounts = Array.isArray(res) ? res : res?.data ?? [];
+      this.cd.detectChanges();
+    },
+    error: err => {
+      console.log('Loan accounts error:', err.status, err.error);
+      alert('Unable to load loan accounts. Check authorization and API access.');
+    }
+  });
+}
 
   GetMyRequests() {
     this.service.getMyRequests().subscribe({
       next: res => {
         console.log('My foreclosure requests:', res);
 
-        this.allForeclosureRequests = Array.isArray(res) ? res : res.data ?? [];
+        const response: any = res;
+this.allForeclosureRequests = Array.isArray(response)
+  ? response
+  : response?.data ?? [];
 
         this.cd.detectChanges();
       },
