@@ -1,3 +1,4 @@
+
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { Router } from '@angular/router';
@@ -35,16 +36,24 @@ export class AuthService {
   private http = inject(HttpClient);
   private router = inject(Router);
 
-  private readonly apiUrl = 'http://localhost:7008/api/Auth';
+  // Updated to match the HTTPS backend URL in launchSettings.json
+  private readonly apiUrl = 'https://localhost:7008/api/Auth';
+
   private readonly googleClientId =
     '1066832090441-qbqpblqu0ksr8dgau73pklpr57boheuf.apps.googleusercontent.com';
 
   register(data: any): Observable<ApiMessageResponse> {
-    return this.http.post<ApiMessageResponse>(`${this.apiUrl}/register`, data);
+    return this.http.post<ApiMessageResponse>(
+      `${this.apiUrl}/register`,
+      data
+    );
   }
 
   login(data: any): Observable<AuthResponse> {
-    return this.http.post<AuthResponse>(`${this.apiUrl}/login`, data);
+    return this.http.post<AuthResponse>(
+      `${this.apiUrl}/login`,
+      data
+    );
   }
 
   getGoogleClientId(): string {
@@ -52,23 +61,34 @@ export class AuthService {
   }
 
   googleLogin(idToken: string): Observable<AuthResponse> {
-    return this.http.post<AuthResponse>(`${this.apiUrl}/google`, {
-      idToken: idToken,
-    });
+    return this.http.post<AuthResponse>(
+      `${this.apiUrl}/google`,
+      { idToken }
+    );
   }
 
-  enableTwoFactor(setupToken: string): Observable<TwoFactorSetupResponse> {
+  enableTwoFactor(
+    setupToken: string
+  ): Observable<TwoFactorSetupResponse> {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${setupToken}`,
     });
-    return this.http.post<TwoFactorSetupResponse>(`${this.apiUrl}/enable-2fa`, {}, { headers });
+
+    return this.http.post<TwoFactorSetupResponse>(
+      `${this.apiUrl}/enable-2fa`,
+      {},
+      { headers }
+    );
   }
 
-  verifyTwoFactor(preAuthToken: string, code: string): Observable<AuthResponse> {
-    return this.http.post<AuthResponse>(`${this.apiUrl}/verify-2fa`, {
-      preAuthToken,
-      code,
-    });
+  verifyTwoFactor(
+    preAuthToken: string,
+    code: string
+  ): Observable<AuthResponse> {
+    return this.http.post<AuthResponse>(
+      `${this.apiUrl}/verify-2fa`,
+      { preAuthToken, code }
+    );
   }
 
   handleLoginResponse(response: AuthResponse): LoginFlowResult {
@@ -80,9 +100,11 @@ export class AuthService {
         result.message = 'Setup token was not returned by the server.';
         return result;
       }
+
       this.clearAuthData();
       sessionStorage.setItem('setupToken', response.setupToken);
       void this.router.navigate(['/two-factor-setup']);
+
       result.status = 'setup';
       return result;
     }
@@ -93,21 +115,29 @@ export class AuthService {
         result.message = 'Pre-authentication token was not returned.';
         return result;
       }
+
       this.clearAuthData();
       sessionStorage.setItem('preAuthToken', response.preAuthToken);
+
       result.status = 'twoFactor';
       result.message = 'Enter the 6-digit code from your Authenticator app.';
       return result;
     }
 
     if (response.token) {
-      const success = this.completeLogin(response.token, response.role);
+      const success = this.completeLogin(
+        response.token,
+        response.role
+      );
+
       if (success) {
         result.status = 'authenticated';
         return result;
       }
+
       result.status = 'error';
-      result.message = 'Login succeeded, but the role is missing or unrecognized.';
+      result.message =
+        'Login succeeded, but the role is missing or unrecognized.';
       return result;
     }
 
@@ -120,6 +150,7 @@ export class AuthService {
     if (!response.token) {
       return false;
     }
+
     return this.completeLogin(response.token, response.role);
   }
 
@@ -127,24 +158,32 @@ export class AuthService {
     if (!response.token) {
       return false;
     }
+
     return this.completeLogin(response.token, response.role);
   }
 
-  private completeLogin(token: string, responseRole?: string | null): boolean {
-    // FIXED: Stripped casing inconsistencies to match 'customer' or 'officer' safely
-    const role = (responseRole || this.getRoleFromToken(token)).trim().toLowerCase();
+  private completeLogin(
+    token: string,
+    responseRole?: string | null
+  ): boolean {
+    const role = (
+      responseRole || this.getRoleFromToken(token)
+    ).trim().toLowerCase();
+
     let dashboardRoute = '';
 
- if (role?.toLowerCase() === 'user' || role?.toLowerCase() === 'customer') {
-  dashboardRoute = '/user-dashboard';
-} else if (role?.toLowerCase() === 'loan officer' || role?.toLowerCase() === 'officer') {
-  dashboardRoute = '/officer-dashboard';
-} else if (role?.toLowerCase() === 'admin') {
-  dashboardRoute = '/admin-dashboard';
-} else {
-  return false;
-}
+    if (role === 'user' || role === 'customer') {
+      dashboardRoute = '/user-dashboard';
+    } else if (role === 'loan officer' || role === 'officer') {
+      dashboardRoute = '/officer-dashboard';
+    } else if (role === 'admin') {
+      dashboardRoute = '/admin-dashboard';
+    } else {
+      return false;
+    }
+
     this.clearAuthData();
+
     sessionStorage.setItem('accessToken', token);
     sessionStorage.setItem('userRole', role);
 
@@ -154,13 +193,24 @@ export class AuthService {
 
   private getRoleFromToken(token: string): string {
     try {
-      const payload = token.split('.')[1].replace(/-/g, '+').replace(/_/g, '/');
-      const paddedPayload = payload.padEnd(payload.length + ((4 - (payload.length % 4)) % 4), '=');
+      const payload = token
+        .split('.')[1]
+        .replace(/-/g, '+')
+        .replace(/_/g, '/');
+
+      const paddedPayload = payload.padEnd(
+        payload.length + ((4 - (payload.length % 4)) % 4),
+        '='
+      );
+
       const claims = JSON.parse(atob(paddedPayload));
+
       const role =
         claims['role'] ??
         claims['roles'] ??
-        claims['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'];
+        claims[
+          'http://schemas.microsoft.com/ws/2008/06/identity/claims/role'
+        ];
 
       return Array.isArray(role) ? (role[0] ?? '') : (role ?? '');
     } catch {
@@ -168,33 +218,60 @@ export class AuthService {
     }
   }
 
-  // ADDED: Token payload claim decoder
   getData(): any {
     const token = this.getAccessToken();
-    if (!token) return null;
+
+    if (!token) {
+      return null;
+    }
+
     try {
-      const payload = token.split('.')[1].replace(/-/g, '+').replace(/_/g, '/');
-      const paddedPayload = payload.padEnd(payload.length + ((4 - (payload.length % 4)) % 4), '=');
+      const payload = token
+        .split('.')[1]
+        .replace(/-/g, '+')
+        .replace(/_/g, '/');
+
+      const paddedPayload = payload.padEnd(
+        payload.length + ((4 - (payload.length % 4)) % 4),
+        '='
+      );
+
       return JSON.parse(atob(paddedPayload));
     } catch {
       return null;
     }
   }
 
-  // ADDED: Returns the user name claim for dashboards
   getName(): string {
-    const d = this.getData();
-    if (!d) return '';
-    return d['unique_name'] || d['name'] 
-        || d['http://xmlsoap.org'] || '';
+    const data = this.getData();
+
+    if (!data) {
+      return '';
+    }
+
+    return (
+      data['unique_name'] ||
+      data['name'] ||
+      data['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name'] ||
+      ''
+    );
   }
 
-  // ADDED: Resolves the missing property compilation error inside support.ts
   getCustomerId(): number {
-    const d = this.getData();
-    if (!d) return 0;
-    return Number(d['customerId'] || d['nameid']
-        || d['http://xmlsoap.orgidentifier'] || 0);
+    const data = this.getData();
+
+    if (!data) {
+      return 0;
+    }
+
+    return Number(
+      data['customerId'] ||
+      data['nameid'] ||
+      data[
+        'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier'
+      ] ||
+      0
+    );
   }
 
   getAccessToken(): string | null {

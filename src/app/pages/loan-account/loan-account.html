@@ -1,0 +1,120 @@
+
+<div class="container-fluid p-4">
+
+  <h2>Loan Accounts</h2>
+
+  <!-- Search and Status Filter -->
+  <div class="row mb-3">
+
+    <div class="col-md-6 mb-2">
+      <input
+        type="text"
+        class="form-control"
+        placeholder="Search by account number"
+        [(ngModel)]="searchText"
+        (ngModelChange)="resetPage()">
+    </div>
+
+    <div class="col-md-6 mb-2">
+      <select
+        class="form-select"
+        [(ngModel)]="selectedStatus"
+        (ngModelChange)="resetPage()">
+
+        <option value="">Select</option>
+        <option value="">All Statuses</option>
+        <option value="Active">Active</option>
+        <option value="Closed">Closed</option>
+
+      </select>
+    </div>
+
+  </div>
+
+  
+<div class="d-flex align-items-center mb-3">
+  <select
+    class="form-select"
+    style="width: 70px;"
+    [ngModel]="pageSize"
+    (ngModelChange)="changePageSize($event)">
+
+    <option [ngValue]="5">5</option>
+    <option [ngValue]="10">10</option>
+    <option [ngValue]="25">25</option>
+    <option [ngValue]="50">50</option>
+
+  </select>
+
+  <span class="ms-2">entries per page</span>
+</div>
+
+
+  <!-- Loan Accounts Table -->
+  <div class="table-responsive">
+    <table class="table table-bordered table-striped">
+
+      <thead class="table-dark">
+        <tr>
+          <th>Account ID</th>
+          <th>Account Number</th>
+          <th>Loan Amount</th>
+          <th>Outstanding Principal</th>
+          <th>Status</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+
+      <tbody>
+
+        <tr *ngFor="let account of paginatedLoanAccounts">
+          <td>{{ account.loanAccountId }}</td>
+          <td>{{ account.loanAccountNo }}</td>
+          <td>{{ account.loanAmount }}</td>
+          <td>{{ account.outstandingPrincipal }}</td>
+          <td>{{ account.loanStatus }}</td>
+
+          <td>
+            <button
+              class="btn btn-primary btn-sm"
+              (click)="goToDetails(account.loanAccountId)">
+              View Details
+            </button>
+          </td>
+        </tr>
+
+        <!-- Show message when no accounts are found -->
+        <tr *ngIf="filteredLoanAccounts.length === 0">
+          <td colspan="6" class="text-center">
+            No loan accounts found.
+          </td>
+        </tr>
+
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Pagination -->
+  <div class="d-flex justify-content-between align-items-center mt-3">
+
+    <button
+      class="btn btn-secondary"
+      (click)="previousPage()"
+      [disabled]="pageNumber === 1">
+      Previous
+    </button>
+
+    <span>
+      Page {{ pageNumber }} of {{ totalPages || 1 }}
+    </span>
+
+    <button
+      class="btn btn-primary"
+      (click)="nextPage()"
+      [disabled]="pageNumber >= totalPages">
+      Next
+    </button>
+
+  </div>
+
+</div>
