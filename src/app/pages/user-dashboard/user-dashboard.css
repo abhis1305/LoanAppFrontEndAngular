@@ -1,0 +1,32 @@
+@import 'bootstrap-icons/font/bootstrap-icons.css';
+
+.sidebar {
+  width: 280px;
+  min-width: 280px;
+  background-color: #102d59;
+}
+
+.sidebar .nav-link {
+  color: #e9f1ff;
+  border-radius: 6px;
+  padding: 10px 12px;
+  margin: 2px 0;
+  font-size: 14px;
+}
+
+.sidebar .nav-link:hover,
+.sidebar .nav-link.active {
+  color: #fff;
+  background-color: #245fca;
+}
+
+.sidebar button:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+@media (max-width: 768px) {
+  .sidebar {
+    width: 100%;
+    min-width: 0;
+  }
+}

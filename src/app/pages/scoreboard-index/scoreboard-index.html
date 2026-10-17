@@ -1,0 +1,57 @@
+
+<div class="scorecard-container">
+  <div class="card shadow index-card">
+    <h2>Customer List</h2>
+
+    <div class="alert alert-danger" *ngIf="errorMessage">
+      {{ errorMessage }}
+    </div>
+
+    <div class="table-responsive">
+      <table class="table table-bordered table-striped">
+        <thead class="table-dark">
+          <tr>
+            <th>Customer Id</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Income</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr *ngIf="loading">
+            <td colspan="5" class="text-center">
+              Loading customers...
+            </td>
+          </tr>
+
+          <tr *ngIf="!loading && errorMessage">
+            <td colspan="5">{{ errorMessage }}</td>
+          </tr>
+
+          <tr *ngIf="!loading && !errorMessage && customers.length === 0">
+            <td colspan="5" class="text-center">
+              No customers found.
+            </td>
+          </tr>
+
+          <tr *ngFor="let customer of customers">
+            <td>{{ customer.customerId }}</td>
+            <td>{{ customer.name }}</td>
+            <td>{{ customer.email }}</td>
+            <td>{{ customer.income | number }}</td>
+            <td>
+              <button
+                type="button"
+                class="btn btn-primary"
+                (click)="generateScorecard(customer.customerId)">
+                Generate Scorecard
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

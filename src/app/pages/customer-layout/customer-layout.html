@@ -1,0 +1,128 @@
+<div class="container-fluid p-0">
+  <div class="row g-0 min-vh-100">
+    <!-- Sidebar -->
+    <aside class="col-auto sidebar text-white d-flex flex-column">
+      <!-- Brand -->
+      <div class="p-3 border-bottom border-secondary">
+        <h3 class="fw-bold mb-1"><i class="bi bi-bank me-2"></i>LoanApp</h3>
+      </div>
+
+      <div class="p-2">
+        <!-- Customer -->
+        <button
+          class="btn text-white w-100 text-start fw-semibold d-flex align-items-center gap-2"
+          (click)="toggleCustomer()"
+        >
+          <i class="bi bi-person fs-5"></i>
+          <span>Customer</span>
+          <i
+            class="bi ms-auto"
+            [ngClass]="customerOpen ? 'bi-chevron-down' : 'bi-chevron-right'"
+          ></i>
+        </button>
+
+        <div *ngIf="customerOpen" class="nav flex-column">
+          <a
+            routerLink="/user-dashboard"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            class="nav-link"
+          >
+            <i class="bi bi-house-door me-2"></i>Dashboard
+          </a>
+          <a routerLink="/user-profile" routerLinkActive="active" class="nav-link">
+            <i class="bi bi-person me-2"></i>
+            Profile
+          </a>
+          <a routerLink="/customer-kyc" routerLinkActive="active" class="nav-link">
+            <i class="bi bi-file-earmark-check me-2"></i>KYC Verification
+          </a>
+          <a routerLink="/cibilindex" routerLinkActive="active" class="nav-link">
+            <i class="bi bi-speedometer2 me-2"></i>CIBIL Score
+          </a>
+          <a routerLink="/customer-eligibility" routerLinkActive="active" class="nav-link">
+            <i class="bi bi-check-circle me-2"></i>Eligibility Result
+          </a>
+        </div>
+
+        <hr class="border-secondary" />
+
+        <!-- Loan Services -->
+        <button
+          class="btn text-white w-100 text-start fw-semibold d-flex align-items-center gap-2"
+          (click)="toggleLoanServices()"
+        >
+          <i class="bi bi-cash-stack fs-5"></i>
+          <span>Loan Services</span>
+          <i
+            class="bi ms-auto"
+            [ngClass]="loanServicesOpen ? 'bi-chevron-down' : 'bi-chevron-right'"
+          ></i>
+        </button>
+
+        <div *ngIf="loanServicesOpen" class="nav flex-column">
+          <a routerLink="/apply-loan" routerLinkActive="active" class="nav-link">
+            <i class="bi bi-file-earmark-plus me-2"></i>Apply Loan
+          </a>
+          <a routerLink="/track-status" routerLinkActive="active" class="nav-link">
+            <i class="bi bi-search me-2"></i>Track Status
+          </a>
+          <a routerLink="/loan-dashboard" routerLinkActive="active" class="nav-link">
+            <i class="bi bi-grid me-2"></i>DashBoard
+          </a>
+          <a routerLink="/foreclosure-request" routerLinkActive="active" class="nav-link">
+            <i class="bi bi-shield-check me-2"></i>ForeClosure Request
+          </a>
+        </div>
+
+        <hr class="border-secondary" />
+
+        <!-- Payments -->
+        <button
+          class="btn text-white w-100 text-start fw-semibold d-flex align-items-center gap-2"
+          (click)="togglePayments()"
+        >
+          <i class="bi bi-wallet2 fs-5"></i>
+          <span>Payments</span>
+          <i
+            class="bi ms-auto"
+            [ngClass]="paymentsOpen ? 'bi-chevron-down' : 'bi-chevron-right'"
+          ></i>
+        </button>
+
+        <div *ngIf="paymentsOpen" class="nav flex-column">
+          <a routerLink="/emi-schedule" routerLinkActive="active" class="nav-link">
+            <i class="bi bi-calendar3 me-2"></i>EMI Schedule
+          </a>
+          <a routerLink="/make-payment" routerLinkActive="active" class="nav-link">
+            <i class="bi bi-credit-card me-2"></i>Make Payments
+          </a>
+          <a routerLink="/payment-history" routerLinkActive="active" class="nav-link">
+            <i class="bi bi-clock-history me-2"></i>Payment History
+          </a>
+          <a routerLink="/my-penalties" routerLinkActive="active" class="nav-link">
+            <i class="bi bi-exclamation-triangle me-2"></i>My Penalties
+          </a>
+        </div>
+
+        <hr class="border-secondary" />
+
+        <a routerLink="/support" class="nav-link"> <i class="bi bi-headset me-2"></i>Support </a>
+
+        <button class="btn btn-outline-light w-100 mt-2 text-start" (click)="logout()">
+          <i class="bi bi-box-arrow-right me-2"></i>Logout
+        </button>
+      </div>
+    </aside>
+
+    <!-- Main Content: every customer page opens here -->
+    <main class="col bg-body-tertiary p-3 p-md-4">
+      <nav class="navbar bg-white rounded shadow-sm px-3 mb-4">
+        <span class="navbar-brand fw-bold mb-0">User Dashboard</span>
+        <span class="badge text-bg-primary">Customer</span>
+      </nav>
+
+      <router-outlet></router-outlet>
+    </main>
+  </div>
+</div>

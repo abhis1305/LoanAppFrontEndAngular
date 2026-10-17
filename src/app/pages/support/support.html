@@ -1,0 +1,145 @@
+<div class="page">
+
+  <!-- HEADER -->
+  <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+    <div>
+      <h4 class="fw-bold mb-1">Support / Raise Query</h4>
+      <span class="text-muted">Raise a query about your loan and follow it until it is resolved.</span>
+    </div>
+    <button type="button" class="btn btn-primary btn-raise" (click)="OpenAdd()">
+      <i class="bi bi-plus-circle me-2"></i>Raise a Query
+    </button>
+  </div>
+
+  <div class="alert alert-danger" *ngIf="listMsg">{{listMsg}}</div>
+
+  <!-- COUNTS -->
+  <div class="row g-3 mb-3">
+    <div class="col-6 col-xl-3">
+      <div class="stat blue">
+        <div class="icon"><i class="bi bi-ticket-detailed"></i></div>
+        <div><small>Total Tickets</small><h3>{{alltickets?.length || 0}}</h3></div>
+      </div>
+    </div>
+    <div class="col-6 col-xl-3">
+      <div class="stat orange">
+        <div class="icon"><i class="bi bi-envelope-open"></i></div>
+        <div><small>Waiting for officer</small><h3>{{countOf('pending')}}</h3></div>
+      </div>
+    </div>
+    <div class="col-6 col-xl-3">
+      <div class="stat purple">
+        <div class="icon"><i class="bi bi-hourglass-split"></i></div>
+        <div><small>Being handled</small><h3>{{countOf('progress')}}</h3></div>
+      </div>
+    </div>
+    <div class="col-6 col-xl-3">
+      <div class="stat green">
+        <div class="icon"><i class="bi bi-check2-circle"></i></div>
+        <div><small>Resolved</small><h3>{{countOf('complet')}}</h3></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MY TICKETS -->
+  <div class="box">
+    <h6 class="box-title">My Tickets</h6>
+
+    <article class="ticket" *ngFor="let t of alltickets">
+      <div class="t-id">#{{t.ticketId}}</div>
+
+      <div class="t-main">
+        <h6>{{t.subject}}</h6>
+        <small class="text-muted">Loan {{t.loanAccountNo}} &middot; raised {{t.createdDate | date:'dd MMM yyyy'}}</small>
+        <p class="t-reply" [class.empty]="!t.officerResponse">
+          {{t.officerResponse || 'No reply yet. An officer will respond soon.'}}
+        </p>
+      </div>
+
+      <div class="t-state">
+        <!-- 3-step progress track: Raised > In progress > Resolved -->
+        <div class="track"
+             [class.st-progress]="(t.status || '').toLowerCase().includes('progress')"
+             [class.st-done]="(t.status || '').toLowerCase().includes('complet')">
+          <i></i><i></i><i></i>
+        </div>
+        <span class="badge rounded-pill" [ngClass]="badge(t.status)">{{t.status}}</span>
+      </div>
+
+      <div class="t-act">
+        <button type="button" class="btn btn-sm btn-outline-primary" (click)="ViewTicket(t)">Open</button>
+      </div>
+    </article>
+
+    <div class="blank" *ngIf="alltickets && alltickets.length == 0">
+      <i class="bi bi-inbox"></i>
+      <p class="mb-0">No tickets yet. Raise a query and it will show up here.</p>
+    </div>
+  </div>
+
+</div>
+
+
+<!-- ============ RAISE QUERY BOX ============ -->
+<div class="modal d-block" tabindex="-1" *ngIf="showAdd">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content sheet">
+      <div class="modal-header">
+        <h5 class="modal-title">Raise a Query</h5>
+        <button type="button" class="btn-close" (click)="CloseAdd()"></button>
+      </div>
+      <form [formGroup]="tickets" (ngSubmit)="SaveTicket(tickets.value)">
+        <div class="modal-body">
+          <label class="form-label fw-semibold">Loan Account</label>
+          <select class="form-select mb-3" formControlName="loanaccountid">
+            <option *ngIf="myloan" [value]="myloan.loanAccountId">{{myloan.loanAccountNo}}</option>
+          </select>
+          <label class="form-label fw-semibold">Subject</label>
+          <input type="text" formControlName="subject" class="form-control mb-3">
+          <label class="form-label fw-semibold">What happened?</label>
+          <textarea formControlName="description" rows="4" class="form-control mb-2"></textarea>
+          <p class="text-danger mb-0">{{msg}}</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" (click)="CloseAdd()">Close</button>
+          <button type="submit" class="btn btn-primary px-4">Send query</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+<div class="modal-backdrop show" *ngIf="showAdd"></div>
+
+
+<!-- ============ VIEW BOX ============ -->
+<div class="modal d-block" tabindex="-1" *ngIf="showView">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content sheet">
+      <div class="modal-header">
+        <h5 class="modal-title">Ticket #{{selected?.ticketId}}</h5>
+        <button type="button" class="btn-close" (click)="CloseView()"></button>
+      </div>
+      <div class="modal-body">
+        <div class="t-state mb-3">
+          <div class="track"
+               [class.st-progress]="(selected?.status || '').toLowerCase().includes('progress')"
+               [class.st-done]="(selected?.status || '').toLowerCase().includes('complet')">
+            <i></i><i></i><i></i>
+          </div>
+          <span class="badge rounded-pill" [ngClass]="badge(selected?.status)">{{selected?.status}}</span>
+          <small class="ms-auto text-muted">Loan {{selected?.loanAccountNo}}</small>
+        </div>
+        <div class="fw-semibold">Subject</div>
+        <p>{{selected?.subject}}</p>
+        <div class="fw-semibold">Your query</div>
+        <p>{{selected?.description}}</p>
+        <div class="fw-semibold">Officer reply</div>
+        <div class="bubble">{{selected?.officerResponse || 'No reply yet. We will get back to you soon.'}}</div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="CloseView()">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal-backdrop show" *ngIf="showView"></div>

@@ -1,0 +1,25 @@
+
+.profile-page {
+  min-height: 100vh;
+  background-color: #f5f7fb;
+}
+
+.profile-page .card {
+  border-radius: 10px;
+}
+
+.detail-label {
+  font-size: 14px;
+  color: #6c757d;
+  margin-bottom: 6px;
+}
+
+.detail-value {
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+.profile-page .form-control:focus,
+.profile-page .form-select:focus {
+  box-shadow: none;
+}
