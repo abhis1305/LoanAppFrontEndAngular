@@ -1,0 +1,89 @@
+
+<div class="container-fluid mt-4 mb-4">
+  <h3 class="mb-4">My Penalties</h3>
+
+  <div *ngIf="loading" class="alert alert-info">
+    Loading your penalties...
+  </div>
+
+  <div *ngIf="errorMessage" class="alert alert-danger">
+    {{ errorMessage }}
+  </div>
+
+  <div *ngIf="successMessage" class="alert alert-success">
+    {{ successMessage }}
+  </div>
+
+  <div class="d-flex justify-content-end mb-3">
+    <button
+      class="btn btn-outline-primary"
+      (click)="loadPenalties()"
+      [disabled]="loading">
+      Refresh
+    </button>
+  </div>
+
+  <div class="table-responsive">
+    <table class="table table-bordered align-middle">
+      <thead class="table-dark">
+        <tr>
+          <th>Penalty Type</th>
+          <th>Penalty Amount</th>
+          <th>Delay Days</th>
+          <th>Applied Date</th>
+          <th>Status</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr *ngFor="let penalty of penalties">
+          <td>{{ penalty.penaltyType }}</td>
+
+          <td>
+            {{ penalty.penaltyAmount | currency:'INR':'symbol':'1.2-2' }}
+          </td>
+
+          <td>{{ penalty.delayDays }}</td>
+
+          <td>
+            {{ penalty.appliedDate | date:'dd-MM-yyyy HH:mm:ss' }}
+          </td>
+
+          <td>
+            <span class="badge" [ngClass]="getStatusClass(penalty.status)">
+              {{ getStatusLabel(penalty.status) }}
+            </span>
+          </td>
+
+          <td>
+            <ng-container *ngIf="penalty.status?.toLowerCase() === 'pending'; else noAction">
+              <button
+                class="btn btn-success btn-sm w-100 mb-2"
+                (click)="payPenalty(penalty.penaltyId)"
+                [disabled]="payingPenaltyId !== null">
+                {{ payingPenaltyId === penalty.penaltyId ? 'Processing...' : 'Pay Now' }}
+              </button>
+
+              <button
+                class="btn btn-warning btn-sm w-100"
+                (click)="raiseTicket(penalty)">
+                Raise Ticket
+              </button>
+            </ng-container>
+
+            <ng-template #noAction>
+              <span class="text-muted">No Action</span>
+            </ng-template>
+          </td>
+        </tr>
+
+        <tr *ngIf="!loading && penalties.length === 0 && !errorMessage">
+          <td colspan="6" class="text-center">
+            No penalties found.
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

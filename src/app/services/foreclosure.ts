@@ -5,13 +5,16 @@ import { HttpClient } from '@angular/common/http';
   providedIn: 'root'
 })
 export class Foreclosure {
+
   constructor(private http: HttpClient) {}
 
+  url = 'https://localhost:7008/api/v1/user/ForeClosure';
+
   getMyRequests() {
-    return this.http.get('https://localhost:7008/api/v1/user/ForeClosure/MyRequests');
+    return this.http.get<any>(`${this.url}/MyRequests`);
   }
 
   createRequest(data: any) {
-    return this.http.post('https://localhost:7008/api/v1/user/ForeClosure/Request', data);
+    return this.http.post<any>(`${this.url}/Request`, data);
   }
 }
