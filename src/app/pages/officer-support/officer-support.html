@@ -1,0 +1,130 @@
+<div class="page">
+
+  <!-- HEADER -->
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+      <h4 class="fw-bold mb-1">Support Tickets</h4>
+      <span class="text-secondary">View customer queries and send your response.</span>
+    </div>
+    <select class="form-select w-auto" (change)="statusFilter=$any($event.target).value">
+      <option value="">All Status</option>
+      <option value="pending">Pending</option>
+      <option value="progress">In Progress</option>
+      <option value="complet">Completed</option>
+    </select>
+  </div>
+
+  <div class="alert alert-danger" *ngIf="listMsg">{{listMsg}}</div>
+
+  <!-- COUNTS -->
+  <div class="row g-3 mb-4">
+    <div class="col-md-3">
+      <div class="kpi kpi-blue">
+        <i class="bi bi-ticket-detailed"></i>
+        <div><small>Total Tickets</small><h4>{{alltickets?.length || 0}}</h4></div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="kpi kpi-orange">
+        <i class="bi bi-envelope-open"></i>
+        <div><small>Pending</small><h4>{{countOf('pending')}}</h4></div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="kpi kpi-purple">
+        <i class="bi bi-hourglass-split"></i>
+        <div><small>In Progress</small><h4>{{countOf('progress')}}</h4></div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="kpi kpi-green">
+        <i class="bi bi-check2-circle"></i>
+        <div><small>Completed</small><h4>{{countOf('complet')}}</h4></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ALL TICKETS -->
+  <div class="card-box">
+    <h6 class="fw-bold mb-3">All Tickets</h6>
+    <table class="table align-middle">
+      <thead>
+        <tr>
+          <th>Ticket No</th>
+          <th>Loan Account No</th>
+          <th>Customer Name</th>
+          <th>Subject</th>
+          <th>Status</th>
+          <th>Date</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let t of shown()">
+          <td>#{{t.ticketId}}</td>
+          <td>{{t.loanAccountNo}}</td>
+          <td>{{t.customerName}}</td>
+          <td>{{t.subject}}</td>
+          <td><span class="badge rounded-pill" [ngClass]="badge(t.status)">{{t.status}}</span></td>
+          <td>{{t.createdDate | date:'dd MMM yyyy'}}</td>
+          <td><input type="submit" value="View" class="btn btn-sm btn-primary" (click)="ViewTicket(t)"></td>
+        </tr>
+        <tr *ngIf="alltickets && shown().length == 0">
+          <td colspan="7" class="text-center text-secondary">No tickets found</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+</div>
+
+
+<!-- ============ VIEW + REPLY BOX ============ -->
+<div class="modal d-block" tabindex="-1" *ngIf="showReply">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Ticket #{{selected?.ticketId}}</h5>
+        <button type="button" class="btn-close" (click)="CloseReply()"></button>
+      </div>
+      <form [formGroup]="reply" (ngSubmit)="SaveResponse(reply.value)">
+        <div class="modal-body">
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <div class="fw-semibold">Customer</div>
+              <p class="mb-0">{{selected?.customerName}}</p>
+            </div>
+            <div class="col-md-6">
+              <div class="fw-semibold">Loan Account</div>
+              <p class="mb-0">{{selected?.loanAccountNo}}</p>
+            </div>
+          </div>
+
+          <div class="fw-semibold">Subject</div>
+          <p>{{selected?.subject}}</p>
+          <div class="fw-semibold">Description</div>
+          <p>{{selected?.description}}</p>
+          <div class="fw-semibold">Raised on</div>
+          <p>{{selected?.createdDate | date:'dd MMM yyyy hh:mm a'}}</p>
+
+          <hr>
+
+          Your Response
+          <textarea formControlName="officerResponse" rows="4" class="form-control mb-3"></textarea>
+          Status
+          <select class="form-select mb-2" formControlName="status">
+            <option>Pending</option>
+            <option>In Progress</option>
+            <option>Completed</option>
+          </select>
+          <p class="text-danger mb-0">{{msg}}</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" (click)="CloseReply()">Close</button>
+          <input type="submit" value="Save Response" class="btn btn-primary">
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+<div class="modal-backdrop show" *ngIf="showReply"></div>

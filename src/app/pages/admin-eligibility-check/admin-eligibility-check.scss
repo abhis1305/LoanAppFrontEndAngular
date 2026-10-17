@@ -1,0 +1,176 @@
+
+:host {
+  display: block;
+  width: 100%;
+}
+
+.eligibility-page {
+  width: 100%;
+  padding: 32px;
+  color: #202124;
+}
+
+.eligibility-card {
+  width: 100%;
+  padding: 0;
+  overflow: hidden;
+  background: #fff;
+  border: 1px solid #e9ecef;
+  border-radius: 12px;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.07);
+}
+
+.card-header {
+  padding: 15px 22px;
+  color: #fff;
+  background: #1769ff;
+}
+
+.card-header h2 {
+  margin: 0;
+  font-size: 27px;
+  font-weight: 600;
+}
+
+.card-body {
+  padding: 24px 20px;
+}
+
+.selection-row {
+  display: flex;
+  align-items: flex-end;
+  gap: 28px;
+  margin-bottom: 18px;
+}
+
+.customer-select {
+  flex: 1;
+  min-width: 0;
+}
+
+.customer-select label,
+.remarks-section label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 500;
+}
+
+.form-select,
+.form-control {
+  border-radius: 8px;
+  border-color: #ced4da;
+}
+
+.form-select {
+  min-height: 48px;
+}
+
+.check-button {
+  flex: 0 0 30%;
+  min-height: 47px;
+  border-radius: 8px;
+}
+
+.empty-message {
+  margin-top: 20px;
+  padding: 18px;
+  color: #6c757d;
+  text-align: center;
+  background: #f8f9fa;
+  border-radius: 8px;
+}
+
+.request-details {
+  margin-top: 28px;
+  padding-top: 22px;
+  border-top: 1px solid #e9ecef;
+}
+
+.request-details h3 {
+  margin-bottom: 20px;
+  font-size: 21px;
+  font-weight: 600;
+}
+
+.details-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.detail-box {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 16px;
+  background: #f8faff;
+  border: 1px solid #e5ecf8;
+  border-radius: 8px;
+  overflow-wrap: anywhere;
+}
+
+.detail-box span {
+  color: #6c757d;
+  font-size: 14px;
+}
+
+.detail-box strong {
+  font-size: 16px;
+}
+
+.pending-status {
+  color: #b77900;
+}
+
+.remarks-section {
+  margin-top: 24px;
+}
+
+.remarks-section textarea {
+  resize: vertical;
+}
+
+.decision-buttons {
+  display: flex;
+  gap: 14px;
+  margin-top: 20px;
+}
+
+.decision-buttons button {
+  min-width: 190px;
+  padding: 11px 18px;
+  border-radius: 7px;
+}
+
+@media (max-width: 768px) {
+  .eligibility-page {
+    padding: 14px;
+  }
+
+  .card-header h2 {
+    font-size: 21px;
+  }
+
+  .selection-row {
+    align-items: stretch;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .check-button {
+    flex-basis: auto;
+    width: 100%;
+  }
+
+  .details-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .decision-buttons {
+    flex-direction: column;
+  }
+
+  .decision-buttons button {
+    width: 100%;
+  }
+}

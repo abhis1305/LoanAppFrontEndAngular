@@ -36,12 +36,14 @@ export class AuthService {
   private http = inject(HttpClient);
   private router = inject(Router);
 
-  // Updated to match the HTTPS backend URL in launchSettings.json
   private readonly apiUrl = 'https://localhost:7008/api/Auth';
 
   private readonly googleClientId =
     '1066832090441-qbqpblqu0ksr8dgau73pklpr57boheuf.apps.googleusercontent.com';
 
+  // =========================
+  // REGISTER
+  // =========================
   register(data: any): Observable<ApiMessageResponse> {
     return this.http.post<ApiMessageResponse>(
       `${this.apiUrl}/register`,
@@ -49,6 +51,9 @@ export class AuthService {
     );
   }
 
+  // =========================
+  // LOGIN
+  // =========================
   login(data: any): Observable<AuthResponse> {
     return this.http.post<AuthResponse>(
       `${this.apiUrl}/login`,
@@ -56,6 +61,9 @@ export class AuthService {
     );
   }
 
+  // =========================
+  // GOOGLE LOGIN
+  // =========================
   getGoogleClientId(): string {
     return this.googleClientId;
   }
@@ -67,6 +75,9 @@ export class AuthService {
     );
   }
 
+  // =========================
+  // TWO-FACTOR SETUP
+  // =========================
   enableTwoFactor(
     setupToken: string
   ): Observable<TwoFactorSetupResponse> {
@@ -81,6 +92,9 @@ export class AuthService {
     );
   }
 
+  // =========================
+  // VERIFY TWO-FACTOR CODE
+  // =========================
   verifyTwoFactor(
     preAuthToken: string,
     code: string
@@ -91,9 +105,13 @@ export class AuthService {
     );
   }
 
+  // =========================
+  // HANDLE LOGIN RESPONSE
+  // =========================
   handleLoginResponse(response: AuthResponse): LoginFlowResult {
     const result = new LoginFlowResult();
 
+    // First-time 2FA setup
     if (response.requiresTwoFactorSetup) {
       if (!response.setupToken) {
         result.status = 'error';
@@ -102,13 +120,16 @@ export class AuthService {
       }
 
       this.clearAuthData();
+
       sessionStorage.setItem('setupToken', response.setupToken);
+
       void this.router.navigate(['/two-factor-setup']);
 
       result.status = 'setup';
       return result;
     }
 
+    // Existing 2FA verification required
     if (response.requiresTwoFactor) {
       if (!response.preAuthToken) {
         result.status = 'error';
@@ -117,13 +138,17 @@ export class AuthService {
       }
 
       this.clearAuthData();
+
       sessionStorage.setItem('preAuthToken', response.preAuthToken);
 
       result.status = 'twoFactor';
-      result.message = 'Enter the 6-digit code from your Authenticator app.';
+      result.message =
+        'Enter the 6-digit code from your Authenticator app.';
+
       return result;
     }
 
+    // Normal login without 2FA
     if (response.token) {
       const success = this.completeLogin(
         response.token,
@@ -138,14 +163,19 @@ export class AuthService {
       result.status = 'error';
       result.message =
         'Login succeeded, but the role is missing or unrecognized.';
+
       return result;
     }
 
     result.status = 'error';
     result.message = response.message || 'Login failed.';
+
     return result;
   }
 
+  // =========================
+  // COMPLETE TWO-FACTOR LOGIN
+  // =========================
   completeTwoFactorLogin(response: AuthResponse): boolean {
     if (!response.token) {
       return false;
@@ -154,6 +184,9 @@ export class AuthService {
     return this.completeLogin(response.token, response.role);
   }
 
+  // =========================
+  // COMPLETE SETUP LOGIN
+  // =========================
   completeSetupLogin(response: AuthResponse): boolean {
     if (!response.token) {
       return false;
@@ -162,22 +195,32 @@ export class AuthService {
     return this.completeLogin(response.token, response.role);
   }
 
+  // =========================
+  // ROLE-BASED NAVIGATION
+  // =========================
   private completeLogin(
     token: string,
     responseRole?: string | null
   ): boolean {
-    const role = (
+    const role = String(
       responseRole || this.getRoleFromToken(token)
-    ).trim().toLowerCase();
+    )
+      .trim()
+      .toLowerCase();
 
     let dashboardRoute = '';
 
     if (role === 'user' || role === 'customer') {
       dashboardRoute = '/user-dashboard';
-    } else if (role === 'loan officer' || role === 'officer') {
+    } else if (
+      role === 'loan officer' ||
+      role === 'loan_officer' ||
+      role === 'officer'
+    ) {
       dashboardRoute = '/officer-dashboard';
-    } else if (role === 'admin') {
-      dashboardRoute = '/admin-dashboard';
+    } else if (role === 'admin' || role === 'administrator') {
+      // Admin pages currently use the OfficerLayout routes.
+      dashboardRoute = '/officer-dashboard';
     } else {
       return false;
     }
@@ -188,46 +231,46 @@ export class AuthService {
     sessionStorage.setItem('userRole', role);
 
     void this.router.navigate([dashboardRoute]);
+
     return true;
   }
 
+  // =========================
+  // EXTRACT ROLE FROM JWT
+  // =========================
   private getRoleFromToken(token: string): string {
-    try {
-      const payload = token
-        .split('.')[1]
-        .replace(/-/g, '+')
-        .replace(/_/g, '/');
+    const claims = this.decodeToken(token);
 
-      const paddedPayload = payload.padEnd(
-        payload.length + ((4 - (payload.length % 4)) % 4),
-        '='
-      );
-
-      const claims = JSON.parse(atob(paddedPayload));
-
-      const role =
-        claims['role'] ??
-        claims['roles'] ??
-        claims[
-          'http://schemas.microsoft.com/ws/2008/06/identity/claims/role'
-        ];
-
-      return Array.isArray(role) ? (role[0] ?? '') : (role ?? '');
-    } catch {
+    if (!claims) {
       return '';
     }
-  }
 
-  getData(): any {
-    const token = this.getAccessToken();
+    const role =
+      claims['role'] ??
+      claims['roles'] ??
+      claims[
+        'http://schemas.microsoft.com/ws/2008/06/identity/claims/role'
+      ];
 
-    if (!token) {
-      return null;
+    if (Array.isArray(role)) {
+      return String(role[0] ?? '');
     }
 
+    return String(role ?? '');
+  }
+
+  // =========================
+  // DECODE JWT PAYLOAD
+  // =========================
+  private decodeToken(token: string): any | null {
     try {
-      const payload = token
-        .split('.')[1]
+      const parts = token.split('.');
+
+      if (parts.length !== 3) {
+        return null;
+      }
+
+      const payload = parts[1]
         .replace(/-/g, '+')
         .replace(/_/g, '/');
 
@@ -242,6 +285,22 @@ export class AuthService {
     }
   }
 
+  // =========================
+  // GET CURRENT USER DATA
+  // =========================
+  getData(): any {
+    const token = this.getAccessToken();
+
+    if (!token) {
+      return null;
+    }
+
+    return this.decodeToken(token);
+  }
+
+  // =========================
+  // GET LOGGED-IN USER NAME
+  // =========================
   getName(): string {
     const data = this.getData();
 
@@ -252,11 +311,16 @@ export class AuthService {
     return (
       data['unique_name'] ||
       data['name'] ||
-      data['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name'] ||
+      data[
+        'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name'
+      ] ||
       ''
     );
   }
 
+  // =========================
+  // GET LOGGED-IN CUSTOMER ID
+  // =========================
   getCustomerId(): number {
     const data = this.getData();
 
@@ -264,33 +328,82 @@ export class AuthService {
       return 0;
     }
 
-    return Number(
-      data['customerId'] ||
-      data['nameid'] ||
+    const value =
+      data['customerId'] ??
+      data['CustomerId'] ??
+      data['customer_id'] ??
+      data['userId'] ??
+      data['UserId'] ??
+      data['user_id'] ??
+      data['nameid'] ??
       data[
         'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier'
-      ] ||
-      0
-    );
+      ];
+
+    if (value === undefined || value === null || value === '') {
+      console.error(
+        'Customer ID claim is missing from the JWT.',
+        data
+      );
+
+      return 0;
+    }
+
+    const id = Number(value);
+
+    return Number.isSafeInteger(id) && id > 0 ? id : 0;
   }
 
+  // =========================
+  // DEBUG JWT CLAIMS
+  // =========================
+  debugTokenClaims(): void {
+    const data = this.getData();
+
+    console.log(
+      'JWT claim names:',
+      data ? Object.keys(data) : 'No token'
+    );
+
+    console.log('JWT decoded data:', data);
+    console.log('Customer ID:', this.getCustomerId());
+    console.log('User name:', this.getName());
+    console.log('Current role:', this.getCurrentRole());
+  }
+
+  // =========================
+  // ACCESS TOKEN
+  // =========================
   getAccessToken(): string | null {
     return sessionStorage.getItem('accessToken');
   }
 
+  // =========================
+  // CURRENT ROLE
+  // =========================
   getCurrentRole(): string | null {
     return sessionStorage.getItem('userRole');
   }
 
+  // =========================
+  // LOGIN STATUS
+  // =========================
   isLoggedIn(): boolean {
     return !!this.getAccessToken();
   }
 
+  // =========================
+  // LOGOUT
+  // =========================
   logout(): void {
     this.clearAuthData();
+
     void this.router.navigate(['/login']);
   }
 
+  // =========================
+  // CLEAR AUTH DATA
+  // =========================
   private clearAuthData(): void {
     sessionStorage.removeItem('accessToken');
     sessionStorage.removeItem('userRole');

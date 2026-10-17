@@ -1,0 +1,238 @@
+
+<div class="scorecard-container">
+  <div class="card shadow result-card">
+
+    <div class="scorecard-header">
+      <h2>Loan Score Card</h2>
+    </div>
+
+    <div class="scorecard-body">
+
+      <button
+        type="button"
+        class="btn btn-secondary mb-4"
+        (click)="backToList()">
+        Back to Customer List
+      </button>
+
+      <div *ngIf="loading" class="alert alert-info">
+        Generating scorecard...
+      </div>
+
+      <div *ngIf="errorMessage" class="alert alert-danger">
+        {{ errorMessage }}
+      </div>
+
+      <ng-container *ngIf="scorecard && !loading">
+
+        <h4>Customer Score Details</h4>
+
+        <div class="table-responsive">
+          <table class="table table-bordered">
+            <tbody>
+              <tr>
+                <th>Customer ID</th>
+                <td>{{ scorecard.customerId ?? 'N/A' }}</td>
+              </tr>
+
+              <tr>
+                <th>CIBIL Score</th>
+                <td>{{ scorecard.cibilScore ?? 'N/A' }}</td>
+              </tr>
+
+              <tr>
+                <th>Risk Category</th>
+                <td>{{ scorecard.riskCategory ?? 'N/A' }}</td>
+              </tr>
+
+              <tr>
+                <th>Maximum Allowable EMI</th>
+                <td>
+                  {{
+                    scorecard.maximumAllowableEmi != null
+                      ? (scorecard.maximumAllowableEmi | currency:'INR':'symbol':'1.0-2')
+                      : 'N/A'
+                  }}
+                </td>
+              </tr>
+
+              <tr>
+                <th>Available EMI</th>
+                <td>
+                  {{
+                    scorecard.availableEmi != null
+                      ? (scorecard.availableEmi | currency:'INR':'symbol':'1.0-2')
+                      : 'N/A'
+                  }}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h4 class="mt-4">Eligible Loan Options</h4>
+
+        <div class="table-responsive">
+          <table class="table table-bordered table-striped">
+            <thead class="table-dark">
+              <tr>
+                <th>Scorecard ID</th>
+                <th>Interest Rate</th>
+                <th>Tenure (Months)</th>
+                <th>Eligible Loan Amount</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              <tr *ngFor="let option of (scorecard.loanOptions || [])">
+                <td>
+                  {{ option.scoreCardId ?? option.ScoreCardId ?? 'N/A' }}
+                </td>
+
+                <td>
+                  {{ option.interestRate ?? option.InterestRate ?? 'N/A' }}%
+                </td>
+
+                <td>
+                  {{ option.tenureInMonths ?? option.TenureInMonths ?? 'N/A' }}
+                </td>
+
+                <td>
+                  {{
+                    (option.eligibleLoanAmount ?? option.EligibleLoanAmount) != null
+                      ? ((option.eligibleLoanAmount ?? option.EligibleLoanAmount)
+                          | currency:'INR':'symbol':'1.0-2')
+                      : 'N/A'
+                  }}
+                </td>
+              </tr>
+
+              <tr *ngIf="!scorecard.loanOptions?.length">
+                <td colspan="4" class="text-center">
+                  No eligible loan options available.
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+      </ng-container>
+    </div>
+  </div>
+</div>
+
+
+
+<!-- 
+
+
+<div class="scorecard-container">
+  <div class="card shadow result-card">
+
+    <div class="scorecard-header">
+      <h2>Loan Score Card</h2>
+    </div>
+
+    <div class="scorecard-body">
+
+      <button
+        type="button"
+        class="btn btn-secondary mb-4"
+        (click)="backToList()">
+        Back to Customer List
+      </button>
+
+      
+<div *ngIf="loading" class="alert alert-info">
+  Generating scorecard...
+</div>
+
+<div *ngIf="errorMessage" class="alert alert-danger">
+  {{ errorMessage }}
+</div>
+
+<ng-container *ngIf="scorecard as sc">
+  <div *ngIf="!loading">
+
+    <h4>Customer Score Details</h4>
+
+    <div class="table-responsive">
+      <table class="table table-bordered">
+        <tbody>
+          <tr>
+            <th>Customer ID</th>
+            <td>{{ sc.customerId ?? 'N/A' }}</td>
+          </tr>
+
+          <tr>
+            <th>CIBIL Score</th>
+            <td>{{ sc.cibilScore ?? 'N/A' }}</td>
+          </tr>
+
+          <tr>
+            <th>Risk Category</th>
+            <td>{{ sc.riskCategory ?? 'N/A' }}</td>
+          </tr>
+
+          <tr>
+            <th>Maximum Allowable EMI</th>
+            <td>
+              {{ sc.maximumAllowableEmi != null
+                ? (sc.maximumAllowableEmi | currency:'INR':'symbol':'1.0-2')
+                : 'N/A' }}
+            </td>
+          </tr>
+
+          <tr>
+            <th>Available EMI</th>
+            <td>
+              {{ sc.availableEmi != null
+                ? (sc.availableEmi | currency:'INR':'symbol':'1.0-2')
+                : 'N/A' }}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h4 class="mt-4">Eligible Loan Options</h4>
+
+    <div class="table-responsive">
+      <table class="table table-bordered table-striped">
+        <thead class="table-dark">
+          <tr>
+            <th>Scorecard ID</th>
+            <th>Interest Rate</th>
+            <th>Tenure (Months)</th>
+            <th>Eligible Loan Amount</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr *ngFor="let option of (sc.loanOptions || [])">
+            <td>{{ option.scoreCardId ?? option.ScoreCardId ?? 'N/A' }}</td>
+            <td>{{ option.interestRate ?? option.InterestRate ?? 'N/A' }}%</td>
+            <td>{{ option.tenureInMonths ?? option.TenureInMonths ?? 'N/A' }}</td>
+            <td>
+              {{ (option.eligibleLoanAmount ?? option.EligibleLoanAmount) != null
+                ? ((option.eligibleLoanAmount ?? option.EligibleLoanAmount)
+                    | currency:'INR':'symbol':'1.0-2')
+                : 'N/A' }}
+            </td>
+          </tr>
+
+          <tr *ngIf="!sc.loanOptions?.length">
+            <td colspan="4" class="text-center">
+              No eligible loan options available.
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+</ng-container>
+
+    </div>
+  </div>
+</div> -->

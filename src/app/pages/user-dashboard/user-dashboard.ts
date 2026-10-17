@@ -15,6 +15,7 @@ export class UserDashboard {
 
   constructor(private service: DashboardService, private auth: AuthService, private cd: ChangeDetectorRef)
   {
+    this.auth.debugTokenClaims();
     this.customerId = this.auth.getCustomerId();   // from the JWT
     this.name = this.auth.getName() || 'Customer';
     this.getCards();
