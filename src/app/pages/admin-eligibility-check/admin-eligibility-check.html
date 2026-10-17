@@ -37,13 +37,13 @@
 
             <option [ngValue]="null">-- Select Customer --</option>
 
-            <option
-              *ngFor="let item of pendingRequests"
-              [ngValue]="item.eligibilityId">
+          <option
+  *ngFor="let item of pendingRequests"
+  [ngValue]="item.eligibilityId ?? item.EligibilityId">
 
-              {{ getCustomerName(item) }}
-              (ID: {{ item.customerId }})
-            </option>
+  {{ getCustomerName(item) }}
+  (ID: {{ item.customerId ?? item.CustomerId }})
+</option>
 
           </select>
         </div>

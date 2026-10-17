@@ -5,7 +5,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
   providedIn: 'root'
 })
 export class OfficerForeclosureService {
-  private apiUrl = 'https://localhost:7008/api/v1/admin/AdminForeClosure';
+  private apiUrl = 'http://localhost:7008/api/v1/admin/AdminForeClosure';
 
   constructor(private http: HttpClient) {}
 

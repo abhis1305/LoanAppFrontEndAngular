@@ -9,14 +9,14 @@ export class EmiScheduleService {
 
   http = inject(HttpClient);
 
-  url = "https://localhost:7008/api/LoanAccount/GetAllLA";
+  url = "http://localhost:7008/api/LoanAccount/GetAllLA";
 
   getLoanAccounts()
   {
     return this.http.get<any>(this.url);
   }
 
-  url2 = "https://localhost:7008/api/EmiSchedule/GetEMI";
+  url2 = "http://localhost:7008/api/EmiSchedule/GetEMI";
 
   getEmiSchedules(id: any)
   {

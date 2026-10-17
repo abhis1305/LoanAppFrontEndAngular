@@ -7,7 +7,7 @@ export class DisbursementServices {
 
 http = inject(HttpClient);
 
-  url = 'http://localhost:5235/api/Disbursement';
+  url = 'http://localhost:7008/api/Disbursement';
 
   GetAll() {
     return this.http.get<any[]>(this.url);

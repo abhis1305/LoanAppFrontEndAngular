@@ -21,8 +21,7 @@ import { cibilapiService } from '../../services/cibil-api';
 export class CustomerEligibility implements OnInit {
 
   // Temporary customer ID for testing.
-  customerId: number | null = 1;
-
+customerId: number | null = null;
   customerName = '';
   panNumber = '';
   monthlyIncome: number | null = null;
@@ -44,57 +43,70 @@ export class CustomerEligibility implements OnInit {
 
   ngOnInit(): void {
     this.loadCustomerProfile();
-    this.loadCustomerEligibility();
+    //this.loadCustomerEligibility();
   }
 
   // Load customer name and PAN using the existing CIBIL profile API.
-  loadCustomerProfile(): void {
-    this.cibilService.getCustomerProfile().subscribe({
-      next: (response: any) => {
-        console.log('Customer profile response:', response);
+ loadCustomerProfile(): void {
+  this.cibilService.getCustomerProfile().subscribe({
+    next: (response: any) => {
+      console.log('Customer profile response:', response);
 
-        const customer = response?.data ?? response;
+      const customer = response?.data ?? response;
 
-        if (!customer) {
-          return;
-        }
-
-        const firstName =
-          customer.firstName ?? customer.FirstName ?? '';
-
-        const lastName =
-          customer.lastName ?? customer.LastName ?? '';
-
-        this.customerName =
-          customer.customerName ??
-          customer.CustomerName ??
-          `${firstName} ${lastName}`.trim();
-
-        this.panNumber =
-          customer.panNumber ??
-          customer.PanNumber ??
-          customer.panNo ??
-          customer.PanNo ??
-          customer.pan ??
-          customer.Pan ??
-          '';
-
-        this.monthlyIncome =
-          customer.monthlyIncome ??
-          customer.MonthlyIncome ??
-          null;
-
-        this.cdr.detectChanges();
-      },
-
-      error: (error: any) => {
-        console.error(
-          'Customer profile request failed:',
-          error
-        );
+      if (!customer) {
+        this.message = 'Customer profile not found.';
+        this.loading = false;
+        return;
       }
-    });
-  }
+
+      this.customerId =
+        customer.customerId ??
+        customer.CustomerId ??
+        null;
+
+      const firstName =
+        customer.firstName ?? customer.FirstName ?? '';
+
+      const lastName =
+        customer.lastName ?? customer.LastName ?? '';
+
+      this.customerName =
+        customer.customerName ??
+        customer.CustomerName ??
+        `${firstName} ${lastName}`.trim();
+
+      this.panNumber =
+        customer.panNumber ??
+        customer.PanNumber ??
+        customer.panNo ??
+        customer.PanNo ??
+        customer.pan ??
+        customer.Pan ??
+        '';
+
+      this.monthlyIncome =
+        customer.monthlyIncome ??
+        customer.MonthlyIncome ??
+        null;
+
+      if (this.customerId === null) {
+        this.message = 'Customer ID not found in profile.';
+        this.loading = false;
+        return;
+      }
+
+      // Load eligibility for this exact customer.
+      this.loadCustomerEligibility();
+    },
+
+    error: (error: any) => {
+      console.error('Customer profile request failed:', error);
+      this.message = 'Unable to load customer profile.';
+      this.loading = false;
+    }
+  });
+}
 
   // Load eligibility result.
   loadCustomerEligibility(): void {

@@ -15,15 +15,12 @@ import { TwoFactorSetup } from './pages/two-factor-setup/two-factor-setup';
 import { UserDashboard } from './pages/user-dashboard/user-dashboard';
 import { UserProfile } from './pages/user-profile/user-profile';
 import { CustomerKyc } from './pages/customer-kyc/customer-kyc';
-import { ApplyLoan } from './apply-loan1/apply-loan';
 import { ViewProfile } from './pages/view-profile/view-profile';
-import { SanctionLetter } from './pages/sanction-letter/sanction-letter';
-import { PendingDeals } from './pages/pending-deals/pending-deals';
-import { Cibil } from './pages/cibil/cibil';
-import { Eligibility } from './pages/eligibility/eligibility';
 import { CibilIndexComponent } from './pages/cibilindex/cibilindex';
 import { CibilScoreComponent } from './pages/cibil-score/cibil-score';
+import { Eligibility } from './pages/eligibility/eligibility';
 import { CustomerEligibility } from './pages/customer-eligibility/customer-eligibility';
+import { SanctionLetter } from './pages/sanction-letter/sanction-letter';
 import { UserForeclosure } from './pages/foreclosure/user-foreclosure/user-foreclosure';
 
 // Officer / Admin pages
@@ -32,12 +29,12 @@ import { OfficerCustomers } from './pages/officer-customers/officer-customers';
 import { Reports } from './pages/reports/reports';
 import { OfficerKyc } from './pages/officer-kyc/officer-kyc';
 import { OfficerKycReview } from './pages/officer-kyc-review/officer-kyc-review';
-import { Scorecard } from './pages/scorecard/scorecard';
 import { Penaltycharges } from './pages/penaltycharges/penaltycharges';
 import { OfficerForeclosure } from './pages/foreclosure/officer-foreclosure/officer-foreclosure';
 import { ScorecardIndex } from './pages/scoreboard-index/scoreboard-index';
 import { ScorecardDetails } from './pages/scoreboard-details/scoreboard-details';
 import { AdminEligibilityCheckComponent } from './pages/admin-eligibility-check/admin-eligibility-check';
+import { PendingDeals } from './pages/pending-deals/pending-deals';
 import { SupportOfficer } from './pages/officer-support/officer-support';
 
 // Loan accounts and payments
@@ -48,8 +45,10 @@ import { Support } from './pages/support/support';
 import { EmiPayments } from './pages/payments/emi-payments/emi-payments';
 import { MakePayment } from './pages/payments/make-payment/make-payment';
 import { MyPenalties } from './pages/penalties/my-penalties/my-penalties';
+import { ApplyLoan } from './pages/apply-loan/apply-loan';
 
 export const routes: Routes = [
+
   // Default route
   {
     path: '',
@@ -92,7 +91,9 @@ export const routes: Routes = [
     canActivate: [authGuard]
   },
 
-  // Customer layout
+  // =========================
+  // CUSTOMER LAYOUT
+  // =========================
   {
     path: '',
     component: CustomerLayout,
@@ -109,14 +110,6 @@ export const routes: Routes = [
       {
         path: 'customer-kyc',
         component: CustomerKyc
-      },
-      {
-        path: 'apply-loan',
-        component: ApplyLoan
-      },
-      {
-        path: 'cibil',
-        component: Cibil
       },
       {
         path: 'cibilindex',
@@ -139,6 +132,10 @@ export const routes: Routes = [
         component: CustomerEligibility
       },
       {
+        path:'apply-loan',
+        component: ApplyLoan
+      },
+      {
         path: 'sanction-letter',
         component: SanctionLetter
       },
@@ -157,7 +154,9 @@ export const routes: Routes = [
     ]
   },
 
-  // Officer / Admin layout
+  // =========================
+  // OFFICER / ADMIN LAYOUT
+  // =========================
   {
     path: '',
     component: OfficerLayout,
