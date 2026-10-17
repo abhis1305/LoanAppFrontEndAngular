@@ -1,5 +1,4 @@
-
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { LoanAccountService } from '../../services/loan-account-service';
@@ -14,8 +13,10 @@ export class LoanAccountDetails implements OnInit {
 
   service = inject(LoanAccountService);
   route = inject(ActivatedRoute);
+  cdr = inject(ChangeDetectorRef);
 
   account: any = null;
+  errorMessage: string = '';
 
   ngOnInit() {
     let id = Number(this.route.snapshot.paramMap.get('id'));
@@ -25,12 +26,15 @@ export class LoanAccountDetails implements OnInit {
   getLoanAccount(id: number) {
     this.service.getLoanAccountById(id).subscribe({
       next: res => {
-        console.log('Loan Account Response:', res);
         this.account = res;
-        console.log('Assigned Account:', this.account);
+        this.cdr.detectChanges();
       },
       error: err => {
         console.log('Loan Account Error:', err);
+        this.errorMessage = err.status == 401
+          ? 'Session expired. Please log in again.'
+          : 'Could not load loan account details.';
+        this.cdr.detectChanges();
       }
     });
   }

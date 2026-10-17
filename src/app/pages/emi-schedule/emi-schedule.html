@@ -77,11 +77,11 @@
       <tbody>
 
         <tr *ngFor="let emi of allEmis; let i = index">
-          <td>{{ i + 1 }}</td>
+          <td>{{ emi.installmentNo }}</td>
 
           <td>{{ emi.dueDate | date:'dd-MMM-yyyy' }}</td>
 
-          <td>{{ emi.emiAmount | currency:'INR':'symbol':'1.0-0' }}</td>
+          <td>{{ emi.emi | currency:'INR':'symbol':'1.0-0' }}</td>
 
           <td>{{ emi.principalAmount | currency:'INR':'symbol':'1.0-0' }}</td>
 
@@ -92,18 +92,18 @@
           <td>{{ emi.closingBalance | currency:'INR':'symbol':'1.0-0' }}</td>
 
           <td>
-            <span *ngIf="emi.status == 'Paid'" class="text-success">
-              {{ emi.status }}
+            <span *ngIf="emi.paymentStatus == 'Paid'" class="text-success">
+              {{ emi.paymentStatus }}
             </span>
 
-            <span *ngIf="emi.status != 'Paid'" class="text-danger">
-              {{ emi.status || 'Pending' }}
+            <span *ngIf="emi.paymentStatus != 'Paid'" class="text-danger">
+              {{ emi.paymentStatus || 'Pending' }}
             </span>
           </td>
 
           <td>
             <button class="btn btn-success btn-sm"
-                    [disabled]="emi.status == 'Paid'">
+                    [disabled]="emi.paymentStatus == 'Paid'">
               Pay
             </button>
           </td>
