@@ -1,0 +1,92 @@
+
+<div class="cibil-page">
+  <div class="cibil-card">
+
+    <!-- Header -->
+    <div class="cibil-header">
+      <h2>
+        <span class="chart-icon">📈</span>
+        CIBIL Score
+      </h2>
+
+      <button
+        type="button"
+        class="check-score-btn"
+        (click)="checkScore()"
+        [disabled]="loading || profileLoading || customerId === null">
+
+        {{ loading ? 'Checking...' : 'Check Score' }}
+      </button>
+    </div>
+
+    <!-- Customer Profile -->
+    <div class="customer-details">
+
+      <!-- Customer Name -->
+      <div class="detail-box">
+        <span class="detail-label">Name</span>
+
+        <h3 *ngIf="profileLoading">
+          Loading...
+        </h3>
+
+        <h3 *ngIf="!profileLoading">
+          {{ customerName || 'Not available' }}
+        </h3>
+      </div>
+
+      <!-- PAN Number -->
+      <div class="detail-box">
+        <span class="detail-label">PAN Number</span>
+
+        <h3 *ngIf="profileLoading">
+          Loading...
+        </h3>
+
+        <h3 *ngIf="!profileLoading">
+          {{ panNumber || 'Not provided' }}
+        </h3>
+      </div>
+
+    </div>
+
+    <!-- Profile Loading Message -->
+    <p
+      *ngIf="profileLoading"
+      class="status-message"
+      role="status">
+      Loading your customer profile...
+    </p>
+
+    <!-- Success or Error Message -->
+    <div
+      *ngIf="message && !profileLoading"
+      class="status-message"
+      role="status">
+      {{ message }}
+    </div>
+
+    <!-- CIBIL Score Result -->
+    <div
+      *ngIf="cibilResult"
+      class="score-result">
+
+      <h3>Your CIBIL Details</h3>
+
+      <div
+        class="score-value"
+        *ngIf="cibilResult.cibilScore != null">
+        {{ cibilResult.cibilScore }}
+      </div>
+
+      <p *ngIf="cibilResult.message">
+        {{ cibilResult.message }}
+      </p>
+
+      <pre
+        *ngIf="cibilResult.cibilScore == null">{{ cibilResult | json }}</pre>
+
+    </div>
+
+  </div>
+</div>

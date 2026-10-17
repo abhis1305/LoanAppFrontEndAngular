@@ -1,0 +1,125 @@
+
+.customer-eligibility-page {
+  min-height: 100%;
+  padding: 40px 35px;
+  background: #f4f6fb;
+}
+
+.eligibility-result-card {
+  padding: 38px;
+  border-radius: 16px;
+  background: #fff;
+  box-shadow: 0 5px 18px rgba(0, 0, 0, 0.07);
+}
+
+.page-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0 0 28px;
+  color: #172033;
+  font-size: 30px;
+}
+
+.title-icon {
+  display: inline-flex;
+  width: 32px;
+  height: 32px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: #2875f5;
+  color: #fff;
+  font-size: 22px;
+}
+
+.details-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px 26px;
+}
+
+.detail-box {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding: 20px 17px;
+  border-radius: 12px;
+  background: #f7f8fa;
+  overflow-wrap: anywhere;
+
+  span {
+    color: #758093;
+    font-size: 15px;
+  }
+
+  strong {
+    color: #111827;
+    font-size: 21px;
+    font-weight: 500;
+  }
+}
+
+.decision-panel {
+  margin-top: 42px;
+  padding: 28px 20px;
+  border-radius: 13px;
+  text-align: center;
+
+  h2 {
+    margin: 0 0 10px;
+    font-size: 32px;
+  }
+
+  p {
+    margin: 0;
+    font-size: 17px;
+  }
+}
+
+.approved {
+  background: #d0e8df;
+  color: #075c42;
+}
+
+.rejected {
+  background: #f9dddd;
+  color: #a51f2d;
+}
+
+.pending {
+  background: #fff1cc;
+  color: #815900;
+}
+
+.info-message {
+  color: #2864c5;
+}
+
+.error-message {
+  color: #c62828;
+}
+
+.dashboard-button {
+  margin-top: 24px;
+  padding: 12px 22px;
+  border: none;
+  border-radius: 8px;
+  background: #2864f0;
+  color: white;
+  cursor: pointer;
+}
+
+@media (max-width: 700px) {
+  .customer-eligibility-page {
+    padding: 16px;
+  }
+
+  .eligibility-result-card {
+    padding: 20px;
+  }
+
+  .details-grid {
+    grid-template-columns: 1fr;
+  }
+}
