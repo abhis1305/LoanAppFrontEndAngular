@@ -76,7 +76,7 @@ export class SupportService {
         return this.http.get<any>(this.url4,{headers:this.headers()});
     }
 
-    url5="http://localhost:5235/api/SupportTicket/RespondT";
+    url5="http://localhost:7008/api/SupportTicket/RespondT";
     RespondTicket(id:any,data:any)
     {
         return this.http.put<any>(`${this.url5}/${id}`,data,{headers:this.headers()});

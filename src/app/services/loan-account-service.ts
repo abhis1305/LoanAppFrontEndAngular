@@ -36,11 +36,11 @@ export class LoanAccountService {
 }
   // API endpoint to get all loan accounts
   private readonly url =
-    'https://localhost:7008/api/LoanAccount/GetAllLA';
+    'http://localhost:7008/api/LoanAccount/GetAllLA';
 
   // API endpoint to get a loan account by ID
   private readonly url2 =
-    'https://localhost:7008/api/LoanAccount/GetLA';
+    'http://localhost:7008/api/LoanAccount/GetLA';
 
   // Get all loan accounts
   getLoanAccounts(): Observable<any> {

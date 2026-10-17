@@ -36,7 +36,7 @@ export class AuthService {
   private http = inject(HttpClient);
   private router = inject(Router);
 
-  private readonly apiUrl = 'https://localhost:7008/api/Auth';
+  private readonly apiUrl = 'http://localhost:7008/api/Auth';
 
   private readonly googleClientId =
     '1066832090441-qbqpblqu0ksr8dgau73pklpr57boheuf.apps.googleusercontent.com';

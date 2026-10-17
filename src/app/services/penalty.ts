@@ -6,8 +6,8 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
   providedIn: 'root'
 })
 export class PenaltyService {
-  private penaltyUrl = 'https://localhost:7008/api/v1/user/Penalty';
-  private paymentUrl = 'https://localhost:7008/api/v1/user/Payment';
+  private penaltyUrl = 'http://localhost:7008/api/v1/user/Penalty';
+  private paymentUrl = 'http://localhost:7008/api/v1/user/Payment';
 
   constructor(private http: HttpClient) {}
 

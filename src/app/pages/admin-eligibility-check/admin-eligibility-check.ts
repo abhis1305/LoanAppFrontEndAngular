@@ -32,74 +32,86 @@ export class AdminEligibilityCheckComponent implements OnInit {
   }
 
   // Load only requests awaiting an admin decision
-  getPendingRequests(): void {
-    this.loading = true;
-    this.errorMessage = '';
-    this.successMessage = '';
 
-    this.service.getPendingRequests()
-      .pipe(finalize(() => this.loading = false))
-      .subscribe({
-        next: (res: any) => {
-          console.log('Pending eligibility requests:', res);
+getPendingRequests(): void {
+  this.loading = true;
+  this.errorMessage = '';
+  this.successMessage = '';
 
-          let data = res?.data ?? res;
+  this.service.getPendingRequests()
+    .pipe(
+      finalize(() => {
+        this.loading = false;
+      })
+    )
+    .subscribe({
+      next: (res: any) => {
+        console.log('Pending eligibility requests:', res);
 
-          if (!Array.isArray(data)) {
-            data = data?.items ?? data?.requests ?? [];
+        const data = res?.data ?? res;
+
+        const requests = Array.isArray(data)
+          ? data
+          : data?.items ?? data?.requests ?? [];
+
+        // Keep only requests with Pending status.
+        this.pendingRequests = requests.filter((item: any) => {
+          const status = String(
+            item.eligibilityStatus ??
+            item.EligibilityStatus ??
+            item.status ??
+            item.Status ??
+            item.isEligible ??
+            ''
+          ).trim().toLowerCase();
+
+          return status === 'pending';
+        });
+
+        // Restore the previously selected request if still pending.
+        if (this.selectedEligibilityId !== null) {
+          this.selectedRequest =
+            this.pendingRequests.find(
+              (item: any) =>
+                Number(item.eligibilityId ?? item.EligibilityId) ===
+                Number(this.selectedEligibilityId)
+            ) ?? null;
+
+          if (!this.selectedRequest) {
+            this.selectedEligibilityId = null;
+            this.remarks = '';
           }
-
-          this.pendingRequests = data.filter((item: any) => {
-            const status = String(
-              item.eligibilityStatus ??
-              item.status ??
-              item.isEligible ??
-              ''
-            ).trim().toLowerCase();
-
-            return status === 'pending' || status === 'false';
-          });
-
-          // Keep the selected request if it is still pending
-          if (this.selectedEligibilityId !== null) {
-            this.selectedRequest =
-              this.pendingRequests.find(
-                (item: any) =>
-                  Number(item.eligibilityId) ===
-                  Number(this.selectedEligibilityId)
-              ) ?? null;
-
-            if (!this.selectedRequest) {
-              this.selectedEligibilityId = null;
-              this.remarks = '';
-            }
-          }
-        },
-        error: (err: any) => {
-          console.error('Pending requests error:', err);
-
-          this.pendingRequests = [];
-          this.selectedRequest = null;
-
-          this.errorMessage =
-            err?.error?.message ??
-            'Unable to load pending eligibility requests. Check the API URL and backend.';
         }
-      });
-  }
 
-  selectRequest(): void {
-    this.selectedRequest =
-      this.pendingRequests.find(
-        (item: any) =>
-          Number(item.eligibilityId) ===
-          Number(this.selectedEligibilityId)
-      ) ?? null;
+        console.log('Filtered pending requests:', this.pendingRequests);
+      },
 
-    this.remarks = '';
-    this.errorMessage = '';
-    this.successMessage = '';
-  }
+      error: (err: any) => {
+        console.error('Pending requests error:', err);
+
+        this.pendingRequests = [];
+        this.selectedRequest = null;
+        this.errorMessage =
+          err?.error?.message ??
+          'Unable to load pending eligibility requests.';
+      }
+    });
+}
+
+
+selectRequest(): void {
+  this.selectedRequest =
+    this.pendingRequests.find(
+      (item: any) =>
+        Number(item.eligibilityId ?? item.EligibilityId) ===
+        Number(this.selectedEligibilityId)
+    ) ?? null;
+
+  this.remarks = '';
+  this.errorMessage = '';
+  this.successMessage = '';
+}
+
 
   updateDecision(approved: boolean): void {
     if (!this.selectedRequest) {

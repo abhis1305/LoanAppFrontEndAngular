@@ -8,7 +8,7 @@ import { Injectable, inject } from '@angular/core';
 export class DashboardService {
   private http = inject(HttpClient);
 
-  private readonly baseUrl = 'https://localhost:7008/api/Dashboard';
+  private readonly baseUrl = 'http://localhost:7008/api/Dashboard';
 
   // Customer dashboard
   getCards(customerId: number) {

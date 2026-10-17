@@ -10,7 +10,7 @@ export class LoanDeal {
   // IMPORTANT:
   // Check the HTTPS port in the Loan API's launchSettings.json.
   // If the HTTPS port is 7235, keep this URL.
-  private readonly baseUrl = 'https://localhost:7235/api/Loan';
+  private readonly baseUrl = 'http://localhost:7008/api/Loan';
 
   // APPLY LOAN
   applyLoans(data: any) {

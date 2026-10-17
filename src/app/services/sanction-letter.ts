@@ -7,7 +7,7 @@ export class SanctionLetterService {
 
      http = inject(HttpClient);
 
-  url = 'http://localhost:5235/api/SanctionLetter';
+  url = 'http://localhost:7008/api/SanctionLetter';
 
   GetApprovedLoans() {
     return this.http.get<any>(`${this.url}/approved-loans`);

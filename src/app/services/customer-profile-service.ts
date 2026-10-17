@@ -41,7 +41,7 @@ export class CustomerProfileService {
   private http = inject(HttpClient);
   private authService = inject(AuthService);
 
-  private readonly apiUrl = 'https://localhost:7008/api/CustomerProfile';
+  private readonly apiUrl = 'http://localhost:7008/api/CustomerProfile';
 
   private getHeaders(): HttpHeaders {
     const token = this.authService.getAccessToken();

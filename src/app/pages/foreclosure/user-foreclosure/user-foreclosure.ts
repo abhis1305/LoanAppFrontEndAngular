@@ -38,7 +38,7 @@ export class UserForeclosure {
   loadingLoanDetails: boolean = false;
 
   GetLoanAccounts() {
-    this.http.get<any>('https://localhost:44319/api/LoanAccount/GetAllLA').subscribe({
+    this.http.get<any>('http://localhost:7008/api/LoanAccount/GetAllLA').subscribe({
       next: res => {
         console.log('Loan accounts:', res);
 
@@ -82,7 +82,7 @@ export class UserForeclosure {
 
     this.loadingLoanDetails = true;
 
-    this.http.get<any>('https://localhost:44319/api/LoanAccount/GetLA/' + this.loanAccountId).subscribe({
+    this.http.get<any>('http://localhost:7008/api/LoanAccount/GetLA/' + this.loanAccountId).subscribe({
       next: res => {
         console.log('Selected loan:', res);
 
@@ -100,7 +100,7 @@ export class UserForeclosure {
       }
     });
 
-    this.http.get<any>('https://localhost:7008/api/EmiSchedule/GetEMI/' + this.loanAccountId).subscribe({
+    this.http.get<any>('http://localhost:7008/api/EmiSchedule/GetEMI/' + this.loanAccountId).subscribe({
       next: res => {
         console.log('EMI schedules:', res);
 

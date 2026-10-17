@@ -8,7 +8,7 @@ export class Foreclosure {
 
   constructor(private http: HttpClient) {}
 
-  url = 'https://localhost:7008/api/v1/user/ForeClosure';
+  url = 'http://localhost:7008/api/v1/user/ForeClosure';
 
   getMyRequests() {
     return this.http.get<any>(`${this.url}/MyRequests`);

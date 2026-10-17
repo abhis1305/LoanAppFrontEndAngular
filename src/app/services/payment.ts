@@ -6,8 +6,8 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
   providedIn: 'root'
 })
 export class PaymentService {
-  private paymentUrl = 'https://localhost:7008/api/v1/user/Payment';
-  private emiUrl = 'https://localhost:7008/api/EmiSchedule';
+  private paymentUrl = 'http://localhost:7008/api/v1/user/Payment';
+  private emiUrl = 'http://localhost:7008/api/EmiSchedule';
 
   constructor(private http: HttpClient) {}
 
